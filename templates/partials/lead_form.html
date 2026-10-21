@@ -1,0 +1,30 @@
+<form class="lead-form" method="post" action="{% url 'leads:create' %}" novalidate>
+  {% csrf_token %}
+  {{ form.page }}
+  {% if form.non_field_errors %}<div class="form-errors" role="alert">{{ form.non_field_errors }}</div>{% endif %}
+  <div class="field">
+    <label for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
+    {{ form.name }}
+    {% for e in form.name.errors %}<p class="field-error" role="alert">{{ e }}</p>{% endfor %}
+  </div>
+  <div class="field">
+    <label for="{{ form.phone.id_for_label }}">{{ form.phone.label }}</label>
+    {{ form.phone }}
+    {% for e in form.phone.errors %}<p class="field-error" role="alert">{{ e }}</p>{% endfor %}
+  </div>
+  <div class="field">
+    <label for="{{ form.message.id_for_label }}">{{ form.message.label }} <span class="optional">— можно коротко</span></label>
+    {{ form.message }}
+    {% for e in form.message.errors %}<p class="field-error" role="alert">{{ e }}</p>{% endfor %}
+  </div>
+  <div class="field-trap" aria-hidden="true">
+    <label for="{{ form.website.id_for_label }}">Не заполняйте это поле</label>
+    <input type="text" name="website" id="{{ form.website.id_for_label }}" tabindex="-1" autocomplete="off">
+  </div>
+  <div class="field field-check">
+    <input type="checkbox" name="consent" id="{{ form.consent.id_for_label }}" required>
+    <label for="{{ form.consent.id_for_label }}">Я даю <a href="{% url 'core:consent' %}" target="_blank">согласие на обработку персональных данных</a> и принимаю <a href="{% url 'core:policy' %}" target="_blank">политику</a></label>
+    {% for e in form.consent.errors %}<p class="field-error" role="alert">{{ e }}</p>{% endfor %}
+  </div>
+  <button class="btn btn-accent btn-wide" type="submit">Отправить заявку</button>
+</form>

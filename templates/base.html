@@ -1,0 +1,33 @@
+{% load static %}<!doctype html>
+<html lang="ru" data-theme="night">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Кузьмин Виктор — сайты для бизнеса в Якутске{% endblock %}</title>
+  <meta name="description" content="{% block description %}Сайты под ключ для бизнеса в Якутске: лендинг от 15 000 ₽ за 5–7 дней, корпоративный сайт, интернет-магазин. Договор, оплата 30/70.{% endblock %}">
+  {% block robots %}{% endblock %}
+  <link rel="canonical" href="{{ SITE_URL }}{% block canonical %}{{ request.path }}{% endblock %}">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:site_name" content="Кузьмин Виктор — сайты для бизнеса">
+  <meta property="og:title" content="{% block og_title %}{{ self.title }}{% endblock %}">
+  <meta property="og:description" content="{{ self.description }}">
+  <meta property="og:url" content="{{ SITE_URL }}{{ request.path }}">
+  <meta property="og:image" content="{{ SITE_URL }}{% static 'img/og.png' %}">
+  <meta name="theme-color" content="#070b16">
+  <link rel="icon" href="{% static 'img/favicon.svg' %}" type="image/svg+xml">
+  <script nonce="{{ request.csp_nonce }}">try{var t=localStorage.getItem("theme");if(t==="frost"||t==="night")document.documentElement.dataset.theme=t;else if(matchMedia("(prefers-color-scheme: light)").matches)document.documentElement.dataset.theme="frost"}catch(e){}</script>
+  <link rel="preload" href="{% static 'fonts/onest-cyrillic.woff2' %}" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="{% static 'css/site.css' %}">
+  {% block head %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+  <a class="skip" href="#main">К содержимому</a>
+  {% include "partials/header.html" %}
+  <main id="main">{% block content %}{% endblock %}</main>
+  {% include "partials/footer.html" %}
+  {% include "partials/cookie.html" %}
+  <script src="{% static 'js/site.js' %}" defer></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,21 @@
+<header class="site-header">
+  <a class="wordmark" href="{% url 'core:home' %}" aria-label="Кузьмин Виктор — на главную">Кузьмин Виктор</a>
+  <nav class="site-nav" aria-label="Основное меню">
+    <a href="{% url 'portfolio:list' %}"{% if request.resolver_match.app_name == 'portfolio' %} aria-current="page"{% endif %}>Работы</a>
+    <a href="{% url 'core:home' %}#ceny">Цены</a>
+    <a href="{% url 'core:home' %}#etapy">Как работаю</a>
+    <a href="{% url 'core:contacts' %}"{% if request.resolver_match.url_name == 'contacts' %} aria-current="page"{% endif %}>Контакты</a>
+  </nav>
+  <div class="header-actions">
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="Сменить тему: полярная ночь или иней" aria-pressed="false">
+      <svg class="theme-icon" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
+        <mask id="moon-cut"><rect width="24" height="24" fill="#fff"/><circle class="moon-cut" cx="17" cy="7" r="6" fill="#000"/></mask>
+        <circle class="sun-core" cx="12" cy="12" r="5" mask="url(#moon-cut)" fill="currentColor"/>
+        <g class="sun-rays" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M12 1.5v2.5M12 20v2.5M1.5 12H4M20 12h2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/>
+        </g>
+      </svg>
+    </button>
+    {% for c in channels_header %}<a class="btn btn-small{% if forloop.first %} btn-accent{% endif %}" href="{{ c.url }}" rel="noopener" target="_blank">{{ c.label }}</a>{% endfor %}
+  </div>
+</header>

@@ -1,0 +1,13 @@
+<header class="demo-hero">
+  <div class="demo-wrap">
+    <h1>{{ b.name }}</h1>
+    <p>{{ b.about }}</p>
+    <a class="demo-btn" href="{% url 'core:home' %}#zayavka">Заказать такой сайт</a>
+  </div>
+  {% if hero_photo %}<img src="{{ hero_photo.url }}" alt="{{ hero_photo.alt }}" width="{{ hero_photo.width }}" height="{{ hero_photo.height }}">{% endif %}
+</header>
+<main class="demo-wrap">
+  {% if b.prices %}<section><h2>Цены</h2><ul>{% for p in b.prices %}<li>{{ p.name }} — {{ p.price|default:"цена по запросу" }}</li>{% endfor %}</ul></section>{% endif %}
+  {% if b.process %}<section><h2>Как мы работаем</h2><ol>{% for s in b.process %}<li><strong>{{ s.title }}</strong> {{ s.text }}</li>{% endfor %}</ol></section>{% endif %}
+  {% if b.hours %}<section><h2>Часы работы</h2><p>{{ b.address.street }}</p></section>{% endif %}
+</main>

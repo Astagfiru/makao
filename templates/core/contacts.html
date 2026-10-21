@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Контакты — Кузьмин Виктор, сайты для бизнеса в Якутске{% endblock %}
+{% block description %}Связаться с веб-разработчиком в Якутске: WhatsApp, Telegram или заявка на сайте. Обсудим задачу, сроки и цену.{% endblock %}
+{% block body_class %}page-inner page-contacts{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <div class="wrap">
+    <h1 class="h-display">Контакты</h1>
+    <p class="page-lead">Пишите в мессенджер или оставьте заявку — отвечу и предложу время для разговора. {{ site_settings.city }}, можно встретиться лично.</p>
+  </div>
+</section>
+<section class="chapter chapter-contacts" aria-labelledby="channels-title">
+  <div class="wrap contacts-grid">
+    <div>
+      <h2 id="channels-title" class="h-section">Написать</h2>
+      <ul class="channels" role="list">
+        {% for c in channels_cta %}<li><a class="channel" href="{{ c.url }}" rel="noopener" target="_blank"><span class="channel-kind">{{ c.get_kind_display }}</span><span class="channel-label">{{ c.label }}</span></a></li>{% endfor %}
+      </ul>
+      <div class="map" data-map data-src="{{ site_settings.map_embed_url }}">
+        <p>Яндекс.Карта загружается только по вашему клику: у Яндекса свои cookie.</p>
+        <button class="btn btn-ink" type="button" data-map-load>Показать карту Якутска</button>
+        <noscript><p><a href="https://yandex.ru/maps/74/yakutsk/" rel="noopener">Открыть карту на Яндексе</a></p></noscript>
+      </div>
+    </div>
+    <div class="cta-tile" id="zayavka">
+      <h2 class="h-section">Заявка</h2>
+      <p>Имя, телефон и пара слов о задаче — этого достаточно.</p>
+      {% include "partials/lead_form.html" %}
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% load static %}<footer class="site-footer">
+  <div class="footer-top">
+    <p class="footer-note">Делаю сайты для малого и среднего бизнеса. {{ site_settings.city }}, работаю по договору.</p>
+    <a class="footer-up" href="#main">Наверх</a>
+  </div>
+  <nav class="footer-contacts" aria-label="Связаться">
+    {% for c in channels_footer %}<a class="footer-contact" href="{{ c.url }}" rel="noopener" target="_blank">{{ c.label }}</a>{% endfor %}
+  </nav>
+  <div class="footer-legal">
+    <p>{{ site_settings.operator_name }}{% if site_settings.inn %} · ИНН {{ site_settings.inn }}{% endif %}{% if site_settings.ogrnip %} · ОГРНИП {{ site_settings.ogrnip }}{% endif %}</p>
+    <p><a href="{% url 'core:policy' %}">Политика обработки персональных данных</a> · <a href="{% url 'core:consent' %}">Согласие на обработку данных</a></p>
+    <p>Информация на сайте не является публичной офертой.</p>
+    <p class="footer-credit">Фото улицы Якутска: Maarten Takens, <a href="https://creativecommons.org/licenses/by-sa/2.0/" rel="noopener">CC BY-SA 2.0</a> · © {% now "Y" %} {{ site_settings.city }}</p>
+  </div>
+</footer>

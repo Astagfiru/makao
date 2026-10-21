@@ -1,0 +1,26 @@
+{% load static site_tags %}<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>{{ demo.business_name }} — демо-концепт сайта | Кузьмин Виктор</title>
+  <meta name="description" content="Демо-концепт сайта для «{{ demo.business_name }}» по открытым данным. Не официальный сайт компании.">
+  <link rel="icon" href="{% static 'img/favicon.svg' %}" type="image/svg+xml">
+  <link rel="stylesheet" href="{% static 'css/demo-base.css' %}">
+  <link rel="stylesheet" href="{% static 'css/demos/'|add:demo.theme|add:'.css' %}">
+</head>
+<body class="demo demo-{{ demo.theme }}">
+  <div class="demo-banner" role="note">
+    <p><strong>Демо-концепт, не официальный сайт «{{ demo.business_name }}».</strong> Сделан по открытым данным как пример работы.</p>
+    <a href="{% url 'core:home' %}#zayavka">Заказать такой сайт</a>
+  </div>
+  {% block demo %}{% endblock %}
+  <footer class="demo-footer">
+    <div class="demo-wrap">
+      <p>Данные из открытых источников: <a href="{{ demo.source_url }}" rel="noopener nofollow" target="_blank">2ГИС</a>{% if demo.checked_at %}, проверено {{ demo.checked_at|date:"j E Y" }}{% endif %}. Фото: 2ГИС{% block photo_credit %}{% endblock %}. Контакты компании на демо не публикуются.</p>
+      <p>Демо-концепт сайта сделал <a href="{% url 'core:home' %}">Кузьмин Виктор</a> — веб-разработчик из Якутска. Если вы владелец и хотите убрать демо — <a href="{% url 'core:contacts' %}">напишите</a>, удалю сразу.</p>
+    </div>
+  </footer>
+</body>
+</html>

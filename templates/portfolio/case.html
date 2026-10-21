@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}{{ case.title }} — кейс | Кузьмин Виктор{% endblock %}
+{% block description %}{{ case.summary }}{% endblock %}
+{% block body_class %}page-inner page-case{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <div class="wrap">
+    <p class="case-crumbs"><a href="{% url 'portfolio:list' %}">Работы</a> → <a href="{% url 'portfolio:list' %}?niche={{ case.niche.slug }}">{{ case.niche.name }}</a></p>
+    <h1 class="h-display">{{ case.title }}</h1>
+    <p class="page-lead">{{ case.summary }}</p>
+    {% if case.is_demo_project %}<p class="tag-demo">Демо-проект: концепт по открытым данным, не официальный сайт компании</p>{% endif %}
+    {% if case.demo %}<p><a class="btn btn-accent" href="{{ case.demo.get_absolute_url }}">Смотреть демо</a></p>{% endif %}
+  </div>
+</section>
+<section class="chapter chapter-case">
+  <div class="wrap case-body">
+    <section><h2 class="h-section">Задача</h2><p>{{ case.task|linebreaksbr }}</p></section>
+    <section><h2 class="h-section">Решение</h2><p>{{ case.solution|linebreaksbr }}</p></section>
+    <section><h2 class="h-section">Что сделано</h2><ul>{% for d in case.done_list %}<li>{{ d }}</li>{% endfor %}</ul></section>
+    {% if case.demo.sources %}
+    <section><h2 class="h-section">Источники данных</h2>
+      <ul class="sources">{% for s in case.demo.sources %}<li><a href="{{ s.url }}" rel="noopener nofollow" target="_blank">{{ s.what }}</a>{% if s.checked_at %} — проверено {{ s.checked_at }}{% endif %}</li>{% endfor %}</ul>
+    </section>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

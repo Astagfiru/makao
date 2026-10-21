@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load site_tags %}
+{% block title %}{{ page.title }}{% endblock %}
+{% block description %}{{ page.description }}{% endblock %}
+{% block body_class %}page-inner page-seo{% endblock %}
+{% block head %}<script type="application/ld+json" nonce="{{ request.csp_nonce }}">{"@context": "https://schema.org", "@type": "Service", "name": "{{ page.h1|escapejs }}", "areaServed": "Якутск", "provider": {"@type": "Person", "name": "{{ site_settings.operator_name|escapejs }}"}, "offers": {"@type": "AggregateOffer", "lowPrice": "15000", "priceCurrency": "RUB"}}</script>{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <div class="wrap">
+    <h1 class="h-display">{{ page.h1 }}</h1>
+    <p class="page-lead">{{ page.lead }}</p>
+    <p><a class="btn btn-accent" href="#zayavka">Обсудить проект</a></p>
+  </div>
+</section>
+<article class="chapter chapter-article">
+  <div class="wrap article">
+    {% for s in page.sections %}
+    <section class="article-part">
+      <h2 class="h-section">{{ s.h2 }}</h2>
+      {% for p in s.paragraphs %}<p>{{ p }}</p>{% endfor %}
+      {% if s.bullets %}<ul>{% for b in s.bullets %}<li>{{ b }}</li>{% endfor %}</ul>{% endif %}
+    </section>
+    {% endfor %}
+  </div>
+</article>
+<section class="chapter chapter-pricing" aria-labelledby="seo-prices">
+  <div class="wrap">
+    <h2 id="seo-prices" class="h-section">Цены</h2>
+    <ul class="price-lines" role="list">
+      {% for t in tariffs %}<li><span class="price-name">{{ t.name }}</span><span class="price-sum">от {{ t.price_from|rub }}</span><span class="price-time">{{ t.duration }}</span></li>{% endfor %}
+    </ul>
+  </div>
+</section>
+{% if cases %}
+<section class="chapter chapter-seo-cases" aria-labelledby="seo-cases">
+  <div class="wrap">
+    <h2 id="seo-cases" class="h-section">Примеры для Якутска</h2>
+    <ul class="case-links" role="list">{% for c in cases %}<li><a href="{{ c.get_absolute_url }}">{{ c.title }}</a> — {{ c.summary }}</li>{% endfor %}</ul>
+  </div>
+</section>
+{% endif %}
+<section class="chapter chapter-cta" id="zayavka" aria-labelledby="seo-cta">
+  <div class="wrap"><div class="cta-tile cta-tile-solo">
+    <h2 id="seo-cta" class="h-section">Обсудим ваш сайт</h2>
+    {% include "partials/lead_form.html" %}
+  </div></div>
+</section>
+{% endblock %}

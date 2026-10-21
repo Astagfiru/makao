@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Заявка принята — Кузьмин Виктор{% endblock %}
+{% block robots %}<meta name="robots" content="noindex">{% endblock %}
+{% block body_class %}page-inner{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <div class="wrap">
+    <h1 class="h-display">Заявка принята</h1>
+    <p class="page-lead">{% if lead_id %}Номер заявки — {{ lead_id }}. {% endif %}Свяжусь с вами в ближайшее время. Если срочно — напишите в мессенджер.</p>
+    <p><a class="btn btn-accent" href="{% url 'portfolio:list' %}">Пока посмотреть работы</a> <a class="btn btn-ghost" href="{% url 'core:home' %}">На главную</a></p>
+  </div>
+</section>
+{% endblock %}

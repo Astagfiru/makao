@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Страница не найдена — Кузьмин Виктор{% endblock %}
+{% block robots %}<meta name="robots" content="noindex">{% endblock %}
+{% block body_class %}page-inner{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <div class="wrap">
+    <h1 class="h-display">Такой страницы нет</h1>
+    <p class="page-lead">Возможно, адрес изменился. Начните с главной или посмотрите работы.</p>
+    <p><a class="btn btn-accent" href="{% url 'core:home' %}">На главную</a> <a class="btn btn-ghost" href="{% url 'portfolio:list' %}">Работы</a></p>
+  </div>
+</section>
+{% endblock %}

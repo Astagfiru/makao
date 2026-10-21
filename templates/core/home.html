@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% load static site_tags %}
+{% block title %}Сайты под ключ для бизнеса в Якутске — от 15 000 ₽ | Кузьмин Виктор{% endblock %}
+{% block body_class %}page-home{% endblock %}
+{% block head %}<script type="application/ld+json" nonce="{{ request.csp_nonce }}">{
+  "@context": "https://schema.org", "@type": "ProfessionalService",
+  "name": "Кузьмин Виктор — разработка сайтов", "url": "{{ SITE_URL }}/",
+  "areaServed": {"@type": "City", "name": "Якутск"},
+  "address": {"@type": "PostalAddress", "addressLocality": "Якутск", "addressCountry": "RU"},
+  "priceRange": "от 15 000 ₽",
+  "makesOffer": [{% for t in tariffs %}{"@type": "Offer", "name": "{{ t.name|escapejs }}", "price": "{{ t.price_from }}", "priceCurrency": "RUB"}{% if not forloop.last %}, {% endif %}{% endfor %}]
+}</script>{% endblock %}
+{% block content %}
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero-sky" aria-hidden="true"><div class="aurora"></div></div>
+  <div class="hero-snow" aria-hidden="true"></div>
+  <div class="hero-type">
+    <h1 id="hero-title" class="hero-title"><span class="line"><span>Сайты под ключ</span></span> <span class="line"><span>для бизнеса в Якутске</span></span></h1>
+    <p class="hero-title hero-title-under" aria-hidden="true"><span class="line"><span>Сайты под ключ</span></span> <span class="line"><span>для бизнеса в Якутске</span></span></p>
+  </div>
+  <div class="hero-foot">
+    <p class="hero-lead">От 15&nbsp;000&nbsp;₽, запуск от 5 дней. Договор, оплата 30/70, сайт полностью ваш.</p>
+    <div class="hero-actions">
+      {% for c in channels_cta|slice:":2" %}<a class="btn{% if forloop.first %} btn-accent{% else %} btn-ink{% endif %}" href="{{ c.url }}" rel="noopener" target="_blank">Написать в {{ c.label }}</a>{% endfor %}
+      <a class="btn btn-ghost" href="#zayavka">Оставить заявку</a>
+    </div>
+  </div>
+</section>
+
+{% if cases %}
+<section class="chapter chapter-work" id="raboty" aria-labelledby="work-title">
+  <div class="wrap">
+    <h2 id="work-title" class="h-section">Демо для Якутска</h2>
+    <p class="lead-small">Концепты сайтов для шести настоящих бизнесов города — по открытым данным 2ГИС. Так может выглядеть сайт в вашей нише.</p>
+  </div>
+  <div class="folders">
+    {% for case in cases %}
+    <article class="folder folder-{{ case.demo.theme|default:'plain' }}" aria-labelledby="folder-{{ case.slug }}">
+      <div class="folder-strip">
+        <h3 class="folder-tab" id="folder-{{ case.slug }}">{{ case.demo.business_name|default:case.title }}</h3>
+        <span class="folder-niche">{{ case.niche.name }}</span>
+      </div>
+      <div class="folder-body">
+        <a class="folder-shot" href="{% if case.demo %}{{ case.demo.get_absolute_url }}{% else %}{{ case.get_absolute_url }}{% endif %}" tabindex="-1" aria-hidden="true">
+          {% if case.preview %}<img src="{{ case.preview.url }}" alt="" width="1600" height="1000" loading="lazy" decoding="async">
+          {% else %}<span class="mock mock-{{ case.demo.theme|default:'plain' }}"><span class="mock-name">{{ case.demo.business_name|default:case.title }}</span><span class="mock-line"></span><span class="mock-line short"></span></span>{% endif %}
+        </a>
+        <div class="folder-text">
+          <p>{{ case.summary }}</p>
+          {% if case.is_demo_project %}<p class="tag-demo">Демо-проект, не официальный сайт</p>{% endif %}
+          <p class="folder-links">{% if case.demo %}<a class="btn btn-ink" href="{{ case.demo.get_absolute_url }}">Смотреть демо</a>{% endif %} <a class="link-arrow" href="{{ case.get_absolute_url }}">Как сделано</a></p>
+        </div>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+  <div class="wrap"><a class="link-arrow" href="{% url 'portfolio:list' %}">Все работы и фильтр по нишам</a></div>
+</section>
+{% endif %}
+
+<section class="chapter chapter-features" aria-labelledby="features-title">
+  <div class="wrap features">
+    <div class="features-head">
+      <h2 id="features-title" class="h-section">С&nbsp;чем спокойно</h2>
+      <p>Шесть вещей, которые я обещаю в договоре и делаю в каждом проекте.</p>
+    </div>
+    <ul class="specimens" role="list">
+      {% for a in advantages %}
+      <li class="specimen specimen-{{ forloop.counter }}">
+        <div class="specimen-tile" aria-hidden="true"><svg viewBox="0 0 120 120"><use href="#obj-{{ a.icon }}"/></svg></div>
+        <h3>{{ a.title }}</h3>
+        <p>{{ a.text }}</p>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+<section class="chapter chapter-pricing" id="ceny" aria-labelledby="pricing-title">
+  <div class="wrap pricing">
+    <h2 id="pricing-title" class="h-section pricing-title">Цены без сюрпризов</h2>
+    <p class="pricing-note">Цена «от» — итоговую фиксирую в договоре до начала работ. Даты — если начать сегодня.</p>
+    <ol class="steps-bars" role="list">
+      {% for t in tariffs %}
+      <li class="bar bar-{{ forloop.counter }}{% if t.is_featured %} is-featured{% endif %}">
+        <h3 class="bar-name">{{ t.name }}</h3>
+        <p class="bar-price">от {{ t.price_from|rub }}</p>
+        <p class="bar-when">{{ t.duration }} · <span class="launch">готов {% if t.launch_to %}{{ t.launch_from|date:"j E" }} — {{ t.launch_to|date:"j E" }}{% else %}не раньше {{ t.launch_from|date:"j E" }}{% endif %}</span></p>
+        {% if t.summary %}<p class="bar-summary">{{ t.summary }}</p>{% endif %}
+        <ul class="bar-list" role="list">{% for f in t.feature_list %}<li>{{ f }}</li>{% endfor %}</ul>
+        <a class="bar-action" href="#zayavka" data-tariff="{{ t.name }}">Обсудить {{ t.name|lower }}</a>
+      </li>
+      {% endfor %}
+    </ol>
+  </div>
+</section>
+
+<section class="chapter chapter-steps" id="etapy" aria-labelledby="steps-title">
+  <div class="wrap steps-intro">
+    <h2 id="steps-title" class="h-section">Как идёт работа</h2>
+    <p>От первого сообщения до запуска — шесть шагов. Платите в два приёма: <strong>30%</strong> перед началом и <strong>70%</strong> после того, как приняли готовый сайт.</p>
+  </div>
+  <ol class="accordion wrap" data-accordion role="list">
+    {% for s in steps %}
+    <li class="stage stage-{{ forloop.counter }}{% if forloop.first %} is-open{% endif %}">
+      <h3 class="stage-head"><button type="button" class="stage-btn" aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}" aria-controls="stage-{{ forloop.counter }}">{{ s.title }}</button></h3>
+      <div class="stage-body" id="stage-{{ forloop.counter }}"><p>{{ s.text }}</p></div>
+    </li>
+    {% endfor %}
+  </ol>
+</section>
+
+{% if reviews %}
+<section class="chapter chapter-reviews" aria-labelledby="reviews-title">
+  <div class="wrap">
+    <h2 id="reviews-title" class="h-section">Что говорят клиенты</h2>
+    <div class="reviews">
+      {% for r in reviews %}<blockquote class="review"><p>{{ r.text }}</p><footer>{{ r.author_name }}{% if r.client_niche %}, {{ r.client_niche }}{% endif %}</footer></blockquote>{% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if faq %}
+<section class="chapter chapter-faq" aria-labelledby="faq-title">
+  <div class="faq-head"><h2 id="faq-title" class="wrap h-display">Частые вопросы</h2></div>
+  {% for item in faq %}
+  <div class="faq-band">
+    <div class="wrap faq-row"><h3>{{ item.question }}</h3><p>{{ item.answer|linebreaksbr }}</p></div>
+  </div>
+  {% endfor %}
+</section>
+{% endif %}
+
+<section class="chapter chapter-cta" id="zayavka" aria-labelledby="cta-title">
+  <div class="cta-row">
+    <div class="cta-flank cta-flank-photo"><img src="{% static 'img/yakutsk-frost-800.webp' %}" srcset="{% static 'img/yakutsk-frost-800.webp' %} 800w, {% static 'img/yakutsk-frost.webp' %} 1500w" sizes="(max-width: 720px) 50vw, 20vw" alt="Улица Якутска в мороз: провода в инее, пар от машин" width="800" height="535" loading="lazy" decoding="async"></div>
+    <div class="cta-tile">
+      <h2 id="cta-title" class="h-section">Обсудим ваш сайт</h2>
+      <p>Оставьте имя и телефон — перезвоню или напишу, обсудим задачу и сроки. Это ни к чему не обязывает.</p>
+      {% include "partials/lead_form.html" %}
+    </div>
+    <div class="cta-flank cta-flank-colour" aria-hidden="true"></div>
+  </div>
+</section>
+
+{% include "partials/objects.html" %}
+{% endblock %}

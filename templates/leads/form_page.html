@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Заявка на сайт — Кузьмин Виктор{% endblock %}
+{% block robots %}<meta name="robots" content="noindex">{% endblock %}
+{% block body_class %}page-inner{% endblock %}
+{% block content %}
+<section class="chapter">
+  <div class="wrap"><div class="cta-tile cta-tile-solo">
+    <h1 class="h-section">Заявка на сайт</h1>
+    {% if rate_limited %}<p class="form-errors" role="alert">Слишком много заявок с вашего адреса. Попробуйте через 10 минут или напишите в мессенджер.</p>
+    {% elif form.errors %}<p class="form-errors" role="alert">Проверьте поля ниже — заявка ещё не отправлена.</p>{% endif %}
+    {% include "partials/lead_form.html" %}
+  </div></div>
+</section>
+{% endblock %}
