@@ -20,3 +20,10 @@ research-private/
 НОВЫЙ-ЧАТ.md
 .vscode/
 *.log
+.coverage
+htmlcov/
+# Рабочие файлы инструментов дизайна и замеров (Node — только инструмент, в проект не входит)
+.taste-skill/
+node_modules/
+package.json
+package-lock.json

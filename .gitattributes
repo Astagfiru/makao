@@ -4,3 +4,6 @@
 *.bat text eol=crlf
 *.webp binary
 *.woff2 binary
+*.jpg binary
+*.png binary
+*.ico binary
