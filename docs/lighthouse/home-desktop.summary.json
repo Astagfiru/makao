@@ -1,0 +1,16 @@
+{
+ "url": "/",
+ "form_factor": "desktop",
+ "scores": {
+  "performance": 100,
+  "accessibility": 100,
+  "best-practices": 100,
+  "seo": 100
+ },
+ "lcp": "0.4 s",
+ "fcp": "0.4 s",
+ "tbt": "0 ms",
+ "cls": "0.006",
+ "fetched_at": "2026-10-21T22:00:15.061Z",
+ "lighthouse": "13.5.0"
+}

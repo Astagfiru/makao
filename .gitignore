@@ -22,6 +22,7 @@ research-private/
 *.log
 .coverage
 htmlcov/
+.cache/
 # Рабочие файлы инструментов дизайна и замеров (Node — только инструмент, в проект не входит)
 .taste-skill/
 node_modules/

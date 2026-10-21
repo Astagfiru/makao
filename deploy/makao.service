@@ -1,0 +1,21 @@
+# systemd-служба сайта: gunicorn запускается при старте сервера и перезапускается при сбое.
+# Положите в /etc/systemd/system/makao.service, затем: systemctl daemon-reload && systemctl enable --now makao
+[Unit]
+Description=Сайт Кузьмин Виктор (Django + gunicorn)
+After=network.target
+
+[Service]
+User=makao
+Group=makao
+WorkingDirectory=/srv/makao
+ExecStart=/srv/makao/.venv/bin/gunicorn config.wsgi:application --bind 127.0.0.1:8000 --workers 3 --timeout 30 --access-logfile -
+Restart=on-failure
+RestartSec=3
+# Защита: служба не может писать никуда, кроме папки сайта
+NoNewPrivileges=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/srv/makao
+
+[Install]
+WantedBy=multi-user.target

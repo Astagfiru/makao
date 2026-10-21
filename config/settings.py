@@ -152,7 +152,10 @@ if not DEBUG:
     SECURE_HSTS_SECONDS = int(os.getenv("HSTS_SECONDS", "31536000"))
     SECURE_SSL_REDIRECT = env_bool("SSL_REDIRECT", False)  # редирект на HTTPS делает Caddy
 
-CACHES = {"default": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache", "LOCATION": "makao"}}
+# Кэш нужен только для ограничения частоты заявок. На сервере — файловый: общий для всех процессов gunicorn.
+CACHES = {"default": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache", "LOCATION": "makao"}
+          if DEBUG else {"BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+                         "LOCATION": BASE_DIR / ".cache"}}
 
 # Заявки: не больше LEAD_RATE_LIMIT штук за LEAD_RATE_WINDOW секунд с одного адреса (адрес в БД не пишем).
 LEAD_RATE_LIMIT = int(os.getenv("LEAD_RATE_LIMIT", "5"))

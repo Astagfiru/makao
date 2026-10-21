@@ -1,0 +1,16 @@
+{
+ "url": "/",
+ "form_factor": "mobile",
+ "scores": {
+  "performance": 95,
+  "accessibility": 100,
+  "best-practices": 100,
+  "seo": 100
+ },
+ "lcp": "2.1 s",
+ "fcp": "0.9 s",
+ "tbt": "220 ms",
+ "cls": "0",
+ "fetched_at": "2026-10-21T22:00:50.166Z",
+ "lighthouse": "13.5.0"
+}

@@ -1,0 +1,25 @@
+# Caddy: HTTPS-сертификат Let's Encrypt получается и продлевается сам.
+# Замените example.ru на свой домен (в двух местах) и положите файл в /etc/caddy/Caddyfile.
+
+example.ru {
+	encode zstd gzip
+
+	# Загруженные файлы (превью кейсов, фото демо) отдаёт сам Caddy
+	handle_path /media/* {
+		root * /srv/makao/media
+		header Cache-Control "public, max-age=2592000"
+		file_server
+	}
+
+	# Всё остальное — Django через gunicorn (статику /static/ отдаёт WhiteNoise со сжатием и кэшем)
+	reverse_proxy 127.0.0.1:8000
+
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		-Server
+	}
+}
+
+www.example.ru {
+	redir https://example.ru{uri} permanent
+}
