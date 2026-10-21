@@ -22,7 +22,7 @@
       {% for case in cases %}
       <li class="case-card" data-glow>
         <a class="case-link" href="{{ case.get_absolute_url }}">
-          <span class="case-shot">{% if case.preview %}<img src="{{ case.preview.url }}" alt="" width="1600" height="1000" loading="lazy" decoding="async">{% else %}<span class="mock mock-{{ case.demo.theme|default:'plain' }}"><span class="mock-name">{{ case.demo.business_name|default:case.title }}</span><span class="mock-line"></span><span class="mock-line short"></span></span>{% endif %}</span>
+          <span class="case-shot">{% if case.preview %}<img src="{{ case.preview.url }}" alt="" width="1440" height="860" loading="lazy" decoding="async">{% else %}<span class="mock mock-{{ case.demo.theme|default:'plain' }}"><span class="mock-name">{{ case.demo.business_name|default:case.title }}</span><span class="mock-line"></span><span class="mock-line short"></span></span>{% endif %}</span>
           <span class="case-meta"><span class="case-niche">{{ case.niche.name }}</span>{% if case.is_demo_project %}<span class="tag-demo">Демо-проект</span>{% endif %}</span>
           <span class="case-title">{{ case.title }}</span>
           <span class="case-summary">{{ case.summary }}</span>

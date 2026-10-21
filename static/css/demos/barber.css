@@ -1,0 +1,81 @@
+/* Демо Topmen: тёмный мужской стиль, латунь, крупная узкая типографика Oswald. */
+@font-face { font-family: "Oswald"; src: url("../../fonts/oswald-cyrillic-400-700.woff2") format("woff2"); font-weight: 400 700; font-display: swap; unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Oswald"; src: url("../../fonts/oswald-latin-400-700.woff2") format("woff2"); font-weight: 400 700; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2212; }
+
+.demo-barber { --d-bg: #121110; --d-ink: #efe6d3; --brass: #c9a45c; --brass-deep: #9c7a39; --coal: #1c1a18; --d-stub-bg: #1c1a18; --d-focus: #c9a45c; }
+.demo-barber h1, .demo-barber h2, .demo-barber h3, .tm-logo, .tm-strip strong { font-family: "Oswald", "Onest", sans-serif; text-transform: uppercase; letter-spacing: 0.01em; line-height: 0.95; }
+.demo-barber h2 { font-size: clamp(40px, 1rem + 4vw, 84px); font-weight: 700; color: var(--brass); }
+.demo-barber h3 { font-size: 26px; font-weight: 600; }
+.tm-small { font-size: 15px; opacity: 0.7; }
+
+.tm-top { display: flex; align-items: center; gap: 28px; padding-block: 20px; }
+.tm-logo { font-size: 30px; font-weight: 700; letter-spacing: 0.08em; text-decoration: none; color: var(--brass); }
+.tm-nav { display: flex; gap: 26px; margin-left: auto; text-transform: uppercase; font-size: 15px; letter-spacing: 0.06em; }
+.tm-nav a { text-decoration: none; }
+.tm-nav a:hover { color: var(--brass); }
+.tm-btn { display: inline-flex; align-items: center; min-height: 46px; padding: 0 22px; background: var(--brass); color: #121110; font-weight: 700; text-decoration: none; text-transform: uppercase; letter-spacing: 0.06em; font-size: 15px; transition: background-color 200ms; }
+.tm-btn:hover { background: #e0bd75; }
+.tm-btn-big { min-height: 60px; padding: 0 32px; font-size: 17px; }
+.tm-link { color: var(--brass); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+
+.tm-hero { position: relative; min-height: min(88svh, 860px); display: flex; align-items: flex-end; overflow: hidden; }
+.tm-hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; filter: grayscale(0.35) contrast(1.05); }
+.tm-hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgb(18 17 16 / 0.2) 0%, rgb(18 17 16 / 0.92) 78%); }
+.tm-hero-in { position: relative; z-index: 1; padding-bottom: clamp(40px, 6vw, 80px); display: grid; gap: 22px; }
+.tm-hero h1 { font-size: clamp(56px, 2rem + 8vw, 168px); font-weight: 700; }
+.tm-hero h1 span { display: block; }
+.tm-hero h1 span:last-child { color: var(--brass); }
+.tm-lead { max-width: 46ch; font-size: 20px; }
+.tm-actions { display: flex; align-items: center; gap: 24px; }
+
+.tm-strip { background: var(--brass); color: #121110; }
+.tm-strip-in { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; padding-block: 28px; }
+.tm-strip p { display: grid; font-weight: 600; text-transform: uppercase; font-size: 14px; letter-spacing: 0.05em; }
+.tm-strip strong { font-size: clamp(36px, 4vw, 56px); }
+
+.tm-included { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; padding-block: clamp(64px, 8vw, 120px); align-items: start; }
+.tm-included > div { display: grid; gap: 18px; }
+.tm-inc-list { counter-reset: i; display: grid; gap: 2px; }
+.tm-inc-list li { padding: 22px 24px; background: var(--coal); font-size: 20px; font-weight: 600; }
+
+.tm-prices { background: #0b0a09; padding-block: clamp(64px, 8vw, 120px); }
+.tm-price-list { margin-top: 36px; display: grid; gap: 2px; }
+.tm-price-list li { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center; padding: 28px 0; border-bottom: 1px solid #3a342b; }
+.tm-price-list p { margin-top: 8px; max-width: 70ch; opacity: 0.75; font-size: 16px; }
+.tm-price-list strong { font-family: "Onest", sans-serif; font-size: clamp(28px, 3vw, 44px); color: var(--brass); white-space: nowrap; }
+.tm-prices .tm-small { margin-top: 20px; }
+
+.tm-gallery { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; padding-block: 4px; }
+.tm-gallery img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; filter: grayscale(0.25); transition: filter 300ms; }
+.tm-gallery img:hover { filter: none; }
+
+.tm-drinks { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; padding-block: clamp(64px, 8vw, 120px); }
+.tm-drinks > div:last-child { display: grid; gap: 16px; }
+.tm-drinks-photos { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.tm-drinks-photos img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; }
+.tm-themes { display: grid; gap: 10px; }
+.tm-themes li { padding-left: 22px; position: relative; }
+.tm-themes li::before { content: ""; position: absolute; left: 0; top: 0.65em; width: 10px; height: 2px; background: var(--brass); }
+
+.tm-awards { background: var(--coal); padding-block: clamp(56px, 7vw, 104px); }
+.tm-award-list { margin-top: 28px; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; }
+.tm-award-list li { padding: 26px 20px; background: #121110; font-family: "Oswald", sans-serif; text-transform: uppercase; font-size: 20px; line-height: 1.15; }
+.tm-award-list li::before { content: "★"; display: block; color: var(--brass); font-size: 26px; margin-bottom: 10px; }
+
+.tm-address { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; padding-block: clamp(64px, 8vw, 120px); align-items: center; }
+.tm-address > div { display: grid; gap: 16px; }
+.tm-address img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+.tm-hours { margin: 0; display: grid; }
+.tm-hours div { display: flex; justify-content: space-between; max-width: 360px; padding: 10px 0; border-bottom: 1px solid #3a342b; }
+.tm-hours dd { margin: 0; font-weight: 700; color: var(--brass); }
+.tm-stub { padding-bottom: clamp(56px, 7vw, 104px); }
+.demo-barber .demo-stub a { background: var(--brass); color: #121110; }
+
+@media (max-width: 900px) {
+  .tm-nav { display: none; }
+  .tm-top { justify-content: space-between; }
+  .tm-strip-in { grid-template-columns: 1fr 1fr; }
+  .tm-included, .tm-drinks, .tm-address { grid-template-columns: 1fr; }
+  .tm-gallery { grid-template-columns: 1fr 1fr; }
+  .tm-award-list { grid-template-columns: 1fr 1fr; }
+}

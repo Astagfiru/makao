@@ -1,3 +1,5 @@
+import shutil
+import tempfile
 from datetime import date
 from io import StringIO
 
@@ -12,8 +14,16 @@ from core.models import ContactChannel, FAQItem, Review, SiteSettings, Tariff
 from core.security import admins_with_default_password, assert_admin_password_changed
 from core.templatetags.site_tags import rub
 
+TMP_MEDIA = tempfile.mkdtemp()
 
+
+@override_settings(MEDIA_ROOT=TMP_MEDIA)
 class PagesTests(TestCase):
+    @classmethod
+    def tearDownClass(cls) -> None:
+        super().tearDownClass()
+        shutil.rmtree(TMP_MEDIA, ignore_errors=True)
+
     def setUp(self) -> None:
         call_command("setup", stdout=StringIO())
 
@@ -130,6 +140,7 @@ class AdminPasswordGuardTests(TestCase):
             assert_admin_password_changed()
 
 
+@override_settings(MEDIA_ROOT=TMP_MEDIA)
 class SetupCommandTests(TestCase):
     def test_setup_creates_admin_and_content_and_is_idempotent(self) -> None:
         out = StringIO()

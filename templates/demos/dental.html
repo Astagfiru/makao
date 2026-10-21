@@ -1,2 +1,89 @@
 {% extends "demos/_base.html" %}
-{% block demo %}{% include "demos/_generic.html" %}{% endblock %}
+{% load demo_tags %}
+{% block photo_credit %}; фото кабинета — Harrison Keely, CC BY 4.0 (сток){% endblock %}
+{% block demo %}
+<header class="dd-top demo-wrap">
+  <a class="dd-logo" href="#top" aria-label="{{ b.name }}">
+    <svg viewBox="0 0 40 32" width="40" height="32" aria-hidden="true"><path d="M8 2h24l8 9-20 19L0 11z" fill="#0fb5a6"/><path d="M0 11h40L20 30z" fill="#0a8f84"/><path d="M8 2l6 9 6-9 6 9 6-9" fill="none" stroke="#fff" stroke-width="1.6"/><path d="M14 11l6 19 6-19" fill="none" stroke="#fff" stroke-width="1.6"/></svg>
+    <span>Дентал Даймонд</span>
+  </a>
+  <nav class="dd-nav" aria-label="Разделы">
+    <a href="#uslugi">Услуги</a><a href="#priem">Как проходит приём</a><a href="#pacienty">Пациенты о нас</a><a href="#kontakty">Контакты</a>
+  </nav>
+  <a class="dd-btn dd-btn-small" href="#zapis">Записаться</a>
+</header>
+
+<section class="dd-hero demo-wrap" id="top">
+  <div class="dd-hero-text">
+    <p class="dd-kicker-free">Первая консультация — бесплатно</p>
+    <h1>{{ b.tagline }}</h1>
+    <p class="dd-lead">{{ b.hero_text }}</p>
+    <p><a class="dd-btn" href="#zapis">Записаться на консультацию</a></p>
+    <ul class="dd-facts" role="list">
+      <li><strong>{{ b.rating.value|comma }} ★</strong> {{ b.rating.ratings }} оценок в 2ГИС</li>
+      <li><strong>Взрослым и детям</strong> 7 направлений</li>
+      <li><strong>Каждый день</strong> сб и вс — по записи</li>
+    </ul>
+  </div>
+  {% with p=b.hero_photo|demo_photo:demo.slug %}{% if p %}
+  <figure class="dd-hero-photo"><img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" fetchpriority="high"></figure>
+  {% endif %}{% endwith %}
+</section>
+
+<section class="dd-services" id="uslugi" aria-labelledby="dd-services-title">
+  <div class="demo-wrap">
+    <h2 id="dd-services-title">Что лечим</h2>
+    <ul class="dd-service-grid" role="list">
+      {% for s in b.services_explained %}<li><h3>{{ s.name }}</h3><p>{{ s.text }}</p></li>{% endfor %}
+    </ul>
+  </div>
+</section>
+
+<section class="dd-cabinet demo-wrap" aria-labelledby="dd-cab-title">
+  {% with p=b.cabinet_photo|demo_photo:demo.slug %}{% if p %}<figure><img src="{{ p.url }}" alt="{{ p.alt }}" width="1600" height="1200" loading="lazy"><figcaption class="demo-credit">Пример кабинета — стоковое фото</figcaption></figure>{% endif %}{% endwith %}
+  <div>
+    <h2 id="dd-cab-title">Детям здесь не страшно</h2>
+    <p>Приём ведут детский стоматолог-терапевт, детский ортодонт и детский хирург. Родители в отзывах пишут, что дети уходят спокойными и ждут следующего визита.</p>
+    {% with p=b.gallery.2|demo_photo:demo.slug %}{% if p %}<img class="dd-kids" src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" loading="lazy">{% endif %}{% endwith %}
+  </div>
+</section>
+
+<section class="dd-process" id="priem" aria-labelledby="dd-process-title">
+  <div class="demo-wrap">
+    <h2 id="dd-process-title">Как проходит приём</h2>
+    <ol class="dd-steps" role="list">
+      {% for s in b.process %}<li><span class="dd-gem" aria-hidden="true"></span><h3>{{ s.title }}</h3><p>{{ s.text }}</p></li>{% endfor %}
+    </ol>
+  </div>
+</section>
+
+<section class="dd-reviews demo-wrap" id="pacienty" aria-labelledby="dd-reviews-title">
+  <div class="dd-score">
+    <p class="dd-score-big">{{ b.rating.value|comma }}</p>
+    <p>{{ b.rating.ratings }} оценок и {{ b.rating.reviews }} отзывов в 2ГИС</p>
+  </div>
+  <div>
+    <h2 id="dd-reviews-title">Что ценят пациенты</h2>
+    <p class="dd-note">Обобщение отзывов в 2ГИС — без цитат и имён.</p>
+    <ul class="dd-themes" role="list">{% for t in b.review_themes %}<li>{{ t|capfirst }}</li>{% endfor %}</ul>
+  </div>
+</section>
+
+<section class="dd-gallery" aria-label="Клиника внутри">
+  <div class="demo-wrap dd-gallery-row">
+    {% for p in b.gallery|slice:":2"|demo_photos:demo.slug %}<figure><img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" loading="lazy"><figcaption>{{ p.alt }}</figcaption></figure>{% endfor %}
+    {% for p in b.gallery|slice:"3:"|demo_photos:demo.slug %}<figure><img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" loading="lazy"><figcaption>{{ p.alt }}</figcaption></figure>{% endfor %}
+  </div>
+</section>
+
+<section class="dd-contacts demo-wrap" id="kontakty" aria-labelledby="dd-contacts-title">
+  <div>
+    <h2 id="dd-contacts-title">Адрес и часы</h2>
+    <p class="dd-address">{{ b.address.street|capfirst }}<br>{{ b.address.district }}, {{ b.address.city }}</p>
+    <dl class="dd-hours">{% for d, v in b.hours|hours_rows %}<div><dt>{{ d }}</dt><dd>{{ v }}</dd></div>{% endfor %}</dl>
+    {% if b.hours.note %}<p class="dd-note">{{ b.hours.note|capfirst }}</p>{% endif %}
+    <ul class="dd-features" role="list">{% for f in b.features %}<li>{{ f }}</li>{% endfor %}</ul>
+  </div>
+  {% include "demos/_stub.html" with stub_title="Запись на бесплатную консультацию" %}
+</section>
+{% endblock %}

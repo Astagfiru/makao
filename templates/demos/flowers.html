@@ -1,2 +1,70 @@
 {% extends "demos/_base.html" %}
-{% block demo %}{% include "demos/_generic.html" %}{% endblock %}
+{% load demo_tags %}
+{% block demo %}
+<header class="lf-top demo-wrap">
+  <a class="lf-logo" href="#top">Liks flowers</a>
+  <nav class="lf-nav" aria-label="Разделы"><a href="#katalog">Букеты</a><a href="#vazy">Вазы</a><a href="#zakaz">Как заказать</a><a href="#adres">Адрес</a></nav>
+  <a class="lf-btn" href="#zapis">Заказать букет</a>
+</header>
+
+<section class="lf-hero demo-wrap" id="top">
+  <div class="lf-hero-text">
+    <p class="lf-script">студия флористики</p>
+    <h1>Свежие букеты в центре Якутска</h1>
+    <p class="lf-lead">{{ b.hero_text }}</p>
+    <p class="lf-actions"><a class="lf-btn lf-btn-big" href="#katalog">Выбрать букет</a><span><strong>{{ b.rating.value|comma }}</strong> — {{ b.rating.ratings }} оценок в 2ГИС</span></p>
+  </div>
+  {% with p=b.hero_photo|demo_photo:demo.slug %}{% if p %}<figure class="lf-hero-photo"><img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" fetchpriority="high"></figure>{% endif %}{% endwith %}
+</section>
+
+<section class="lf-catalog" id="katalog" aria-labelledby="lf-cat-title">
+  <div class="demo-wrap">
+    <div class="lf-head"><h2 id="lf-cat-title">Букеты</h2><p>Позиции из прайса студии в 2ГИС. Состав и размер подберут под повод и бюджет.</p></div>
+    <ul class="lf-grid" role="list">
+      {% for item in b.catalog %}{% with p=item.photo|demo_photo:demo.slug %}
+      <li class="lf-card">
+        {% if p %}<img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" loading="lazy">{% endif %}
+        <h3>{{ item.name }}</h3>
+        <p class="lf-price">{% for pr in b.prices %}{% if pr.name == item.name %}{{ pr.price|default:"цена по запросу" }}{% endif %}{% endfor %}</p>
+      </li>{% endwith %}{% endfor %}
+    </ul>
+    {% for p in b.promo %}<p class="lf-promo">{{ p.text }} <span>({{ p.valid }})</span></p>{% endfor %}
+  </div>
+</section>
+
+<section class="lf-vases demo-wrap" id="vazy" aria-labelledby="lf-vases-title">
+  {% with p=b.vases_photo|demo_photo:demo.slug %}{% if p %}<img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" loading="lazy">{% endif %}{% endwith %}
+  <div>
+    <h2 id="lf-vases-title">Вазы к букету</h2>
+    <ul class="lf-vase-list" role="list">{% for pr in b.prices %}{% if pr.category == "Вазы" %}<li>{{ pr.name }}{% if pr.note %} <span>· {{ pr.note|lower }}</span>{% endif %}</li>{% endif %}{% endfor %}</ul>
+    <p class="lf-small">Цены уточняйте в студии.</p>
+  </div>
+</section>
+
+<section class="lf-order" id="zakaz" aria-labelledby="lf-order-title">
+  <div class="demo-wrap lf-order-in">
+    <div>
+      <h2 id="lf-order-title">Как заказать</h2>
+      <ol class="lf-steps" role="list">{% for s in b.process %}<li><h3>{{ s.title }}</h3><p>{{ s.text }}</p></li>{% endfor %}</ol>
+    </div>
+    {% with p=b.delivery_photo|demo_photo:demo.slug %}{% if p %}<img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" loading="lazy">{% endif %}{% endwith %}
+  </div>
+</section>
+
+<section class="lf-love demo-wrap" aria-labelledby="lf-love-title">
+  <h2 id="lf-love-title">Что пишут о нас</h2>
+  <ul class="lf-themes" role="list">{% for t in b.review_themes %}<li>{{ t|capfirst }}</li>{% endfor %}</ul>
+  <p class="lf-small">Обобщение отзывов в 2ГИС — без цитат и имён.</p>
+  <div class="lf-gallery">{% for p in b.gallery|demo_photos:demo.slug %}<img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" loading="lazy">{% endfor %}</div>
+</section>
+
+<section class="lf-address demo-wrap" id="adres" aria-labelledby="lf-addr-title">
+  <div>
+    <h2 id="lf-addr-title">Короленко, 25</h2>
+    <p>{{ b.address.details|capfirst }}, {{ b.address.district }}</p>
+    <dl class="lf-hours">{% for d, v in b.hours|hours_rows %}<div><dt>{{ d }}</dt><dd>{{ v }}</dd></div>{% endfor %}</dl>
+    <ul class="lf-small" role="list">{% for f in b.features %}<li>{{ f }}</li>{% endfor %}</ul>
+  </div>
+  {% include "demos/_stub.html" with stub_title="Здесь будет заказ букета с доставкой" %}
+</section>
+{% endblock %}

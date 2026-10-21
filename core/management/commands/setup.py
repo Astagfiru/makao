@@ -4,7 +4,7 @@ from django.core.management import call_command
 from django.core.management.base import BaseCommand
 
 from core.seed import seed_core
-from portfolio.seed import copy_demo_photos, seed_portfolio
+from portfolio.seed import attach_previews, copy_demo_photos, seed_portfolio
 
 
 class Command(BaseCommand):
@@ -28,8 +28,8 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS(f"3/4 Контент: добавлено {added}."))
 
         copied, missing = copy_demo_photos()
-        note = f"скопировано {copied}" + (f"; нет папки фото у {', '.join(missing)} — будут сток/заглушки"
-                                          if missing else "")
+        note = f"скопировано {copied}, превью кейсов: {attach_previews()}" + (
+            f"; нет папки фото у {', '.join(missing)} — будут сток/заглушки" if missing else "")
         self.stdout.write(self.style.SUCCESS(f"4/4 Фото демо-сайтов: {note}."))
 
         if settings.ADMIN_PASSWORD == settings.DEFAULT_ADMIN_PASSWORD:

@@ -264,7 +264,7 @@ h3 { font-size: var(--fs-h3); font-weight: 700; line-height: 1.2; letter-spacing
 .tag-demo { font-size: var(--fs-small); font-weight: 600; }
 
 /* Цвета ниш — их же используют миниатюры */
-.folder-dental, .mock-dental { --folder-bg: #f2f8f8; --folder-ink: #06343a; --tab-bg: #0fb5a6; --tab-ink: #ffffff; }
+.folder-dental, .mock-dental { --folder-bg: #f2f8f8; --folder-ink: #06343a; --tab-bg: #08756c; --tab-ink: #ffffff; }
 .folder-dryclean, .mock-dryclean { --folder-bg: #d9ecfa; --folder-ink: #0b2a4a; --tab-bg: #ffffff; --tab-ink: #0b2a4a; }
 .folder-barber, .mock-barber { --folder-bg: #121110; --folder-ink: #f1e6cf; --tab-bg: #c9a45c; --tab-ink: #121110; }
 .folder-salon, .mock-salon { --folder-bg: #f7e1ee; --folder-ink: #3a0d2c; --tab-bg: #e0218a; --tab-ink: #ffffff; }
@@ -353,10 +353,8 @@ h3 { font-size: var(--fs-h3); font-weight: 700; line-height: 1.2; letter-spacing
   .js .accordion { display: flex; height: 520px; }
   .js .stage { position: relative; flex: 0 0 calc(42% / 5); overflow: hidden; transition: flex-basis 450ms var(--ease); }
   .js .stage.is-open { flex-basis: 58%; }
-  .js .stage:not(.is-open) .stage-btn { position: absolute; inset: 0; width: 100%; height: 100%; padding: 0; }
-  .js .stage:not(.is-open) .stage-label {
-    position: absolute; left: 18px; bottom: 24px; writing-mode: vertical-rl; transform: rotate(180deg); white-space: nowrap;
-  }
+  .js .stage:not(.is-open) .stage-btn { position: absolute; inset: 0; height: 100%; padding: 24px 0 24px 16px; align-items: flex-end; justify-content: flex-start; }
+  .js .stage:not(.is-open) .stage-label { writing-mode: vertical-rl; transform: rotate(180deg); white-space: nowrap; }
   .js .stage.is-open .stage-btn { font-size: 40px; letter-spacing: -0.02em; padding: 28px 32px 0; min-height: 0; cursor: default; }
   .js .stage.is-open .stage-body { display: block; position: absolute; left: 32px; bottom: 32px; padding: 0; }
   .js .stage:not(.is-open):hover { filter: brightness(1.12); }

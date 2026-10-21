@@ -47,7 +47,7 @@
   var groups = document.querySelectorAll(".chapter, .page-hero");
   if ("IntersectionObserver" in window && !reduceMotion) {
     groups.forEach(function (group) {
-      var parts = group.querySelectorAll("h2, h3, p, li, .btn, img, .mock, .specimen-tile, .cta-tile, .folder-tab");
+      var parts = group.querySelectorAll("h2, h3, p, li, .btn, .specimen-tile, .folder-tab");
       parts.forEach(function (el, i) {
         if (el.closest(".hero") || el.closest(".folder-body") && i > 40) return;
         el.setAttribute("data-reveal", "");

@@ -1,2 +1,82 @@
 {% extends "demos/_base.html" %}
-{% block demo %}{% include "demos/_generic.html" %}{% endblock %}
+{% load demo_tags %}
+{% block demo %}
+<div class="gr-flow">
+<header class="gr-top demo-wrap">
+  <a class="gr-logo" href="#top">градиент</a>
+  <nav class="gr-nav" aria-label="Разделы"><a href="#raboty">Работы</a><a href="#ceny">Цены</a><a href="#vizit">Визит</a><a href="#adres">Адрес</a></nav>
+  <a class="gr-btn" href="#zapis">Онлайн-запись</a>
+</header>
+
+<section class="gr-hero demo-wrap" id="top">
+  <div class="gr-hero-text">
+    <p class="gr-award">Премия 2ГИС · лучшая парикмахерская 2026</p>
+    <h1>{{ b.tagline }}</h1>
+    <p class="gr-lead">{{ b.hero_text }}</p>
+    <p><a class="gr-btn gr-btn-big" href="#zapis">Выбрать время</a></p>
+  </div>
+  {% with p=b.hero_photo|demo_photo:demo.slug %}{% if p %}<img class="gr-hero-photo" src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" fetchpriority="high">{% endif %}{% endwith %}
+</section>
+
+<section class="gr-works" id="raboty" aria-labelledby="gr-works-title">
+  <div class="demo-wrap">
+    <h2 id="gr-works-title">Работы мастеров</h2>
+    <p class="gr-sub">Окрашивание в техниках, скрытое и цветное, каре, локоны. Фото — из карточки салона в 2ГИС.</p>
+  </div>
+  <div class="gr-strip" tabindex="0" aria-label="Галерея работ, листается вбок">
+    {% for p in b.gallery|demo_photos:demo.slug %}<figure><img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" loading="lazy"><figcaption>{{ p.alt }}</figcaption></figure>{% endfor %}
+  </div>
+</section>
+
+<section class="gr-prices demo-wrap" id="ceny" aria-labelledby="gr-prices-title">
+  <div class="gr-prices-head">
+    <h2 id="gr-prices-title">Цены</h2>
+    <p>Вилка — потому что цена зависит от длины волос и опыта мастера. Материалы для окрашивания уже входят в стоимость.</p>
+  </div>
+  <div class="gr-price-cols">
+    {% for group, items in b.prices|price_groups %}
+    <section class="gr-price-group">
+      <h3>{{ group }}</h3>
+      <ul role="list">{% for p in items %}<li><span>{{ p.name|capfirst }}</span><strong>{{ p.price|default:"по запросу" }}</strong></li>{% endfor %}</ul>
+    </section>
+    {% endfor %}
+  </div>
+  <p class="gr-small">По прайсу 2ГИС, {{ b.prices_updated|lower }}.</p>
+</section>
+
+<section class="gr-visit" id="vizit" aria-labelledby="gr-visit-title">
+  <div class="demo-wrap gr-visit-in">
+    <div>
+      <h2 id="gr-visit-title">Как проходит визит</h2>
+      <ol class="gr-steps" role="list">{% for s in b.process %}<li><h3>{{ s.title }}</h3><p>{{ s.text }}</p></li>{% endfor %}</ol>
+    </div>
+    <div class="gr-visit-photos">
+      {% with p=b.work_photo|demo_photo:demo.slug %}{% if p %}<img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" loading="lazy">{% endif %}{% endwith %}
+      {% with p=b.care_photo|demo_photo:demo.slug %}{% if p %}<img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" loading="lazy">{% endif %}{% endwith %}
+    </div>
+  </div>
+</section>
+
+<section class="gr-love demo-wrap" aria-labelledby="gr-love-title">
+  <p class="gr-score">{{ b.rating.value|comma }}<span>{{ b.rating.ratings }} оценок · {{ b.rating.reviews }} отзывов в 2ГИС</span></p>
+  <div>
+    <h2 id="gr-love-title">За что любят салон</h2>
+    <ul class="gr-themes" role="list">{% for t in b.review_themes %}<li>{{ t|capfirst }}</li>{% endfor %}</ul>
+    <p class="gr-small">Обобщение отзывов в 2ГИС — без цитат и имён.</p>
+  </div>
+</section>
+
+<section class="gr-address" id="adres" aria-labelledby="gr-addr-title">
+  <div class="demo-wrap gr-address-in">
+    {% with p=b.place_photo|demo_photo:demo.slug %}{% if p %}<img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" loading="lazy">{% endif %}{% endwith %}
+    <div>
+      <h2 id="gr-addr-title">Орджоникидзе, 44</h2>
+      <p>{{ b.address.details|capfirst }}, {{ b.address.district }}</p>
+      <dl class="gr-hours">{% for d, v in b.hours|hours_rows %}<div><dt>{{ d }}</dt><dd>{{ v }}</dd></div>{% endfor %}</dl>
+      <ul class="gr-tags" role="list">{% for a in b.awards %}<li>{{ a }}</li>{% endfor %}<li>Wi-Fi для клиентов</li><li>Можно с собакой</li></ul>
+      {% include "demos/_stub.html" with stub_title="Здесь будет онлайн-запись" %}
+    </div>
+  </div>
+</section>
+</div>
+{% endblock %}

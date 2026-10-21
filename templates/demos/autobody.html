@@ -1,2 +1,81 @@
 {% extends "demos/_base.html" %}
-{% block demo %}{% include "demos/_generic.html" %}{% endblock %}
+{% load demo_tags %}
+{% block demo %}
+<header class="sa-top demo-wrap">
+  <a class="sa-logo" href="#top"><span>САНЬЯ</span> кузовной ремонт</a>
+  <nav class="sa-nav" aria-label="Разделы"><a href="#pdr">ПДР</a><a href="#remont">Как чиним</a><a href="#uslugi">Услуги</a><a href="#adres">Адрес</a></nav>
+  <a class="sa-btn" href="#zapis">Записаться на осмотр</a>
+</header>
+
+<section class="sa-hero" id="top">
+  {% with p=b.hero_photo|demo_photo:demo.slug %}{% if p %}<img class="sa-hero-bg" src="{{ p.url }}" alt="" width="{{ p.width }}" height="{{ p.height }}" fetchpriority="high">{% endif %}{% endwith %}
+  <div class="demo-wrap sa-hero-in">
+    <h1>Кузов по заводским данным</h1>
+    <p class="sa-lead">Без шпаклёвки. Вмятины — без покраски (ПДР).</p>
+    <p class="sa-text">{{ b.hero_text }}</p>
+    <p class="sa-actions"><a class="sa-btn sa-btn-big" href="#zapis">Записаться на осмотр</a><a class="sa-link" href="#pdr">Что такое ПДР</a></p>
+  </div>
+</section>
+
+<section class="sa-pdr" id="pdr" aria-labelledby="sa-pdr-title">
+  <div class="demo-wrap sa-pdr-in">
+    <h2 id="sa-pdr-title">{{ b.pdr.title }}</h2>
+    <div>
+      <p class="sa-pdr-text">{{ b.pdr.text }}</p>
+      <svg class="sa-pdr-pic" viewBox="0 0 520 160" role="img" aria-label="Схема: вмятину выдавливают изнутри, краска остаётся целой">
+        <path d="M10 60 C120 60 170 60 210 60 C240 60 250 105 280 105 C310 105 320 60 350 60 C390 60 430 60 510 60" fill="none" stroke="#ff6a13" stroke-width="10" stroke-linecap="round"/>
+        <path d="M10 40 H510" stroke="#f3f4f6" stroke-width="4" stroke-dasharray="10 10" opacity="0.5"/>
+        <path d="M280 150 V118" stroke="#f3f4f6" stroke-width="8" stroke-linecap="round"/>
+        <path d="M266 130 L280 112 L294 130" fill="none" stroke="#f3f4f6" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="10" y="28" fill="#f3f4f6" font-size="18" font-family="Onest, sans-serif">так должно быть</text>
+        <text x="300" y="150" fill="#f3f4f6" font-size="18" font-family="Onest, sans-serif">давим изнутри</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="sa-repair demo-wrap" id="remont" aria-labelledby="sa-repair-title">
+  <h2 id="sa-repair-title">Как проходит ремонт</h2>
+  <ol class="sa-steps" role="list">
+    {% for s in b.process %}{% with p=b.process_photos|slice:forloop.counter|last %}
+    <li>
+      {% with ph=p|demo_photo:demo.slug %}{% if ph %}<img src="{{ ph.url }}" alt="{{ ph.alt }}" width="{{ ph.width }}" height="{{ ph.height }}" loading="lazy">{% endif %}{% endwith %}
+      <h3>{{ s.title }}</h3><p>{{ s.text }}</p>
+    </li>{% endwith %}
+    {% endfor %}
+  </ol>
+</section>
+
+<section class="sa-services" id="uslugi" aria-labelledby="sa-services-title">
+  <div class="demo-wrap sa-services-in">
+    <div>
+      <h2 id="sa-services-title">Что делаем</h2>
+      <ul class="sa-list" role="list">{% for p in b.prices %}<li><span>{{ p.name }}</span><em>цена после осмотра</em></li>{% endfor %}<li><span>Ремонт вмятин без покраски (ПДР)</span><em>цена после осмотра</em></li><li><span>Сварка</span><em>цена после осмотра</em></li><li><span>Автоэмали и подбор краски</span><em>в магазине сервиса</em></li></ul>
+      <p class="sa-small">В прайсе 2ГИС у всех работ пометка «Цены уточняйте»: стоимость зависит от повреждения — её называют после осмотра.</p>
+    </div>
+    <div class="sa-services-photos">{% for p in b.gallery|demo_photos:demo.slug %}<img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" loading="lazy">{% endfor %}</div>
+  </div>
+</section>
+
+<section class="sa-trust demo-wrap" aria-labelledby="sa-trust-title">
+  <p class="sa-score">{{ b.rating.value|comma }}<span>{{ b.rating.ratings }} оценок в 2ГИС</span></p>
+  <div>
+    <h2 id="sa-trust-title">Что говорят клиенты</h2>
+    <ul class="sa-themes" role="list">{% for t in b.review_themes %}<li>{{ t|capfirst }}</li>{% endfor %}</ul>
+    <p class="sa-small">Обобщение отзывов об автосервисе в 2ГИС — без цитат и имён.</p>
+  </div>
+</section>
+
+<section class="sa-address" id="adres" aria-labelledby="sa-addr-title">
+  <div class="demo-wrap sa-address-in">
+    <div>
+      <h2 id="sa-addr-title">Чернышевского, 65</h2>
+      <p>{{ b.address.details|capfirst }}, Залог, {{ b.address.city }}</p>
+      <dl class="sa-hours">{% for d, v in b.hours|hours_rows %}<div><dt>{{ d }}</dt><dd>{{ v }}</dd></div>{% endfor %}</dl>
+      <ul class="sa-small" role="list">{% for f in b.features %}<li>{{ f }}</li>{% endfor %}</ul>
+    </div>
+    {% with p=b.place_photo|demo_photo:demo.slug %}{% if p %}<img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" loading="lazy">{% endif %}{% endwith %}
+  </div>
+  <div class="demo-wrap">{% include "demos/_stub.html" with stub_title="Здесь будет запись на осмотр" %}</div>
+</section>
+{% endblock %}

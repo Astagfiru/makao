@@ -5,6 +5,7 @@ from datetime import date
 from pathlib import Path
 
 from django.conf import settings
+from django.core.files import File
 
 from portfolio.models import Case, DemoSite, Niche
 
@@ -68,6 +69,18 @@ def seed_portfolio(refresh: bool = False) -> dict[str, int]:
             Case.objects.filter(slug=spec["slug"]).update(**case_values)
             counts["кейсы"] += 1
     return {name: n for name, n in counts.items() if n}
+
+
+def attach_previews() -> int:
+    """Скриншоты демо (research-private/previews/<slug>.webp) -> превью кейсов без своей картинки."""
+    attached = 0
+    for case in Case.objects.filter(preview=""):
+        shot = PRIVATE_DIR / "previews" / f"{case.slug}.webp"
+        if shot.is_file():
+            with shot.open("rb") as fh:
+                case.preview.save(shot.name, File(fh), save=True)
+            attached += 1
+    return attached
 
 
 def copy_demo_photos() -> tuple[int, list[str]]:

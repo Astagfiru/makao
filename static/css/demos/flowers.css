@@ -1,0 +1,73 @@
+/* Демо Liks flowers: элегантная флористика — пастель, антиква Cormorant Garamond, много воздуха. */
+@font-face { font-family: "Cormorant Garamond"; src: url("../../fonts/cormorant-cyrillic.woff2") format("woff2"); font-weight: 500 700; font-display: swap; unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Cormorant Garamond"; src: url("../../fonts/cormorant-latin.woff2") format("woff2"); font-weight: 500 700; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2212; }
+
+.demo-flowers { --d-bg: #fbf5f2; --d-ink: #3d2128; --rose: #e9a5b0; --rose-deep: #b8566a; --blush: #f6e1e0; --sage: #dfe6d8; --d-stub-bg: #3d2128; }
+.demo-flowers h1, .demo-flowers h2, .demo-flowers h3, .lf-logo, .lf-script { font-family: "Cormorant Garamond", Georgia, serif; font-weight: 600; letter-spacing: -0.01em; line-height: 1; }
+.demo-flowers h2 { font-size: clamp(42px, 1rem + 4vw, 84px); }
+.demo-flowers h3 { font-size: 28px; }
+.lf-small { font-size: 15px; opacity: 0.7; }
+
+.lf-top { display: flex; align-items: center; gap: 28px; padding-block: 20px; }
+.lf-logo { font-size: 34px; font-style: italic; text-decoration: none; color: var(--rose-deep); }
+.lf-nav { display: flex; gap: 24px; margin-left: auto; }
+.lf-nav a { text-decoration: none; }
+.lf-nav a:hover { color: var(--rose-deep); }
+.lf-btn { display: inline-flex; align-items: center; min-height: 48px; padding: 0 24px; border-radius: 999px; background: var(--d-ink); color: #fbf5f2; text-decoration: none; font-weight: 600; transition: background-color 200ms; }
+.lf-btn:hover { background: var(--rose-deep); }
+.lf-btn-big { min-height: 58px; padding: 0 32px; }
+
+.lf-hero { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; padding-block: clamp(24px, 4vw, 56px) clamp(72px, 9vw, 130px); }
+.lf-hero-text { display: grid; gap: 22px; }
+.lf-script { font-style: italic; font-size: 30px; color: var(--rose-deep); }
+.lf-hero h1 { font-size: clamp(56px, 1.5rem + 6vw, 128px); }
+.lf-lead { font-size: 20px; max-width: 40ch; }
+.lf-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 20px; }
+.lf-actions strong { font-family: "Cormorant Garamond", serif; font-size: 34px; }
+.lf-hero-photo img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 999px 999px 24px 24px; }
+
+.lf-catalog { background: var(--blush); padding-block: clamp(64px, 8vw, 120px); }
+.lf-head { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: end; }
+.lf-grid { margin-top: 40px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px 20px; }
+.lf-card { display: grid; gap: 10px; }
+.lf-card img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 20px; transition: transform 500ms; }
+.lf-card:hover img { transform: scale(1.02); }
+.lf-price { font-weight: 600; color: var(--rose-deep); }
+.lf-promo { margin-top: 32px; padding: 18px 22px; border-radius: 20px; background: #fff; font-weight: 600; }
+.lf-promo span { font-weight: 400; opacity: 0.7; }
+
+.lf-vases { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 56px; align-items: center; padding-block: clamp(64px, 8vw, 120px); }
+.lf-vases img { width: 100%; border-radius: 24px; aspect-ratio: 4 / 5; object-fit: cover; }
+.lf-vases > div { display: grid; gap: 18px; }
+.lf-vase-list { display: grid; gap: 8px; font-size: 22px; font-family: "Cormorant Garamond", serif; }
+.lf-vase-list span { font-family: "Onest", sans-serif; font-size: 15px; opacity: 0.7; }
+
+.lf-order { background: var(--sage); padding-block: clamp(64px, 8vw, 120px); }
+.lf-order-in { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 56px; align-items: center; }
+.lf-steps { margin-top: 32px; display: grid; gap: 24px; }
+.lf-steps li { display: grid; gap: 6px; padding-left: 26px; border-left: 3px solid var(--rose-deep); }
+.lf-order img { width: 100%; border-radius: 24px; aspect-ratio: 4 / 5; object-fit: cover; }
+
+.lf-love { padding-block: clamp(64px, 8vw, 120px); display: grid; gap: 22px; }
+.lf-themes { display: flex; flex-wrap: wrap; gap: 10px; }
+.lf-themes li { padding: 12px 20px; border-radius: 999px; background: #fff; font-size: 18px; }
+.lf-gallery { margin-top: 16px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.lf-gallery img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 20px; }
+
+.lf-address { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; padding-bottom: clamp(64px, 8vw, 120px); align-items: start; }
+.lf-address > div { display: grid; gap: 16px; }
+.lf-hours { margin: 0; display: grid; }
+.lf-hours div { display: flex; justify-content: space-between; max-width: 360px; padding: 10px 0; }
+.lf-hours dd { margin: 0; font-weight: 700; }
+.demo-flowers .demo-stub { border-radius: 28px; }
+.demo-flowers .demo-stub a { border-radius: 999px; background: var(--rose); color: var(--d-ink); }
+
+@media (max-width: 900px) {
+  .lf-nav { display: none; }
+  .lf-top { justify-content: space-between; }
+  .lf-hero, .lf-head, .lf-vases, .lf-order-in, .lf-address { grid-template-columns: 1fr; }
+  .lf-hero-photo { order: -1; }
+  .lf-hero-photo img { aspect-ratio: 1; }
+  .lf-grid { grid-template-columns: 1fr 1fr; }
+  .lf-gallery { grid-template-columns: 1fr 1fr; }
+}

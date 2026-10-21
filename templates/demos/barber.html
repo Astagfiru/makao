@@ -1,2 +1,77 @@
 {% extends "demos/_base.html" %}
-{% block demo %}{% include "demos/_generic.html" %}{% endblock %}
+{% load demo_tags %}
+{% block demo %}
+<header class="tm-top demo-wrap">
+  <a class="tm-logo" href="#top">TOPMEN</a>
+  <nav class="tm-nav" aria-label="Разделы"><a href="#ceny">Цены</a><a href="#nagrady">Награды</a><a href="#adres">Адрес</a></nav>
+  <a class="tm-btn" href="#zapis">Записаться</a>
+</header>
+
+<section class="tm-hero" id="top">
+  {% with p=b.hero_photo|demo_photo:demo.slug %}{% if p %}<img class="tm-hero-bg" src="{{ p.url }}" alt="" width="{{ p.width }}" height="{{ p.height }}" fetchpriority="high">{% endif %}{% endwith %}
+  <div class="demo-wrap tm-hero-in">
+    <h1><span>Ваше мужское</span> <span>пространство</span></h1>
+    <p class="tm-lead">{{ b.hero_text }}</p>
+    <p class="tm-actions"><a class="tm-btn tm-btn-big" href="#zapis">Записаться онлайн</a><a class="tm-link" href="#ceny">Цены</a></p>
+  </div>
+</section>
+
+<section class="tm-strip" aria-label="Коротко">
+  <div class="demo-wrap tm-strip-in">
+    <p><strong>{{ b.rating.value|comma }}</strong> рейтинг 2ГИС</p>
+    <p><strong>{{ b.rating.reviews }}</strong> отзывов</p>
+    <p><strong>{{ b.awards|length }}</strong> Премий 2ГИС</p>
+    <p><strong>10–20</strong> каждый день</p>
+  </div>
+</section>
+
+<section class="tm-included demo-wrap" aria-labelledby="tm-inc-title">
+  <div>
+    <h2 id="tm-inc-title">В стрижку входит</h2>
+    <p>Форму подбирают по голове, структуре волос и вашему стилю. Работа ножницами и машинкой.</p>
+  </div>
+  <ol class="tm-inc-list" role="list">{% for i in b.included %}<li>{{ i }}</li>{% endfor %}</ol>
+</section>
+
+<section class="tm-prices" id="ceny" aria-labelledby="tm-prices-title">
+  <div class="demo-wrap">
+    <h2 id="tm-prices-title">Цены</h2>
+    <ul class="tm-price-list" role="list">
+      {% for p in b.prices %}<li><div><h3>{{ p.name }}</h3><p>{{ p.note|truncatewords:22 }}</p></div><strong>{{ p.price }}</strong></li>{% endfor %}
+    </ul>
+    <p class="tm-small">По прайсу 2ГИС, {{ b.prices_updated|lower }}. {% for p in b.promo %}{{ p.text }} — по данным taplink барбершопа.{% endfor %}</p>
+  </div>
+</section>
+
+<section class="tm-gallery demo-wrap" aria-label="Работы и зал">
+  {% for p in b.gallery|demo_photos:demo.slug %}<figure><img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" loading="lazy"></figure>{% endfor %}
+</section>
+
+<section class="tm-drinks demo-wrap" aria-labelledby="tm-drinks-title">
+  <div class="tm-drinks-photos">{% for p in b.drinks|demo_photos:demo.slug %}<img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" loading="lazy">{% endfor %}</div>
+  <div>
+    <h2 id="tm-drinks-title">Пока ждёте — чай или кофе</h2>
+    <p>Напитки для гостей бесплатно. Что ценят клиенты по отзывам в 2ГИС:</p>
+    <ul class="tm-themes" role="list">{% for t in b.review_themes %}<li>{{ t|capfirst }}</li>{% endfor %}</ul>
+  </div>
+</section>
+
+<section class="tm-awards" id="nagrady" aria-labelledby="tm-awards-title">
+  <div class="demo-wrap">
+    <h2 id="tm-awards-title">Награды</h2>
+    <ul class="tm-award-list" role="list">{% for a in b.awards %}<li>{{ a }}</li>{% endfor %}</ul>
+  </div>
+</section>
+
+<section class="tm-address demo-wrap" id="adres" aria-labelledby="tm-addr-title">
+  <div>
+    <h2 id="tm-addr-title">Проспект Ленина, 52</h2>
+    <p>{{ b.address.details|capfirst }}, {{ b.address.district }}</p>
+    <dl class="tm-hours">{% for d, v in b.hours|hours_rows %}<div><dt>{{ d }}</dt><dd>{{ v }}</dd></div>{% endfor %}</dl>
+    <p class="tm-small">{{ b.hours.note|capfirst }}</p>
+    <ul class="tm-small" role="list">{% for f in b.features %}<li>{{ f }}</li>{% endfor %}</ul>
+  </div>
+  {% with p=b.place_photo|demo_photo:demo.slug %}{% if p %}<img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" loading="lazy">{% endif %}{% endwith %}
+</section>
+<div class="demo-wrap tm-stub">{% include "demos/_stub.html" with stub_title="Здесь будет онлайн-запись к мастеру" %}</div>
+{% endblock %}

@@ -1,0 +1,79 @@
+/* Демо «Дентал Даймонд»: белый и бирюза, мотив огранки бриллианта, спокойствие и доверие. */
+@font-face { font-family: "Manrope"; src: url("../../fonts/manrope-cyrillic-400-800.woff2") format("woff2"); font-weight: 400 800; font-display: swap; unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Manrope"; src: url("../../fonts/manrope-latin-400-800.woff2") format("woff2"); font-weight: 400 800; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2212; }
+
+.demo-dental { --d-bg: #ffffff; --d-ink: #0b2b30; --teal: #0fb5a6; --teal-deep: #0a8f84; --mint: #e7f7f5; --ice: #f3f8f9; --d-stub-bg: #0b2b30; font-family: "Manrope", "Onest", sans-serif; }
+.demo-dental h1, .demo-dental h2, .demo-dental h3 { letter-spacing: -0.02em; line-height: 1.08; }
+.demo-dental h2 { font-size: clamp(32px, 1rem + 2.6vw, 52px); font-weight: 800; }
+.demo-dental h3 { font-size: 21px; font-weight: 800; }
+
+.dd-top { display: flex; align-items: center; gap: 28px; padding-block: 18px; }
+.dd-logo { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 21px; text-decoration: none; color: var(--teal-deep); }
+.dd-nav { display: flex; gap: 22px; margin-left: auto; font-weight: 600; font-size: 16px; }
+.dd-nav a { text-decoration: none; }
+.dd-nav a:hover { color: var(--teal-deep); }
+.dd-btn { display: inline-flex; align-items: center; min-height: 54px; padding: 0 26px; background: var(--teal); color: #fff; font-weight: 800; text-decoration: none; border-radius: 999px; transition: background-color 200ms, transform 200ms; }
+.dd-btn:hover { background: var(--teal-deep); transform: translateY(-2px); }
+.dd-btn-small { min-height: 44px; padding: 0 20px; }
+
+.dd-hero { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(24px, 4vw, 64px); align-items: center; padding-block: clamp(24px, 4vw, 56px) clamp(56px, 7vw, 96px); }
+.dd-hero-text { display: grid; gap: 22px; justify-items: start; }
+.dd-kicker-free { display: inline-block; padding: 8px 16px; background: var(--mint); color: var(--teal-deep); font-weight: 800; border-radius: 999px; }
+.dd-hero h1 { font-size: clamp(40px, 1rem + 4.2vw, 76px); font-weight: 800; }
+.dd-lead { font-size: 20px; max-width: 34ch; }
+.dd-facts { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+.dd-facts li { display: grid; padding: 14px 18px; background: var(--ice); border-radius: 18px; font-size: 15px; }
+.dd-facts strong { font-size: 18px; }
+.dd-hero-photo img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; clip-path: polygon(18% 0, 82% 0, 100% 14%, 100% 100%, 0 100%, 0 14%); }
+
+.dd-services { background: var(--ice); padding-block: clamp(56px, 7vw, 104px); }
+.dd-service-grid { margin-top: 36px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.dd-service-grid li { position: relative; display: grid; gap: 10px; padding: 28px 28px 32px; background: #fff; border-radius: 22px; transition: transform 250ms; }
+.dd-service-grid li::before { content: ""; width: 34px; height: 26px; background: var(--teal); clip-path: polygon(22% 0, 78% 0, 100% 34%, 50% 100%, 0 34%); }
+.dd-service-grid li:hover { transform: translateY(-4px); }
+
+.dd-cabinet { display: grid; grid-template-columns: 1.2fr 1fr; gap: clamp(24px, 4vw, 64px); align-items: center; padding-block: clamp(56px, 7vw, 104px); }
+.dd-cabinet figure img { width: 100%; border-radius: 28px; }
+.dd-cabinet > div { display: grid; gap: 18px; }
+.dd-kids { width: 60%; border-radius: 22px; aspect-ratio: 1; object-fit: cover; }
+
+.dd-process { background: var(--teal); color: #fff; padding-block: clamp(56px, 7vw, 104px); }
+.dd-steps { margin-top: 40px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px; }
+.dd-steps li { display: grid; gap: 12px; align-content: start; }
+.dd-gem { width: 46px; height: 36px; background: #fff; clip-path: polygon(22% 0, 78% 0, 100% 34%, 50% 100%, 0 34%); }
+
+.dd-reviews { display: grid; grid-template-columns: 0.7fr 1.3fr; gap: clamp(24px, 4vw, 64px); padding-block: clamp(56px, 7vw, 104px); align-items: start; }
+.dd-score { padding: 36px; background: var(--mint); border-radius: 28px; display: grid; gap: 6px; }
+.dd-score-big { font-size: clamp(72px, 9vw, 132px); font-weight: 800; line-height: 1; color: var(--teal-deep); letter-spacing: -0.04em; }
+.dd-note { font-size: 15px; opacity: 0.75; margin-top: 8px; }
+.dd-themes { margin-top: 22px; display: grid; gap: 12px; font-size: 19px; }
+.dd-themes li { padding-left: 34px; position: relative; }
+.dd-themes li::before { content: ""; position: absolute; left: 0; top: 6px; width: 18px; height: 14px; background: var(--teal); clip-path: polygon(22% 0, 78% 0, 100% 34%, 50% 100%, 0 34%); }
+
+.dd-gallery { padding-bottom: clamp(56px, 7vw, 104px); }
+.dd-gallery-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.dd-gallery figure { display: grid; gap: 8px; font-size: 14px; }
+.dd-gallery img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 22px; }
+
+.dd-contacts { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px, 4vw, 64px); padding-bottom: clamp(56px, 7vw, 104px); align-items: start; }
+.dd-contacts > div { display: grid; gap: 16px; }
+.dd-address { font-size: 22px; font-weight: 700; }
+.dd-hours { display: grid; gap: 4px; margin: 0; }
+.dd-hours div { display: flex; justify-content: space-between; max-width: 360px; padding: 10px 0; }
+.dd-hours dd { margin: 0; font-weight: 700; }
+.dd-features { display: grid; gap: 6px; font-size: 15px; }
+.demo-dental .demo-stub { border-radius: 28px; }
+.demo-dental .demo-stub a { border-radius: 999px; background: var(--teal); color: #fff; }
+
+@media (max-width: 900px) {
+  .dd-nav { display: none; }
+  .dd-top { justify-content: space-between; }
+  .dd-hero, .dd-cabinet, .dd-reviews, .dd-contacts { grid-template-columns: 1fr; }
+  .dd-hero-photo { order: -1; }
+  .dd-hero-photo img { aspect-ratio: 4 / 3; }
+  .dd-service-grid, .dd-steps { grid-template-columns: 1fr 1fr; }
+  .dd-gallery-row { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 560px) {
+  .dd-service-grid, .dd-steps { grid-template-columns: 1fr; }
+}

@@ -1,2 +1,89 @@
 {% extends "demos/_base.html" %}
-{% block demo %}{% include "demos/_generic.html" %}{% endblock %}
+{% load static demo_tags %}
+{% block demo %}
+<header class="sn-top demo-wrap">
+  <a class="sn-logo" href="#top" aria-label="{{ b.name }}">
+    <svg viewBox="0 0 32 32" width="34" height="34" aria-hidden="true"><g stroke="#e0218a" stroke-width="2.4" stroke-linecap="round"><path d="M16 3v26M4.7 9.5l22.6 13M4.7 22.5l22.6-13"/><path d="M12 5l4 4 4-4M12 27l4-4 4 4" fill="none"/></g></svg>
+    <span>S’Нежный</span>
+  </a>
+  <p class="sn-motto">{{ b.slogan }}</p>
+  <a class="sn-btn sn-btn-ghost" href="#prajs">Цены</a>
+</header>
+
+<section class="sn-hero demo-wrap" id="top">
+  <div class="sn-hero-text">
+    <h1>{{ b.tagline }}</h1>
+    <p class="sn-lead">{{ b.hero_text }}</p>
+    <p class="sn-actions"><a class="sn-btn" href="#prajs">Узнать цену своей вещи</a><a class="sn-btn sn-btn-ghost" href="#punkty">Приёмные пункты</a></p>
+  </div>
+  <div class="sn-hero-side">
+    {% for p in b.promo %}<div class="sn-promo"><p class="sn-promo-big">−15%</p><p>{{ p.text }}</p><p class="sn-promo-dates">Акция действует {{ p.valid }}</p></div>{% endfor %}
+    {% with p=b.hero_photo|demo_photo:demo.slug %}{% if p %}<img class="sn-hero-photo" src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" fetchpriority="high">{% endif %}{% endwith %}
+  </div>
+</section>
+
+<section class="sn-prices" id="prajs" aria-labelledby="sn-prices-title">
+  <div class="demo-wrap">
+    <div class="sn-prices-head">
+      <h2 id="sn-prices-title">Сколько стоит чистка</h2>
+      <p>{{ b.prices|length }} позиций из прайса — {{ b.prices_updated|lower }}. Начните вводить название вещи.</p>
+    </div>
+    <div class="sn-search" data-price-search hidden>
+      <label for="sn-q" class="visually-hidden">Поиск по прайсу</label>
+      <input id="sn-q" type="search" placeholder="Например: пуховик, шуба, плед" autocomplete="off" data-q>
+      <p class="sn-count" data-count aria-live="polite"></p>
+    </div>
+    <nav class="sn-cats" aria-label="Категории прайса">{% for group, items in b.prices|price_groups %}<a href="#cat-{{ forloop.counter }}">{{ group }}</a>{% endfor %}</nav>
+    <div class="sn-groups">
+      {% for group, items in b.prices|price_groups %}
+      <section class="sn-group" id="cat-{{ forloop.counter }}" data-group>
+        <h3>{{ group }}</h3>
+        <ul role="list">{% for p in items %}<li data-row><span>{{ p.name|capfirst }}</span><strong>{{ p.price|default:"по запросу" }}</strong></li>{% endfor %}</ul>
+      </section>
+      {% endfor %}
+    </div>
+    <p class="sn-empty" data-empty hidden>Такой вещи в прайсе нет — на рабочем сайте здесь будет кнопка «Спросить цену».</p>
+    {% if b.prices_note %}<p class="sn-note">Прайс не является публичной офертой, цены уточняйте в приёмных пунктах.</p>{% endif %}
+  </div>
+</section>
+
+<section class="sn-process demo-wrap" aria-labelledby="sn-process-title">
+  <h2 id="sn-process-title">Как мы чистим</h2>
+  <ol class="sn-steps" role="list">{% for s in b.process %}<li><h3>{{ s.title }}</h3><p>{{ s.text }}</p></li>{% endfor %}</ol>
+  <p class="sn-priority">{{ b.priority }}</p>
+</section>
+
+<section class="sn-gallery" aria-labelledby="sn-gallery-title">
+  <div class="demo-wrap">
+    <h2 id="sn-gallery-title">Что к нам приносят</h2>
+    <div class="sn-gallery-grid">{% for p in b.gallery|demo_photos:demo.slug %}<figure><img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" loading="lazy"><figcaption>{{ p.alt }}</figcaption></figure>{% endfor %}</div>
+  </div>
+</section>
+
+<section class="sn-reviews demo-wrap" aria-labelledby="sn-reviews-title">
+  <p class="sn-score"><strong>{{ b.rating.value|comma }}</strong> {{ b.rating.ratings }} оценок в 2ГИС</p>
+  <div>
+    <h2 id="sn-reviews-title">За что нас выбирают</h2>
+    <p class="sn-small">Обобщение отзывов в 2ГИС — без цитат и имён.</p>
+    <ul class="sn-themes" role="list">{% for t in b.review_themes %}<li>{{ t|capfirst }}</li>{% endfor %}</ul>
+  </div>
+</section>
+
+<section class="sn-points" id="punkty" aria-labelledby="sn-points-title">
+  <div class="demo-wrap sn-points-grid">
+    <div>
+      <h2 id="sn-points-title">Приёмные пункты</h2>
+      <ul class="sn-branches" role="list">{% for br in b.branches %}<li><strong>{{ br.address }}</strong><span>★ {{ br.rating }}</span></li>{% endfor %}</ul>
+      <dl class="sn-hours">{% for d, v in b.hours|hours_rows %}<div><dt>{{ d }}</dt><dd>{{ v }}</dd></div>{% endfor %}</dl>
+      <p class="sn-small">Часы — для пункта на Дзержинского, 18 (по 2ГИС). Перерыв в будни — с 14 до 15.</p>
+      <ul class="sn-features" role="list">{% for f in b.features %}<li>{{ f }}</li>{% endfor %}</ul>
+    </div>
+    <div class="sn-points-photos">
+      {% with p=b.point_photo|demo_photo:demo.slug %}{% if p %}<img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" loading="lazy">{% endif %}{% endwith %}
+      {% with p=b.hours_photo|demo_photo:demo.slug %}{% if p %}<img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" loading="lazy">{% endif %}{% endwith %}
+    </div>
+  </div>
+  <div class="demo-wrap">{% include "demos/_stub.html" with stub_title="Здесь будут кнопки «Позвонить» и «Написать»" %}</div>
+</section>
+<script src="{% static 'js/demo-search.js' %}" defer></script>
+{% endblock %}

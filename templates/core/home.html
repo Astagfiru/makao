@@ -43,7 +43,7 @@
       </div>
       <div class="folder-body">
         <a class="folder-shot" href="{% if case.demo %}{{ case.demo.get_absolute_url }}{% else %}{{ case.get_absolute_url }}{% endif %}" tabindex="-1" aria-hidden="true">
-          {% if case.preview %}<img src="{{ case.preview.url }}" alt="" width="1600" height="1000" loading="lazy" decoding="async">
+          {% if case.preview %}<img src="{{ case.preview.url }}" alt="" width="1440" height="860" loading="lazy" decoding="async">
           {% else %}<span class="mock mock-{{ case.demo.theme|default:'plain' }}"><span class="mock-name">{{ case.demo.business_name|default:case.title }}</span><span class="mock-line"></span><span class="mock-line short"></span></span>{% endif %}
         </a>
         <div class="folder-text">

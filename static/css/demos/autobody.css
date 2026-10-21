@@ -1,0 +1,75 @@
+/* Демо «Санья»: индустриальный тёмный + сигнальный оранжевый, шрифт Russo One. */
+@font-face { font-family: "Russo One"; src: url("../../fonts/russo-cyrillic-400.woff2") format("woff2"); font-weight: 400; font-display: swap; unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Russo One"; src: url("../../fonts/russo-latin-400.woff2") format("woff2"); font-weight: 400; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2212; }
+
+.demo-autobody { --d-bg: #16181c; --d-ink: #f3f4f6; --orange: #ff6a13; --steel: #23272e; --plate: #2d323a; --d-stub-bg: #23272e; --d-focus: #ff6a13; }
+.demo-autobody h1, .demo-autobody h2, .demo-autobody h3, .sa-logo span, .sa-score { font-family: "Russo One", "Onest", sans-serif; font-weight: 400; line-height: 1; letter-spacing: 0; }
+.demo-autobody h2 { font-size: clamp(34px, 1rem + 3.4vw, 68px); }
+.demo-autobody h3 { font-size: 22px; }
+.sa-small { font-size: 15px; opacity: 0.7; }
+
+.sa-top { display: flex; align-items: center; gap: 28px; padding-block: 18px; }
+.sa-logo { display: flex; align-items: baseline; gap: 10px; text-decoration: none; font-size: 14px; text-transform: uppercase; letter-spacing: 0.08em; }
+.sa-logo span { font-size: 30px; color: var(--orange); letter-spacing: 0.02em; }
+.sa-nav { display: flex; gap: 24px; margin-left: auto; font-weight: 600; }
+.sa-nav a { text-decoration: none; }
+.sa-nav a:hover { color: var(--orange); }
+.sa-btn { display: inline-flex; align-items: center; min-height: 48px; padding: 0 22px; background: var(--orange); color: #160a02; font-weight: 800; text-decoration: none; clip-path: polygon(0 0, 100% 0, 100% 70%, 92% 100%, 0 100%); transition: background-color 200ms; }
+.sa-btn:hover { background: #ff8a45; }
+.sa-btn-big { min-height: 62px; padding: 0 34px; font-size: 18px; }
+.sa-link { font-weight: 700; color: var(--orange); }
+
+.sa-hero { position: relative; min-height: min(86svh, 820px); display: flex; align-items: flex-end; overflow: hidden; }
+.sa-hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 60% 50%; }
+.sa-hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgb(22 24 28 / 0.94) 0%, rgb(22 24 28 / 0.7) 45%, rgb(22 24 28 / 0.15) 100%); }
+.sa-hero-in { position: relative; z-index: 1; display: grid; gap: 18px; padding-block: 64px; max-width: 1320px; }
+.sa-hero h1 { font-size: clamp(48px, 1.6rem + 6vw, 128px); max-width: 11ch; }
+.sa-lead { font-size: clamp(20px, 1rem + 0.6vw, 26px); color: var(--orange); font-weight: 700; max-width: 30ch; }
+.sa-text { max-width: 46ch; font-size: 18px; }
+.sa-actions { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+
+.sa-pdr { background: var(--orange); color: #160a02; padding-block: clamp(56px, 7vw, 104px); }
+.sa-pdr-in { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+.sa-pdr-text { font-size: 22px; font-weight: 600; }
+.sa-pdr-pic { margin-top: 24px; width: 100%; background: #16181c; padding: 18px; }
+
+.sa-repair { padding-block: clamp(64px, 8vw, 120px); }
+.sa-steps { margin-top: 36px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; }
+.sa-steps li { background: var(--steel); display: grid; gap: 10px; align-content: start; padding-bottom: 26px; }
+.sa-steps img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.sa-steps h3, .sa-steps p { padding-inline: 22px; }
+.sa-steps h3 { margin-top: 10px; color: var(--orange); }
+
+.sa-services { background: var(--steel); padding-block: clamp(64px, 8vw, 120px); }
+.sa-services-in { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 48px; align-items: start; }
+.sa-list { margin-top: 28px; display: grid; gap: 4px; }
+.sa-list li { display: flex; justify-content: space-between; gap: 16px; align-items: center; padding: 20px 22px; background: var(--plate); font-size: 19px; font-weight: 700; }
+.sa-list em { font-style: normal; font-weight: 500; font-size: 15px; color: var(--orange); white-space: nowrap; }
+.sa-services .sa-small { margin-top: 16px; }
+.sa-services-photos { display: grid; gap: 4px; }
+.sa-services-photos img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+
+.sa-trust { display: grid; grid-template-columns: 0.6fr 1.4fr; gap: 48px; padding-block: clamp(64px, 8vw, 120px); align-items: center; }
+.sa-score { display: grid; font-size: clamp(90px, 11vw, 170px); color: var(--orange); }
+.sa-score span { font-family: "Onest", sans-serif; font-size: 16px; color: var(--d-ink); }
+.sa-themes { margin-top: 22px; display: grid; gap: 4px; }
+.sa-themes li { padding: 16px 20px; background: var(--steel); font-size: 18px; border-left: 6px solid var(--orange); }
+.sa-trust .sa-small { margin-top: 14px; }
+
+.sa-address { padding-bottom: clamp(64px, 8vw, 120px); }
+.sa-address-in { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; margin-bottom: 40px; }
+.sa-address-in > div { display: grid; gap: 16px; }
+.sa-address-in img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.sa-hours { margin: 0; display: grid; }
+.sa-hours div { display: flex; justify-content: space-between; max-width: 380px; padding: 10px 0; border-bottom: 2px solid var(--plate); }
+.sa-hours dd { margin: 0; font-weight: 800; color: var(--orange); }
+.demo-autobody .demo-stub a { background: var(--orange); color: #160a02; }
+
+@media (max-width: 900px) {
+  .sa-nav { display: none; }
+  .sa-top { justify-content: space-between; }
+  .sa-top .sa-btn { display: none; }
+  .sa-pdr-in, .sa-services-in, .sa-trust, .sa-address-in { grid-template-columns: 1fr; }
+  .sa-steps { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 560px) { .sa-steps { grid-template-columns: 1fr; } }

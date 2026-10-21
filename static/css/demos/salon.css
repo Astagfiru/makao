@@ -1,0 +1,77 @@
+/* Демо «Градиент»: тема — сам градиент. Цвет перетекает от раздела к разделу, как окрашивание. */
+@font-face { font-family: "Unbounded"; src: url("../../fonts/unbounded-cyrillic-400-800.woff2") format("woff2"); font-weight: 400 800; font-display: swap; unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Unbounded"; src: url("../../fonts/unbounded-latin-400-800.woff2") format("woff2"); font-weight: 400 800; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2212; }
+
+.demo-salon { --d-bg: #fff4f9; --d-ink: #2a0b22; --magenta: #e0218a; --violet: #6b2bd9; --peach: #ffb38a; --d-stub-bg: #2a0b22; }
+.gr-flow { background: linear-gradient(180deg, #ffe7f2 0%, #ffd9e8 18%, #f3d4ff 38%, #dcd6ff 58%, #ffe2cf 80%, #fff4f9 100%); }
+.demo-salon h1, .demo-salon h2, .demo-salon h3, .gr-logo, .gr-score { font-family: "Unbounded", "Onest", sans-serif; letter-spacing: -0.02em; line-height: 1.05; }
+.demo-salon h2 { font-size: clamp(32px, 1rem + 3vw, 60px); font-weight: 700; }
+.demo-salon h3 { font-size: 18px; font-weight: 700; }
+.gr-small { font-size: 14px; opacity: 0.7; margin-top: 16px; }
+
+.gr-top { display: flex; align-items: center; gap: 28px; padding-block: 20px; }
+.gr-logo { font-size: 28px; font-weight: 800; text-decoration: none; background: linear-gradient(90deg, var(--magenta), var(--violet)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.gr-nav { display: flex; gap: 22px; margin-left: auto; font-weight: 600; }
+.gr-nav a { text-decoration: none; }
+.gr-btn { display: inline-flex; align-items: center; min-height: 48px; padding: 0 24px; border-radius: 999px; background: linear-gradient(90deg, var(--magenta), var(--violet)); color: #fff; font-weight: 700; text-decoration: none; transition: transform 200ms, box-shadow 200ms; }
+.gr-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgb(224 33 138 / 0.35); }
+.gr-btn-big { min-height: 60px; padding: 0 34px; font-size: 18px; }
+
+.gr-hero { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 48px; align-items: center; padding-block: clamp(24px, 4vw, 56px) clamp(64px, 8vw, 120px); }
+.gr-hero-text { display: grid; gap: 24px; justify-items: start; }
+.gr-award { padding: 8px 16px; border-radius: 999px; background: rgb(255 255 255 / 0.7); font-weight: 700; font-size: 15px; }
+.gr-hero h1 { font-size: clamp(48px, 1rem + 6vw, 120px); font-weight: 800; background: linear-gradient(100deg, var(--magenta) 0%, var(--violet) 55%, #ff7a59 100%); -webkit-background-clip: text; background-clip: text; color: transparent; padding-bottom: 0.08em; }
+.gr-lead { font-size: 20px; max-width: 42ch; }
+.gr-hero-photo { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 200px 200px 32px 32px; }
+
+.gr-works { padding-bottom: clamp(64px, 8vw, 120px); }
+.gr-sub { margin-top: 12px; max-width: 60ch; }
+.gr-strip { margin-top: 32px; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(240px, 22vw); gap: 14px; overflow-x: auto; padding: 0 clamp(16px, 3vw, 40px) 12px; scroll-snap-type: x mandatory; scrollbar-width: thin; }
+.gr-strip figure { scroll-snap-align: start; display: grid; gap: 8px; font-size: 14px; font-weight: 600; }
+.gr-strip img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 28px; transition: transform 400ms; }
+.gr-strip figure:hover img { transform: translateY(-6px) rotate(-1deg); }
+
+.gr-prices { padding-bottom: clamp(64px, 8vw, 120px); }
+.gr-prices-head { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: end; }
+.gr-price-cols { margin-top: 32px; columns: 3 300px; column-gap: 14px; }
+.gr-price-group { break-inside: avoid; margin-bottom: 14px; padding: 24px; border-radius: 28px; background: rgb(255 255 255 / 0.72); }
+.gr-price-group h3 { margin-bottom: 12px; color: var(--magenta); }
+.gr-price-group li { display: flex; justify-content: space-between; gap: 14px; padding: 7px 0; font-size: 15px; }
+.gr-price-group strong { white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+.gr-visit { padding-block: clamp(64px, 8vw, 120px); background: rgb(42 11 34 / 0.92); color: #ffeef8; }
+.gr-visit-in { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 48px; align-items: center; }
+.gr-visit h2 { color: #ffb6dd; }
+.gr-steps { margin-top: 32px; display: grid; gap: 22px; }
+.gr-steps li { display: grid; gap: 6px; padding-left: 28px; position: relative; }
+.gr-steps li::before { content: ""; position: absolute; left: 0; top: 4px; width: 14px; height: 14px; border-radius: 50%; background: linear-gradient(135deg, var(--magenta), var(--peach)); }
+.gr-visit-photos { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.gr-visit-photos img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 28px; }
+.gr-visit-photos img:last-child { margin-top: 48px; }
+
+.gr-love { display: grid; grid-template-columns: 0.7fr 1.3fr; gap: 48px; padding-block: clamp(64px, 8vw, 120px); align-items: center; }
+.gr-score { display: grid; font-size: clamp(80px, 10vw, 160px); font-weight: 800; line-height: 1; background: linear-gradient(135deg, var(--magenta), var(--violet)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.gr-score span { font-family: "Onest", sans-serif; font-size: 16px; font-weight: 600; color: var(--d-ink); -webkit-text-fill-color: var(--d-ink); }
+.gr-themes { margin-top: 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.gr-themes li { padding: 18px 20px; border-radius: 22px; background: rgb(255 255 255 / 0.75); }
+
+.gr-address { padding-bottom: clamp(64px, 8vw, 120px); }
+.gr-address-in { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 48px; align-items: start; }
+.gr-address-in > img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 32px; }
+.gr-address-in > div { display: grid; gap: 18px; }
+.gr-hours { margin: 0; display: grid; }
+.gr-hours div { display: flex; justify-content: space-between; max-width: 380px; padding: 8px 0; }
+.gr-hours dd { margin: 0; font-weight: 700; }
+.gr-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.gr-tags li { padding: 8px 14px; border-radius: 999px; background: #fff; font-size: 14px; font-weight: 600; }
+.demo-salon .demo-stub { border-radius: 32px; }
+.demo-salon .demo-stub a { border-radius: 999px; background: linear-gradient(90deg, var(--magenta), var(--violet)); color: #fff; }
+
+@media (max-width: 900px) {
+  .gr-nav { display: none; }
+  .gr-top { justify-content: space-between; }
+  .gr-hero, .gr-prices-head, .gr-visit-in, .gr-love, .gr-address-in { grid-template-columns: 1fr; }
+  .gr-hero-photo { aspect-ratio: 4 / 3; border-radius: 120px 120px 28px 28px; }
+  .gr-strip { grid-auto-columns: 70vw; }
+  .gr-themes { grid-template-columns: 1fr; }
+}
