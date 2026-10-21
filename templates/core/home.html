@@ -16,11 +16,11 @@
   <div class="hero-sky" aria-hidden="true"><div class="aurora"></div></div>
   <div class="hero-snow" aria-hidden="true"></div>
   <div class="hero-type">
-    <h1 id="hero-title" class="hero-title"><span class="line"><span>Сайты под ключ</span></span> <span class="line"><span>для бизнеса в Якутске</span></span></h1>
-    <p class="hero-title hero-title-under" aria-hidden="true"><span class="line"><span>Сайты под ключ</span></span> <span class="line"><span>для бизнеса в Якутске</span></span></p>
+    <h1 id="hero-title" class="hero-title"><span class="line"><span>Сайты под ключ</span></span> <span class="line"><span>в Якутске</span></span></h1>
+    <p class="hero-title hero-title-under" aria-hidden="true"><span class="line"><span>Сайты под ключ</span></span> <span class="line"><span>в Якутске</span></span></p>
   </div>
   <div class="hero-foot">
-    <p class="hero-lead">От 15&nbsp;000&nbsp;₽, запуск от 5 дней. Договор, оплата 30/70, сайт полностью ваш.</p>
+    <p class="hero-lead">Для бизнеса — от 15&nbsp;000&nbsp;₽, запуск от 5&nbsp;дней. Договор, оплата 30/70, сайт полностью ваш.</p>
     <div class="hero-actions">
       {% for c in channels_cta|slice:":2" %}<a class="btn{% if forloop.first %} btn-accent{% else %} btn-ink{% endif %}" href="{{ c.url }}" rel="noopener" target="_blank">Написать в {{ c.label }}</a>{% endfor %}
       <a class="btn btn-ghost" href="#zayavka">Оставить заявку</a>
@@ -104,7 +104,7 @@
   <ol class="accordion wrap" data-accordion role="list">
     {% for s in steps %}
     <li class="stage stage-{{ forloop.counter }}{% if forloop.first %} is-open{% endif %}">
-      <h3 class="stage-head"><button type="button" class="stage-btn" aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}" aria-controls="stage-{{ forloop.counter }}">{{ s.title }}</button></h3>
+      <h3 class="stage-head"><button type="button" class="stage-btn" aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}" aria-controls="stage-{{ forloop.counter }}"><span class="stage-label">{{ s.title }}</span></button></h3>
       <div class="stage-body" id="stage-{{ forloop.counter }}"><p>{{ s.text }}</p></div>
     </li>
     {% endfor %}
