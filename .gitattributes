@@ -1,0 +1,6 @@
+# В репозитории — переводы строк Linux (LF): сайт будет работать на Ubuntu
+* text=auto eol=lf
+*.ps1 text eol=crlf
+*.bat text eol=crlf
+*.webp binary
+*.woff2 binary
