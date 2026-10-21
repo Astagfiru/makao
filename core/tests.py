@@ -68,6 +68,22 @@ class PagesTests(TestCase):
         self.assertIn("/zakazat-sajt-yakutsk/", sitemap)
         self.assertNotIn("/demo/", sitemap)
 
+    def test_yandex_map_loads_only_on_click(self) -> None:
+        response = self.client.get(reverse("core:contacts"))
+        self.assertContains(response, "data-map-load")
+        self.assertNotContains(response, "<iframe")
+
+    def test_cookie_banner_is_hidden_until_script_decides(self) -> None:
+        response = self.client.get(reverse("core:home"))
+        self.assertContains(response, 'data-cookie hidden')
+        self.assertContains(response, "Принять")
+
+    def test_footer_legal_block_everywhere(self) -> None:
+        for name in ("core:contacts", "portfolio:list", "core:policy"):
+            response = self.client.get(reverse(name))
+            self.assertContains(response, "ИНН")
+            self.assertContains(response, reverse("core:consent"))
+
     def test_404_page(self) -> None:
         response = self.client.get("/net-takoy-stranicy/")
         self.assertEqual(response.status_code, 404)
