@@ -3,7 +3,7 @@
 {% block demo %}
 <header class="tm-top demo-wrap">
   <a class="tm-logo" href="#top">TOPMEN</a>
-  <nav class="tm-nav" aria-label="Разделы"><a href="#ceny">Цены</a><a href="#nagrady">Награды</a><a href="#adres">Адрес</a></nav>
+  <nav class="tm-nav" aria-label="Разделы"><a href="#ceny">Цены</a><a href="#zapis">Запись</a><a href="#novosti">Новости</a><a href="#nagrady">Награды</a><a href="#adres">Адрес</a></nav>
   <a class="tm-btn" href="#zapis">Записаться</a>
 </header>
 
@@ -43,6 +43,8 @@
   </div>
 </section>
 
+<div class="tm-booking-band"><div class="demo-wrap">{% include "examples/_booking.html" %}</div></div>
+
 <section class="tm-gallery demo-wrap" aria-label="Работы и зал">
   {% for p in b.gallery|demo_photos:demo.slug %}<figure><img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" loading="lazy"></figure>{% endfor %}
 </section>
@@ -55,6 +57,8 @@
     <ul class="tm-themes" role="list">{% for t in b.review_themes %}<li>{{ t|capfirst }}</li>{% endfor %}</ul>
   </div>
 </section>
+
+<div class="demo-wrap">{% include "examples/_posts.html" %}</div>
 
 <section class="tm-awards" id="nagrady" aria-labelledby="tm-awards-title">
   <div class="demo-wrap">
@@ -73,5 +77,5 @@
   </div>
   {% with p=b.place_photo|demo_photo:demo.slug %}{% if p %}<img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" loading="lazy">{% endif %}{% endwith %}
 </section>
-<div class="demo-wrap tm-stub">{% include "demos/_stub.html" with stub_title="Здесь будет онлайн-запись к мастеру" %}</div>
+<div class="demo-wrap tm-stub">{% include "demos/_stub.html" with stub_title="Позвонить или написать" %}</div>
 {% endblock %}

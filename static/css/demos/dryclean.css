@@ -2,7 +2,7 @@
 @font-face { font-family: "Nunito"; src: url("../../fonts/nunito-cyrillic-400-800.woff2") format("woff2"); font-weight: 400 800; font-display: swap; unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
 @font-face { font-family: "Nunito"; src: url("../../fonts/nunito-latin-400-800.woff2") format("woff2"); font-weight: 400 800; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2212; }
 
-.demo-dryclean { --d-bg: #f7fbff; --d-ink: #0b2a4a; --blue: #2f7fe0; --sky: #d9ecfa; --pink: #e0218a; --d-stub-bg: #0b2a4a; font-family: "Nunito", "Onest", sans-serif; }
+.demo-dryclean { --e-accent: #2f7fe0; --e-on-accent: #fff; --e-surface: #ffffff; --e-radius: 20px; --e-head: "Nunito", sans-serif; --d-bg: #f7fbff; --d-ink: #0b2a4a; --blue: #2f7fe0; --sky: #d9ecfa; --pink: #e0218a; --d-stub-bg: #0b2a4a; font-family: "Nunito", "Onest", sans-serif; }
 .demo-dryclean h1, .demo-dryclean h2 { font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; }
 .demo-dryclean h2 { font-size: clamp(32px, 1rem + 2.6vw, 52px); }
 .demo-dryclean h3 { font-size: 20px; font-weight: 800; }
@@ -87,3 +87,10 @@
   .sn-themes { grid-template-columns: 1fr; }
 }
 @media (max-width: 560px) { .sn-steps { grid-template-columns: 1fr; } .sn-gallery-grid { grid-template-columns: 1fr 1fr; } }
+
+.sn-nav { display: flex; gap: 20px; font-weight: 700; }
+.sn-nav a { text-decoration: none; color: var(--blue); }
+.sn-prices .ex-cart { padding-block: 24px 0; }
+.sn-prices .ex-cart > .ex-head { display: none; }
+.sn-track-band { background: #eaf4fc; }
+@media (max-width: 900px) { .sn-nav { display: none; } }

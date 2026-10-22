@@ -1,0 +1,16 @@
+{% extends "examples/_page.html" %}
+{% block page %}
+<section class="ex-done" aria-labelledby="track-title">
+  <h1 id="track-title">Статус заказа</h1>
+  <form class="ex-track-form" method="get">
+    <label class="ex-field"><span>Номер</span><input name="n" inputmode="numeric" pattern="[0-9]*" required value="{{ asked|default_if_none:'' }}"></label>
+    <button class="ex-btn" type="submit">Проверить</button>
+  </form>
+  {% if item %}
+  <p class="ex-total">№{{ item.number }}: {{ item.status }}</p>
+  <ol class="ex-timeline" role="list">{% for s in statuses %}<li{% if s == item.status %} class="is-now"{% endif %}>{{ s }}</li>{% endfor %}</ol>
+  {% elif asked %}
+  <p class="ex-alert" role="alert">Заказа с таким номером нет. В примере номера выдаются при оформлении — начиная со 101.</p>
+  {% endif %}
+</section>
+{% endblock %}

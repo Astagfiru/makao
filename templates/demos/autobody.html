@@ -3,7 +3,7 @@
 {% block demo %}
 <header class="sa-top demo-wrap">
   <a class="sa-logo" href="#top"><span>САНЬЯ</span> кузовной ремонт</a>
-  <nav class="sa-nav" aria-label="Разделы"><a href="#pdr">ПДР</a><a href="#remont">Как чиним</a><a href="#uslugi">Услуги</a><a href="#adres">Адрес</a></nav>
+  <nav class="sa-nav" aria-label="Разделы"><a href="#pdr">ПДР</a><a href="#remont">Как чиним</a><a href="#zapis">Запись</a><a href="#status">Статус ремонта</a><a href="#adres">Адрес</a></nav>
   <a class="sa-btn" href="#zapis">Записаться на осмотр</a>
 </header>
 
@@ -57,6 +57,9 @@
   </div>
 </section>
 
+<div class="demo-wrap">{% include "examples/_booking.html" %}</div>
+<div class="sa-track-band"><div class="demo-wrap">{% include "examples/_track_form.html" %}</div></div>
+
 <section class="sa-trust demo-wrap" aria-labelledby="sa-trust-title">
   <p class="sa-score">{{ b.rating.value|comma }}<span>{{ b.rating.ratings }} оценок в 2ГИС</span></p>
   <div>
@@ -76,6 +79,6 @@
     </div>
     {% with p=b.place_photo|demo_photo:demo.slug %}{% if p %}<img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" loading="lazy">{% endif %}{% endwith %}
   </div>
-  <div class="demo-wrap">{% include "demos/_stub.html" with stub_title="Здесь будет запись на осмотр" %}</div>
+  <div class="demo-wrap">{% include "demos/_stub.html" with stub_title="Позвонить или написать" %}</div>
 </section>
 {% endblock %}

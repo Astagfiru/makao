@@ -44,34 +44,84 @@
   }
 
   /* Появление частей каждого раздела: заголовок, текст, картинка — со сдвигом */
+  function setupReveal() {
   var groups = document.querySelectorAll(".chapter, .page-hero");
-  if ("IntersectionObserver" in window && !reduceMotion) {
-    groups.forEach(function (group) {
-      var parts = group.querySelectorAll("h2, h3, p, li, .btn, .specimen-tile, .folder-tab");
-      parts.forEach(function (el, i) {
-        if (el.closest(".hero") || el.closest(".folder-body") && i > 40) return;
-        el.setAttribute("data-reveal", "");
-        el.style.setProperty("--d", Math.min(i % 8, 7) * 70 + "ms");
+    if ("IntersectionObserver" in window && !reduceMotion) {
+      groups.forEach(function (group) {
+        var parts = group.querySelectorAll("h2, h3, p, .specimen, .bar, .faq-row, .cta-tile");
+        parts.forEach(function (el, i) {
+          if (el.closest(".hero") || el.closest(".showcase") || el.getBoundingClientRect().top < window.innerHeight) return;
+          el.setAttribute("data-reveal", "");
+          el.style.setProperty("--d", Math.min(i % 8, 7) * 70 + "ms");
+        });
       });
-    });
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); } });
-    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.05 });
-    document.querySelectorAll("[data-reveal]").forEach(function (el) { io.observe(el); });
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); } });
+      }, { rootMargin: "0px 0px -8% 0px", threshold: 0.05 });
+      document.querySelectorAll("[data-reveal]").forEach(function (el) { io.observe(el); });
+    }
   }
+  if ("requestIdleCallback" in window) window.requestIdleCallback(setupReveal, { timeout: 1500 });
+  else window.setTimeout(setupReveal, 200);
 
-  /* Аккордеон этапов работы */
-  document.querySelectorAll("[data-accordion]").forEach(function (list) {
-    list.addEventListener("click", function (event) {
-      var btn = event.target.closest(".stage-btn");
-      if (!btn) return;
-      list.querySelectorAll(".stage").forEach(function (stage) {
-        var open = stage.contains(btn);
-        stage.classList.toggle("is-open", open);
-        stage.querySelector(".stage-btn").setAttribute("aria-expanded", open ? "true" : "false");
+  /* Примеры работ: вкладки с названиями, стрелки по бокам, клавиши ← →, свайп на телефоне */
+  document.querySelectorAll("[data-showcase]").forEach(function (box) {
+    var tabs = Array.prototype.slice.call(box.querySelectorAll('[role="tab"]'));
+    var cards = Array.prototype.slice.call(box.querySelectorAll(".work-card"));
+    var prev = box.querySelector("[data-show-prev]");
+    var next = box.querySelector("[data-show-next]");
+    if (!tabs.length) return;
+    var current = 0;
+    function show(i, focusTab, initial) {
+      var userAction = !initial;
+      current = (i + cards.length) % cards.length;
+      cards.forEach(function (card, n) { card.classList.toggle("is-active", n === current); });
+      tabs.forEach(function (tab, n) {
+        tab.setAttribute("aria-selected", n === current ? "true" : "false");
+        tab.tabIndex = n === current ? 0 : -1;
+      });
+      if (focusTab) tabs[current].focus();
+      if (userAction) tabs[current].scrollIntoView({ block: "nearest", inline: "nearest", behavior: reduceMotion ? "auto" : "smooth" });
+    }
+    box.querySelector(".show-tabs").hidden = false;
+    prev.hidden = next.hidden = false;
+    box.classList.add("is-ready");
+    tabs.forEach(function (tab, n) {
+      tab.addEventListener("click", function () { show(n); });
+      tab.addEventListener("keydown", function (e) {
+        if (e.key === "ArrowRight") { e.preventDefault(); show(current + 1, true); }
+        if (e.key === "ArrowLeft") { e.preventDefault(); show(current - 1, true); }
       });
     });
+    prev.addEventListener("click", function () { show(current - 1); });
+    next.addEventListener("click", function () { show(current + 1); });
+    var startX = null;
+    box.addEventListener("touchstart", function (e) { startX = e.touches[0].clientX; }, { passive: true });
+    box.addEventListener("touchend", function (e) {
+      if (startX === null) return;
+      var dx = e.changedTouches[0].clientX - startX;
+      if (Math.abs(dx) > 50) show(current + (dx < 0 ? 1 : -1));
+      startX = null;
+    });
+    show(0, false, true);
   });
+
+  /* Портфолио: фильтр по нишам без перезагрузки страницы (без JS — обычные ссылки) */
+  var filter = document.querySelector("[data-niche-filter]");
+  if (filter) {
+    var cardsList = document.querySelectorAll("[data-niche]");
+    filter.addEventListener("click", function (e) {
+      var link = e.target.closest("a[data-slug]");
+      if (!link) return;
+      e.preventDefault();
+      var slug = link.dataset.slug;
+      cardsList.forEach(function (card) { card.hidden = slug !== "" && card.dataset.niche !== slug; });
+      filter.querySelectorAll("a").forEach(function (a) {
+        if (a === link) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current");
+      });
+      history.replaceState(null, "", slug ? "?niche=" + slug + "#raboty" : location.pathname + "#raboty");
+    });
+  }
 
   /* Подсветка карточек кейсов за курсором */
   document.querySelectorAll("[data-glow]").forEach(function (card) {

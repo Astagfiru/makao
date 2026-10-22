@@ -1,29 +1,29 @@
 {% extends "base.html" %}
-{% block title %}Портфолио: демо-сайты для бизнеса Якутска — Кузьмин Виктор{% endblock %}
-{% block description %}Демо-концепты сайтов для реальных бизнесов Якутска: стоматология, химчистка, барбершоп, салон, автосервис, цветы. Фильтр по нишам.{% endblock %}
+{% block title %}Примеры работ: сайты для бизнеса Якутска — Кузьмин Виктор{% endblock %}
+{% block description %}Примеры сайтов для реальных бизнесов Якутска: стоматология, химчистка, барбершоп, салон, автосервис, цветы. Фильтр по нишам.{% endblock %}
 {% block canonical %}{% url 'portfolio:list' %}{% endblock %}
 {% block body_class %}page-inner page-portfolio{% endblock %}
 {% block content %}
 <section class="page-hero">
   <div class="wrap">
-    <h1 class="h-display">Работы</h1>
-    <p class="page-lead">Демо-концепты для настоящих бизнесов Якутска — собраны по открытым данным, чтобы показать, каким может быть сайт в вашей нише. Это не официальные сайты компаний.</p>
+    <h1 class="h-display">Примеры работ</h1>
+    <p class="page-lead">Примеры сайтов для настоящих бизнесов Якутска — собраны по открытым данным, чтобы показать, каким может быть сайт в вашей нише. Это не официальные сайты компаний.</p>
   </div>
 </section>
-<section class="chapter chapter-grid" aria-labelledby="grid-title">
+<section class="chapter chapter-grid" id="raboty" aria-labelledby="grid-title">
   <div class="wrap">
     <h2 id="grid-title" class="visually-hidden">Список работ</h2>
-    <nav class="niche-filter" aria-label="Фильтр по нишам">
-      <a href="{% url 'portfolio:list' %}"{% if not active %} aria-current="true"{% endif %}>Все</a>
-      {% for n in niches %}<a href="?niche={{ n.slug }}"{% if active == n.slug %} aria-current="true"{% endif %}>{{ n.name }}</a>{% endfor %}
+    <nav class="niche-filter" aria-label="Фильтр по нишам" data-niche-filter>
+      <a href="{% url 'portfolio:list' %}#raboty" data-slug=""{% if not active %} aria-current="true"{% endif %}>Все</a>
+      {% for n in niches %}<a href="?niche={{ n.slug }}#raboty" data-slug="{{ n.slug }}"{% if active == n.slug %} aria-current="true"{% endif %}>{{ n.name }}</a>{% endfor %}
     </nav>
     {% if cases %}
     <ul class="case-grid" role="list">
       {% for case in cases %}
-      <li class="case-card" data-glow>
+      <li class="case-card" data-glow data-niche="{{ case.niche.slug }}">
         <a class="case-link" href="{{ case.get_absolute_url }}">
           <span class="case-shot">{% if case.preview %}<img src="{{ case.preview.url }}" alt="" width="1440" height="860" loading="lazy" decoding="async">{% else %}<span class="mock mock-{{ case.demo.theme|default:'plain' }}"><span class="mock-name">{{ case.demo.business_name|default:case.title }}</span><span class="mock-line"></span><span class="mock-line short"></span></span>{% endif %}</span>
-          <span class="case-meta"><span class="case-niche">{{ case.niche.name }}</span>{% if case.is_demo_project %}<span class="tag-demo">Демо-проект</span>{% endif %}</span>
+          <span class="case-meta"><span class="case-niche">{{ case.niche.name }}</span>{% if case.is_demo_project %}<span class="tag-demo">Пример работы</span>{% endif %}</span>
           <span class="case-title">{{ case.title }}</span>
           <span class="case-summary">{{ case.summary }}</span>
         </a>

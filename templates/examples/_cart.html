@@ -1,0 +1,57 @@
+{# Калькулятор/корзина: количество по позициям → итог (со скидками по правилам бизнеса) → оформление. Без JS — пересчёт кнопкой. #}
+{% load site_tags %}
+<section class="ex-cart" id="zakaz" aria-labelledby="ex-cart-title">
+  <div class="ex-head">
+    <h2 id="ex-cart-title">{{ cart.title }}</h2>
+    <p>{% if demo.theme == "dryclean" %}Отметьте вещи — итог посчитается сразу, акция «от 5 зимних вещей −15%» применится сама.{% else %}Выберите букеты и вазы, укажите доставку. Где цены нет в открытом прайсе — флорист пришлёт её после заказа.{% endif %}</p>
+  </div>
+  {% if request.GET.error %}<p class="ex-alert" role="alert">Выберите хотя бы одну позицию и отметьте согласие.</p>{% endif %}
+  <form method="get" action="#zakaz" class="ex-cart-form" data-cart>
+    <div class="ex-cart-list">
+      {% regroup items by group as groups %}
+      {% for g in groups %}
+      <fieldset class="ex-cart-group" data-group data-title="{{ g.grouper }}"><legend>{{ g.grouper|default:"Позиции"|capfirst }}</legend>
+        {% for s in g.list %}
+        <label class="ex-cart-row" data-row data-price="{{ s.price|default_if_none:'' }}" data-winter="{{ s.winter|yesno:'1,0' }}">
+          <span class="ex-cart-name">{{ s.name|capfirst }}</span>
+          <span class="ex-cart-price">{{ s.price_text }}</span>
+          <input type="number" name="q_{{ s.id }}" min="0" max="50" inputmode="numeric" value="{% for k, v in quantities.items %}{% if k == s.id %}{{ v }}{% endif %}{% endfor %}" aria-label="Количество: {{ s.name }}">
+        </label>
+        {% endfor %}
+      </fieldset>
+      {% endfor %}
+    </div>
+    <aside class="ex-summary" aria-live="polite">
+      <p class="ex-summary-title">Итого</p>
+      {% if totals.lines %}
+      <ul role="list">{% for l in totals.lines %}<li><span>{{ l.name|truncatechars:38 }} × {{ l.qty }}</span><strong>{% if l.sum is not None %}{{ l.sum|rub }}{% else %}по запросу{% endif %}</strong></li>{% endfor %}</ul>
+      {% if totals.discount %}<p class="ex-discount">Скидка 15% за {{ totals.winter }} зимних вещей: −{{ totals.discount|rub }}</p>{% endif %}
+      <p class="ex-total">{{ totals.total|rub }}{% if totals.unknown %} <small>+ позиции по запросу</small>{% endif %}</p>
+      {% else %}<p class="ex-muted">Пока ничего не выбрано.</p>{% endif %}
+      <button class="ex-btn ex-btn-ghost" type="submit">Пересчитать</button>
+    </aside>
+  </form>
+
+  {% if totals.lines %}
+  <form method="post" action="{% url 'portfolio:order' demo.slug %}" class="ex-checkout">
+    {% csrf_token %}
+    {% for k, v in quantities.items %}<input type="hidden" name="q_{{ k }}" value="{{ v }}">{% endfor %}
+    <div class="ex-row">
+      <label class="ex-field"><span>Имя</span><input name="name" maxlength="40" placeholder="Как к вам обращаться" autocomplete="off"></label>
+      {% if features.branch %}
+      <label class="ex-field"><span>Приёмный пункт</span><select name="branch">{% for br in b.branches %}<option>{{ br.address }}</option>{% endfor %}</select></label>
+      {% endif %}
+      {% if features.delivery %}
+      <label class="ex-field"><span>Получение</span><select name="delivery"><option>Доставка по Якутску</option><option>Самовывоз — Короленко, 25</option></select></label>
+      <label class="ex-field"><span>Время</span><select name="slot"><option>10:00–12:00</option><option>12:00–14:00</option><option>14:00–16:00</option><option>16:00–18:00</option><option>18:00–20:00</option></select></label>
+      <label class="ex-field ex-wide"><span>Текст открытки (необязательно)</span><input name="card_text" maxlength="200" autocomplete="off"></label>
+      {% endif %}
+    </div>
+    <label class="ex-check"><input type="checkbox" name="consent" required> <span>Согласен на обработку данных — на рабочем сайте здесь ссылка на политику компании</span></label>
+    <div class="ex-actions">
+      <button class="ex-btn" type="submit">{% if demo.theme == "dryclean" %}Оформить и получить номер квитанции{% else %}Оформить заказ{% endif %}</button>
+      <p class="ex-muted">Это пример: заказ видите только вы. Статус можно отслеживать по номеру, а менять — в кабинете владельца.</p>
+    </div>
+  </form>
+  {% endif %}
+</section>

@@ -31,31 +31,34 @@
 {% if cases %}
 <section class="chapter chapter-work" id="raboty" aria-labelledby="work-title">
   <div class="wrap">
-    <h2 id="work-title" class="h-section">Демо для Якутска</h2>
-    <p class="lead-small">Концепты сайтов для шести настоящих бизнесов города — по открытым данным 2ГИС. Так может выглядеть сайт в вашей нише.</p>
-  </div>
-  <div class="folders">
-    {% for case in cases %}
-    <article class="folder folder-{{ case.demo.theme|default:'plain' }}" aria-labelledby="folder-{{ case.slug }}">
-      <div class="folder-strip">
-        <h3 class="folder-tab" id="folder-{{ case.slug }}">{{ case.demo.business_name|default:case.title }}</h3>
-        <span class="folder-niche">{{ case.niche.name }}</span>
+    <h2 id="work-title" class="h-section">Примеры работ</h2>
+    <p class="lead-small">Сайты для шести настоящих бизнесов Якутска — по открытым данным 2ГИС: с записью на время, оплатой, корзиной и кабинетом владельца. Так может работать сайт в вашей нише.</p>
+    <div class="showcase" data-showcase>
+      <div class="show-tabs" role="tablist" aria-label="Выберите пример" hidden>
+        {% for case in cases %}<button type="button" role="tab" class="show-tab" id="tab-{{ case.slug }}" aria-controls="work-{{ case.slug }}" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"><span>{{ case.demo.business_name|default:case.title }}</span><small>{{ case.niche.name }}</small></button>{% endfor %}
       </div>
-      <div class="folder-body">
-        <a class="folder-shot" href="{% if case.demo %}{{ case.demo.get_absolute_url }}{% else %}{{ case.get_absolute_url }}{% endif %}" tabindex="-1" aria-hidden="true">
-          {% if case.preview %}<img src="{{ case.preview.url }}" alt="" width="1440" height="860" loading="lazy" decoding="async">
-          {% else %}<span class="mock mock-{{ case.demo.theme|default:'plain' }}"><span class="mock-name">{{ case.demo.business_name|default:case.title }}</span><span class="mock-line"></span><span class="mock-line short"></span></span>{% endif %}
-        </a>
-        <div class="folder-text">
-          <p>{{ case.summary }}</p>
-          {% if case.is_demo_project %}<p class="tag-demo">Демо-проект, не официальный сайт</p>{% endif %}
-          <p class="folder-links">{% if case.demo %}<a class="btn btn-ink" href="{{ case.demo.get_absolute_url }}">Смотреть демо</a>{% endif %} <a class="link-arrow" href="{{ case.get_absolute_url }}">Как сделано</a></p>
-        </div>
+      <div class="show-stage">
+        <button type="button" class="show-arrow show-prev" data-show-prev aria-label="Предыдущий пример" hidden>←</button>
+        {% for case in cases %}
+        <article class="work-card folder-{{ case.demo.theme|default:'plain' }}" id="work-{{ case.slug }}" role="tabpanel" aria-labelledby="tab-{{ case.slug }}">
+          <a class="work-shot" href="{% if case.demo %}{{ case.demo.get_absolute_url }}{% else %}{{ case.get_absolute_url }}{% endif %}" tabindex="-1" aria-hidden="true">
+            {% if case.preview %}<img src="{{ case.preview.url }}" alt="" width="1440" height="860" loading="lazy" decoding="async">
+            {% else %}<span class="mock mock-{{ case.demo.theme|default:'plain' }}"><span class="mock-name">{{ case.demo.business_name|default:case.title }}</span><span class="mock-line"></span><span class="mock-line short"></span></span>{% endif %}
+          </a>
+          <div class="work-text">
+            <div>
+              <h3 class="work-name">{{ case.demo.business_name|default:case.title }} <span>· {{ case.niche.name }}</span></h3>
+              <p>{{ case.summary }}</p>
+            </div>
+            <p class="work-links">{% if case.demo %}<a class="btn btn-ink" href="{{ case.demo.get_absolute_url }}">Открыть пример</a>{% endif %}<a class="link-arrow" href="{{ case.get_absolute_url }}">Как сделано</a></p>
+          </div>
+        </article>
+        {% endfor %}
+        <button type="button" class="show-arrow show-next" data-show-next aria-label="Следующий пример" hidden>→</button>
       </div>
-    </article>
-    {% endfor %}
+    </div>
+    <p class="work-foot"><a class="link-arrow" href="{% url 'portfolio:list' %}">Все работы и фильтр по нишам</a></p>
   </div>
-  <div class="wrap"><a class="link-arrow" href="{% url 'portfolio:list' %}">Все работы и фильтр по нишам</a></div>
 </section>
 {% endif %}
 
@@ -97,18 +100,22 @@
 </section>
 
 <section class="chapter chapter-steps" id="etapy" aria-labelledby="steps-title">
-  <div class="wrap steps-intro">
-    <h2 id="steps-title" class="h-section">Как идёт работа</h2>
-    <p>От первого сообщения до запуска — шесть шагов. Платите в два приёма: <strong>30%</strong> перед началом и <strong>70%</strong> после того, как приняли готовый сайт.</p>
+  <div class="wrap">
+    <div class="steps-intro">
+      <h2 id="steps-title" class="h-section">Как идёт работа</h2>
+      <p>Шесть шагов от первого сообщения до запуска. Платите в два приёма: <strong>30%</strong> перед началом и <strong>70%</strong> — только после того, как приняли готовый сайт.</p>
+    </div>
+    <ol class="timeline" role="list">
+      {% for s in steps %}
+      <li class="tl-step tl-{{ forloop.counter }}">
+        <span class="tl-dot" aria-hidden="true"></span>
+        <h3>{{ s.title }}</h3>
+        <p>{{ s.text }}</p>
+        {% if forloop.counter == 3 %}<p class="tl-pay">Оплата 30%</p>{% elif forloop.counter == 5 %}<p class="tl-pay">Оплата 70%</p>{% endif %}
+      </li>
+      {% endfor %}
+    </ol>
   </div>
-  <ol class="accordion wrap" data-accordion role="list">
-    {% for s in steps %}
-    <li class="stage stage-{{ forloop.counter }}{% if forloop.first %} is-open{% endif %}">
-      <h3 class="stage-head"><button type="button" class="stage-btn" aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}" aria-controls="stage-{{ forloop.counter }}"><span class="stage-label">{{ s.title }}</span></button></h3>
-      <div class="stage-body" id="stage-{{ forloop.counter }}"><p>{{ s.text }}</p></div>
-    </li>
-    {% endfor %}
-  </ol>
 </section>
 
 {% if reviews %}
@@ -134,14 +141,16 @@
 {% endif %}
 
 <section class="chapter chapter-cta" id="zayavka" aria-labelledby="cta-title">
-  <div class="cta-row">
-    <div class="cta-flank cta-flank-photo"><img src="{% static 'img/yakutsk-frost-800.webp' %}" srcset="{% static 'img/yakutsk-frost-800.webp' %} 800w, {% static 'img/yakutsk-frost.webp' %} 1500w" sizes="(max-width: 720px) 50vw, 20vw" alt="Улица Якутска в мороз: провода в инее, пар от машин" width="800" height="535" loading="lazy" decoding="async"></div>
-    <div class="cta-tile">
+  <div class="wrap cta-grid">
+    <div class="cta-text">
       <h2 id="cta-title" class="h-section">Обсудим ваш сайт</h2>
-      <p>Оставьте имя и телефон — перезвоню или напишу, обсудим задачу и сроки. Это ни к чему не обязывает.</p>
+      <p>Оставьте имя и телефон — перезвоню или напишу, обсудим задачу, сроки и цену. Это ни к чему не обязывает.</p>
+      <p>Удобнее в мессенджере?</p>
+      <div class="cta-channels">{% for c in channels_cta|slice:":3" %}<a class="btn {% if forloop.first %}btn-accent{% else %}btn-light{% endif %}" href="{{ c.url }}" rel="noopener" target="_blank">{{ c.label }}</a>{% endfor %}</div>
+    </div>
+    <div class="cta-tile">
       {% include "partials/lead_form.html" %}
     </div>
-    <div class="cta-flank cta-flank-colour" aria-hidden="true"></div>
   </div>
 </section>
 

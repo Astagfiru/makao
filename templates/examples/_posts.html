@@ -1,0 +1,8 @@
+<section class="ex-posts" id="novosti" aria-labelledby="ex-posts-title">
+  <div class="ex-head"><h2 id="ex-posts-title">Новости и акции</h2><p>Владелец публикует их сам из кабинета — без программиста.</p></div>
+  <ul class="ex-post-list" role="list">
+    {% for p in posts|slice:":6" %}<li class="ex-post{% if p.own %} is-own{% endif %}"><p class="ex-post-title">{{ p.title }}</p>{% if p.text %}<p>{{ p.text }}</p>{% endif %}{% if p.date %}<p class="ex-muted">{{ p.date }}</p>{% endif %}</li>
+    {% empty %}<li class="ex-post"><p class="ex-muted">Пока новостей нет — добавьте первую в кабинете владельца.</p></li>{% endfor %}
+  </ul>
+  <p><a class="ex-link" href="{% url 'portfolio:cabinet' demo.slug %}?tab=novosti">Добавить новость в кабинете →</a></p>
+</section>

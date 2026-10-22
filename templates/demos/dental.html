@@ -8,7 +8,7 @@
     <span>Дентал Даймонд</span>
   </a>
   <nav class="dd-nav" aria-label="Разделы">
-    <a href="#uslugi">Услуги</a><a href="#priem">Как проходит приём</a><a href="#pacienty">Пациенты о нас</a><a href="#kontakty">Контакты</a>
+    <a href="#uslugi">Услуги</a><a href="#zapis">Запись</a><a href="#novosti">Новости</a><a href="#kontakty">Контакты</a>
   </nav>
   <a class="dd-btn dd-btn-small" href="#zapis">Записаться</a>
 </header>
@@ -57,6 +57,8 @@
   </div>
 </section>
 
+<div class="demo-wrap">{% include "examples/_booking.html" %}</div>
+
 <section class="dd-reviews demo-wrap" id="pacienty" aria-labelledby="dd-reviews-title">
   <div class="dd-score">
     <p class="dd-score-big">{{ b.rating.value|comma }}</p>
@@ -76,6 +78,8 @@
   </div>
 </section>
 
+<div class="dd-posts-band"><div class="demo-wrap">{% include "examples/_posts.html" %}</div></div>
+
 <section class="dd-contacts demo-wrap" id="kontakty" aria-labelledby="dd-contacts-title">
   <div>
     <h2 id="dd-contacts-title">Адрес и часы</h2>
@@ -84,6 +88,6 @@
     {% if b.hours.note %}<p class="dd-note">{{ b.hours.note|capfirst }}</p>{% endif %}
     <ul class="dd-features" role="list">{% for f in b.features %}<li>{{ f }}</li>{% endfor %}</ul>
   </div>
-  {% include "demos/_stub.html" with stub_title="Запись на бесплатную консультацию" %}
+  {% include "demos/_stub.html" with stub_title="Позвонить или написать" %}
 </section>
 {% endblock %}

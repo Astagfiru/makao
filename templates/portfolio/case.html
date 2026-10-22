@@ -5,11 +5,11 @@
 {% block content %}
 <section class="page-hero">
   <div class="wrap">
-    <p class="case-crumbs"><a href="{% url 'portfolio:list' %}">Работы</a> → <a href="{% url 'portfolio:list' %}?niche={{ case.niche.slug }}">{{ case.niche.name }}</a></p>
+    <p class="case-crumbs"><a href="{% url 'portfolio:list' %}">Примеры работ</a> → <a href="{% url 'portfolio:list' %}?niche={{ case.niche.slug }}">{{ case.niche.name }}</a></p>
     <h1 class="h-display">{{ case.title }}</h1>
     <p class="page-lead">{{ case.summary }}</p>
-    {% if case.is_demo_project %}<p class="tag-demo">Демо-проект: концепт по открытым данным, не официальный сайт компании</p>{% endif %}
-    {% if case.demo %}<p><a class="btn btn-accent" href="{{ case.demo.get_absolute_url }}">Смотреть демо</a></p>{% endif %}
+    {% if case.is_demo_project %}<p class="tag-demo">Пример работы: сделан по открытым данным, не официальный сайт компании</p>{% endif %}
+    {% if case.demo %}<p><a class="btn btn-accent" href="{{ case.demo.get_absolute_url }}">Открыть пример</a></p>{% endif %}
   </div>
 </section>
 <section class="chapter chapter-case">

@@ -4,7 +4,7 @@
 <div class="gr-flow">
 <header class="gr-top demo-wrap">
   <a class="gr-logo" href="#top">градиент</a>
-  <nav class="gr-nav" aria-label="Разделы"><a href="#raboty">Работы</a><a href="#ceny">Цены</a><a href="#vizit">Визит</a><a href="#adres">Адрес</a></nav>
+  <nav class="gr-nav" aria-label="Разделы"><a href="#raboty">Работы</a><a href="#ceny">Цены</a><a href="#zapis">Запись</a><a href="#novosti">Новости</a><a href="#adres">Адрес</a></nav>
   <a class="gr-btn" href="#zapis">Онлайн-запись</a>
 </header>
 
@@ -17,6 +17,8 @@
   </div>
   {% with p=b.hero_photo|demo_photo:demo.slug %}{% if p %}<img class="gr-hero-photo" src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" fetchpriority="high">{% endif %}{% endwith %}
 </section>
+
+<div class="gr-marquee" aria-hidden="true"><div>{% for p in b.prices|slice:":12" %}<span>{{ p.name|cut:"." }}</span>{% endfor %}{% for p in b.prices|slice:":12" %}<span>{{ p.name|cut:"." }}</span>{% endfor %}</div></div>
 
 <section class="gr-works" id="raboty" aria-labelledby="gr-works-title">
   <div class="demo-wrap">
@@ -57,6 +59,9 @@
   </div>
 </section>
 
+<div class="demo-wrap">{% include "examples/_booking.html" %}</div>
+<div class="demo-wrap">{% include "examples/_posts.html" %}</div>
+
 <section class="gr-love demo-wrap" aria-labelledby="gr-love-title">
   <p class="gr-score">{{ b.rating.value|comma }}<span>{{ b.rating.ratings }} оценок · {{ b.rating.reviews }} отзывов в 2ГИС</span></p>
   <div>
@@ -74,7 +79,7 @@
       <p>{{ b.address.details|capfirst }}, {{ b.address.district }}</p>
       <dl class="gr-hours">{% for d, v in b.hours|hours_rows %}<div><dt>{{ d }}</dt><dd>{{ v }}</dd></div>{% endfor %}</dl>
       <ul class="gr-tags" role="list">{% for a in b.awards %}<li>{{ a }}</li>{% endfor %}<li>Wi-Fi для клиентов</li><li>Можно с собакой</li></ul>
-      {% include "demos/_stub.html" with stub_title="Здесь будет онлайн-запись" %}
+      {% include "demos/_stub.html" with stub_title="Позвонить или написать" %}
     </div>
   </div>
 </section>

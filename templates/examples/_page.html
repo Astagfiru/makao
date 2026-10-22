@@ -1,0 +1,12 @@
+{% extends "demos/_base.html" %}
+{# Служебные страницы примера (подтверждение, статус, кабинет) — в оформлении того же бизнеса. #}
+{% block demo %}
+<header class="ex-mini demo-wrap">
+  <a class="ex-mini-name" href="{% url 'portfolio:demo' demo.slug %}">← {{ demo.business_name }}</a>
+  <nav aria-label="Разделы примера">
+    <a href="{% url 'portfolio:track' demo.slug %}">Статус заказа</a>
+    <a href="{% url 'portfolio:cabinet' demo.slug %}">Кабинет владельца</a>
+  </nav>
+</header>
+<main class="demo-wrap ex-page">{% block page %}{% endblock %}</main>
+{% endblock %}

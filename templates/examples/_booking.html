@@ -1,0 +1,39 @@
+{# Запись на время: услуга → день → свободное время → имя → подтверждение (и оплата, если включена). Без JS — обычные формы. #}
+<section class="ex-booking" id="zapis" aria-labelledby="ex-booking-title">
+  <div class="ex-head">
+    <h2 id="ex-booking-title">{{ booking.title }}</h2>
+    <p>Свободное время считается по часам работы из 2ГИС. {% if booking.pay %}Можно оплатить онлайн сразу или на месте.{% endif %}</p>
+  </div>
+  {% if request.GET.error %}<p class="ex-alert" role="alert">Это время уже занято или не отмечено согласие — выберите время ещё раз.</p>{% endif %}
+  <form class="ex-pick" method="get" action="#zapis" data-autosubmit>
+    <label class="ex-field"><span>Услуга</span>
+      <select name="service">
+        {% regroup services by group as groups %}
+        {% for g in groups %}<optgroup label="{{ g.grouper|default:'Услуги' }}">{% for s in g.list %}<option value="{{ s.id }}"{% if s.id == chosen.id %} selected{% endif %}>{{ s.name }} — {{ s.price_text }}</option>{% endfor %}</optgroup>{% endfor %}
+      </select>
+    </label>
+    <fieldset class="ex-days"><legend>День</legend>
+      {% for d in days %}<label class="ex-day{% if d.off %} is-off{% endif %}"><input type="radio" name="date" value="{{ d.iso }}"{% if picked and d.iso == picked.iso %} checked{% endif %}{% if d.off %} disabled{% endif %}><span>{{ d.label }}{% if d.off %}<small>выходной</small>{% endif %}</span></label>{% endfor %}
+    </fieldset>
+    <noscript><button class="ex-btn ex-btn-ghost" type="submit">Показать свободное время</button></noscript>
+  </form>
+
+  <form class="ex-confirm" method="post" action="{% url 'portfolio:book' demo.slug %}">
+    {% csrf_token %}
+    <input type="hidden" name="service" value="{{ chosen.id }}">
+    <input type="hidden" name="date" value="{{ picked.iso }}">
+    <fieldset class="ex-slots"><legend>Время{% if chosen %} · {{ chosen.minutes }} мин{% endif %}</legend>
+      {% for s in slots %}<label class="ex-slot{% if not s.free %} is-busy{% endif %}"><input type="radio" name="time" value="{{ s.time }}" required{% if not s.free %} disabled{% endif %}><span>{{ s.time }}</span></label>
+      {% empty %}<p class="ex-muted">На этот день свободного времени нет — выберите другой.</p>{% endfor %}
+    </fieldset>
+    <div class="ex-row">
+      <label class="ex-field"><span>Имя</span><input name="name" maxlength="40" placeholder="Как к вам обращаться" autocomplete="off"></label>
+      <label class="ex-field"><span>{{ booking.ask }}</span><input name="note" maxlength="300" autocomplete="off"></label>
+    </div>
+    <label class="ex-check"><input type="checkbox" name="consent" required> <span>Согласен на обработку данных — на рабочем сайте здесь ссылка на политику компании</span></label>
+    <div class="ex-actions">
+      <button class="ex-btn" type="submit"{% if not slots %} disabled{% endif %}>{{ booking.button }}</button>
+      <p class="ex-muted">Это пример: запись видите только вы, телефон не нужен. В кабинете владельца она появится как новая заявка.</p>
+    </div>
+  </form>
+</section>

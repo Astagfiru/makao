@@ -43,6 +43,6 @@ class DemoSiteAdmin(admin.ModelAdmin):
         ("Содержимое (JSON)", {"fields": ("blocks",), "classes": ("collapse",)}),
     )
 
-    @admin.display(description="Демо")
+    @admin.display(description="Пример")
     def open_link(self, obj: DemoSite) -> str:
         return format_html('<a href="{}" target="_blank" rel="noopener">открыть ↗</a>', obj.get_absolute_url())

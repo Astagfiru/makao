@@ -1,0 +1,62 @@
+{% extends "examples/_page.html" %}
+{% load site_tags %}
+{% block page %}
+<section class="ex-cabinet" aria-labelledby="cab-title">
+  <h1 id="cab-title">Кабинет владельца</h1>
+  <p class="ex-note">Так выглядит управление сайтом для «{{ demo.business_name }}». Это пример: вход без пароля, изменения видите только вы,
+    и они сами исчезнут через две недели. На рабочем сайте кабинет — по логину и паролю владельца.</p>
+
+  <nav class="ex-tabs" aria-label="Разделы кабинета">
+    <a href="?tab=zayavki"{% if tab == "zayavki" %} aria-current="page"{% endif %}>Заявки</a>
+    <a href="?tab=ceny"{% if tab == "ceny" %} aria-current="page"{% endif %}>Цены</a>
+    {% if features.posts %}<a href="?tab=novosti"{% if tab == "novosti" %} aria-current="page"{% endif %}>Новости</a>{% endif %}
+    {% if features.booking %}<a href="?tab=raspisanie"{% if tab == "raspisanie" %} aria-current="page"{% endif %}>Расписание</a>{% endif %}
+  </nav>
+
+  {% if tab == "zayavki" %}
+  <div class="ex-panel">
+    <h2>Записи и заказы</h2>
+    {% if not data.bookings and not data.orders %}<p class="ex-muted">Пока пусто. Запишитесь или оформите заказ на <a href="{% url 'portfolio:demo' demo.slug %}">сайте</a> — заявка появится здесь.</p>{% endif %}
+    <ul class="ex-orders" role="list">
+      {% for x in data.bookings reversed %}
+      <li><div><strong>№{{ x.number }} · {{ x.service }}</strong><span>{{ x.date }} в {{ x.time }} · {{ x.name }}{% if x.note %} · «{{ x.note }}»{% endif %}{% if x.paid %} · оплачено{% endif %}</span></div>
+        <form method="post">{% csrf_token %}<input type="hidden" name="action" value="status"><input type="hidden" name="tab" value="zayavki"><input type="hidden" name="kind" value="bookings"><input type="hidden" name="number" value="{{ x.number }}">
+          <select name="status" aria-label="Статус записи №{{ x.number }}">{% for s in booking_statuses %}<option{% if s == x.status %} selected{% endif %}>{{ s }}</option>{% endfor %}</select><button class="ex-btn ex-btn-small" type="submit">Сохранить</button></form></li>
+      {% endfor %}
+      {% for x in data.orders reversed %}
+      <li><div><strong>№{{ x.number }} · {{ x.lines|length }} поз. · {{ x.total|rub }}</strong><span>{{ x.created }} · {{ x.name }}{% if x.branch %} · {{ x.branch }}{% endif %}{% if x.delivery %} · {{ x.delivery }} {{ x.slot }}{% endif %}{% if x.paid %} · оплачено{% endif %}</span></div>
+        <form method="post">{% csrf_token %}<input type="hidden" name="action" value="status"><input type="hidden" name="tab" value="zayavki"><input type="hidden" name="kind" value="orders"><input type="hidden" name="number" value="{{ x.number }}">
+          <select name="status" aria-label="Статус заказа №{{ x.number }}">{% for s in order_statuses %}<option{% if s == x.status %} selected{% endif %}>{{ s }}</option>{% endfor %}</select><button class="ex-btn ex-btn-small" type="submit">Сохранить</button></form></li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% elif tab == "ceny" %}
+  <form class="ex-panel" method="post">
+    {% csrf_token %}<input type="hidden" name="action" value="prices"><input type="hidden" name="tab" value="ceny">
+    <h2>Цены</h2>
+    <p class="ex-muted">Пустое поле — цена как в прайсе. Новая цена сразу появится на сайте{% if features.booking %}, в записи{% endif %}{% if features.cart %} и в расчёте заказа{% endif %}.</p>
+    <div class="ex-price-table">
+      {% for s in services|slice:":40" %}<label><span>{{ s.name|capfirst }}</span><input name="p_{{ s.id }}" inputmode="numeric" placeholder="{{ s.price_text }}" value="{% for k, v in data.prices.items %}{% if k == s.id %}{{ v }}{% endif %}{% endfor %}"></label>{% endfor %}
+    </div>
+    <button class="ex-btn" type="submit">Сохранить цены</button>
+  </form>
+  {% elif tab == "novosti" %}
+  <div class="ex-panel">
+    <h2>Новости и акции</h2>
+    <form method="post" class="ex-row">{% csrf_token %}<input type="hidden" name="action" value="post_add"><input type="hidden" name="tab" value="novosti">
+      <label class="ex-field"><span>Заголовок</span><input name="title" maxlength="120" required placeholder="Например: скидка на чистку пуховиков"></label>
+      <label class="ex-field ex-wide"><span>Текст</span><textarea name="text" rows="3" maxlength="600"></textarea></label>
+      <button class="ex-btn" type="submit">Опубликовать</button></form>
+    <ul class="ex-orders" role="list">{% for p in data.posts %}<li><div><strong>{{ p.title }}</strong><span>{{ p.date }}</span></div>
+      <form method="post">{% csrf_token %}<input type="hidden" name="action" value="post_del"><input type="hidden" name="tab" value="novosti"><input type="hidden" name="index" value="{{ forloop.counter0 }}"><button class="ex-btn ex-btn-small ex-btn-ghost" type="submit">Удалить</button></form></li>{% endfor %}</ul>
+  </div>
+  {% elif tab == "raspisanie" %}
+  <div class="ex-panel">
+    <h2>Выходные и праздники</h2>
+    <p class="ex-muted">Отметьте день — запись на него закроется. Часы работы берутся из карточки.</p>
+    <div class="ex-days-grid">{% for d in days %}<form method="post">{% csrf_token %}<input type="hidden" name="action" value="day_off"><input type="hidden" name="tab" value="raspisanie"><input type="hidden" name="date" value="{{ d.iso }}"><button type="submit" class="ex-daybtn{% if d.off %} is-off{% endif %}" aria-pressed="{{ d.off|yesno:'true,false' }}">{{ d.label }}<small>{% if d.off %}выходной{% else %}работаем{% endif %}</small></button></form>{% endfor %}</div>
+  </div>
+  {% endif %}
+  <form method="post" class="ex-reset">{% csrf_token %}<input type="hidden" name="action" value="reset"><button class="ex-link" type="submit">Сбросить все изменения примера</button></form>
+</section>
+{% endblock %}

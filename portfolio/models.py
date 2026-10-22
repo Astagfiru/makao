@@ -31,10 +31,10 @@ class DemoSite(models.Model):
         FLOWERS = "flowers", "Цветы: «Пастель»"
 
     business_name = models.CharField("Название бизнеса", max_length=100)
-    slug = models.SlugField("Адрес демо (латиницей)", unique=True)
+    slug = models.SlugField("Адрес примера (латиницей)", unique=True)
     theme = models.CharField("Оформление", max_length=20, choices=Theme.choices)
     blocks = models.JSONField("Блоки страницы", default=dict, blank=True,
-                              help_text="Содержимое демо: первый экран, услуги, цены, часы работы и т.д.")
+                              help_text="Содержимое примера: первый экран, услуги, цены, часы работы и т.д.")
     sources = models.JSONField("Источники данных", default=list, blank=True,
                                help_text="Список {url, what, checked_at} — откуда взяты факты.")
     source_url = models.URLField("Карточка бизнеса в 2ГИС", blank=True)
@@ -42,8 +42,8 @@ class DemoSite(models.Model):
     is_published = models.BooleanField("Опубликован", default=True)
 
     class Meta:
-        verbose_name = "Демо-сайт"
-        verbose_name_plural = "Демо-сайты"
+        verbose_name = "Пример сайта"
+        verbose_name_plural = "Примеры сайтов"
         ordering = ["business_name"]
 
     def __str__(self) -> str:
@@ -62,7 +62,7 @@ class Case(models.Model):
     title = models.CharField("Название", max_length=120)
     slug = models.SlugField("Адрес (латиницей)", unique=True)
     niche = models.ForeignKey(Niche, verbose_name="Ниша", on_delete=models.PROTECT, related_name="cases")
-    demo = models.ForeignKey(DemoSite, verbose_name="Демо-сайт", on_delete=models.SET_NULL,
+    demo = models.ForeignKey(DemoSite, verbose_name="Пример сайта", on_delete=models.SET_NULL,
                              null=True, blank=True, related_name="cases")
     summary = models.CharField("Коротко (для карточки)", max_length=200)
     preview = models.ImageField(
@@ -73,7 +73,7 @@ class Case(models.Model):
     task = models.TextField("Задача")
     solution = models.TextField("Решение")
     done = models.TextField("Что сделано", help_text="Каждый пункт с новой строки")
-    is_demo_project = models.BooleanField("Демо-проект", default=True,
+    is_demo_project = models.BooleanField("Пример работы (не заказ)", default=True,
                                           help_text="Снимите отметку, когда бизнес станет реальным клиентом.")
     is_published = models.BooleanField("Опубликовано", default=True)
     order = models.PositiveSmallIntegerField("Порядок", default=0)

@@ -2,7 +2,7 @@
 @font-face { font-family: "Manrope"; src: url("../../fonts/manrope-cyrillic-400-800.woff2") format("woff2"); font-weight: 400 800; font-display: swap; unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
 @font-face { font-family: "Manrope"; src: url("../../fonts/manrope-latin-400-800.woff2") format("woff2"); font-weight: 400 800; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2212; }
 
-.demo-dental { --d-bg: #ffffff; --d-ink: #0b2b30; --teal: #0fb5a6; --teal-deep: #0a8f84; --mint: #e7f7f5; --ice: #f3f8f9; --d-stub-bg: #0b2b30; font-family: "Manrope", "Onest", sans-serif; }
+.demo-dental { --e-accent: #0a8f84; --e-on-accent: #fff; --e-surface: #f3f8f9; --e-radius: 18px; --e-head: "Manrope", sans-serif; --d-bg: #ffffff; --d-ink: #0b2b30; --teal: #0fb5a6; --teal-deep: #0a8f84; --mint: #e7f7f5; --ice: #f3f8f9; --d-stub-bg: #0b2b30; font-family: "Manrope", "Onest", sans-serif; }
 .demo-dental h1, .demo-dental h2, .demo-dental h3 { letter-spacing: -0.02em; line-height: 1.08; }
 .demo-dental h2 { font-size: clamp(32px, 1rem + 2.6vw, 52px); font-weight: 800; }
 .demo-dental h3 { font-size: 21px; font-weight: 800; }
@@ -77,3 +77,5 @@
 @media (max-width: 560px) {
   .dd-service-grid, .dd-steps { grid-template-columns: 1fr; }
 }
+
+.dd-posts-band { background: var(--mint); }

@@ -1,8 +1,10 @@
+@font-face { font-family: "Lora"; src: url("../../fonts/lora-cyrillic-400-700.woff2") format("woff2"); font-weight: 400 700; font-display: swap; unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Lora"; src: url("../../fonts/lora-latin-400-700.woff2") format("woff2"); font-weight: 400 700; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
 /* Демо Liks flowers: элегантная флористика — пастель, антиква Cormorant Garamond, много воздуха. */
 @font-face { font-family: "Cormorant Garamond"; src: url("../../fonts/cormorant-cyrillic.woff2") format("woff2"); font-weight: 500 700; font-display: swap; unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
 @font-face { font-family: "Cormorant Garamond"; src: url("../../fonts/cormorant-latin.woff2") format("woff2"); font-weight: 500 700; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2212; }
 
-.demo-flowers { --d-bg: #fbf5f2; --d-ink: #3d2128; --rose: #e9a5b0; --rose-deep: #b8566a; --blush: #f6e1e0; --sage: #dfe6d8; --d-stub-bg: #3d2128; }
+.demo-flowers { font-family: "Lora", Georgia, serif; --e-accent: #8f3a4f; --e-on-accent: #fff; --e-surface: #f6e1e0; --e-radius: 20px; --e-head: "Cormorant Garamond", serif; --d-bg: #fbf5f2; --d-ink: #3d2128; --rose: #e9a5b0; --rose-deep: #b8566a; --blush: #f6e1e0; --sage: #dfe6d8; --d-stub-bg: #3d2128; }
 .demo-flowers h1, .demo-flowers h2, .demo-flowers h3, .lf-logo, .lf-script { font-family: "Cormorant Garamond", Georgia, serif; font-weight: 600; letter-spacing: -0.01em; line-height: 1; }
 .demo-flowers h2 { font-size: clamp(42px, 1rem + 4vw, 84px); }
 .demo-flowers h3 { font-size: 28px; }
@@ -70,4 +72,15 @@
   .lf-hero-photo img { aspect-ratio: 1; }
   .lf-grid { grid-template-columns: 1fr 1fr; }
   .lf-gallery { grid-template-columns: 1fr 1fr; }
+}
+
+.demo-flowers .ex-head h2 { font-size: clamp(42px, 1rem + 4vw, 84px); }
+.demo-flowers .ex-btn { border-radius: 999px; }
+.lf-track-band { background: var(--sage); }
+/* Своя композиция: логотип по центру, меню под ним */
+@media (min-width: 901px) {
+  .lf-top { display: grid; grid-template-columns: 1fr auto 1fr; row-gap: 14px; }
+  .lf-logo { grid-column: 2; grid-row: 1; font-size: 44px; text-align: center; }
+  .lf-nav { grid-column: 1 / -1; grid-row: 2; justify-content: center; margin: 0; }
+  .lf-top .lf-btn { grid-column: 3; grid-row: 1; justify-self: end; }
 }

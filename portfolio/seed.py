@@ -40,7 +40,7 @@ def blocks_for(spec: dict) -> dict:
 
 
 def seed_portfolio(refresh: bool = False) -> dict[str, int]:
-    counts = {"демо-сайты": 0, "кейсы": 0}
+    counts = {"примеры сайтов": 0, "кейсы": 0}
     for order, spec in enumerate(demo_specs(), 1):
         r = spec["research"]
         niche, _ = Niche.objects.get_or_create(slug=spec["niche"]["slug"],
@@ -53,10 +53,10 @@ def seed_portfolio(refresh: bool = False) -> dict[str, int]:
         demo = DemoSite.objects.filter(slug=spec["slug"]).first()
         if demo is None:
             demo = DemoSite.objects.create(slug=spec["slug"], **demo_values)
-            counts["демо-сайты"] += 1
+            counts["примеры сайтов"] += 1
         elif refresh:
             DemoSite.objects.filter(pk=demo.pk).update(**demo_values)
-            counts["демо-сайты"] += 1
+            counts["примеры сайтов"] += 1
         case = spec["case"]
         case_values = {"title": case["title"], "niche": niche, "demo": demo, "summary": case["summary"],
                        "task": case["task"], "solution": case["solution"], "done": "\n".join(case["done"]),

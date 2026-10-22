@@ -1,25 +1,28 @@
-{% load static site_tags %}<!doctype html>
+{% load static %}<!doctype html>
 <html lang="ru">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
-  <title>{{ demo.business_name }} — демо-концепт сайта | Кузьмин Виктор</title>
-  <meta name="description" content="Демо-концепт сайта для «{{ demo.business_name }}» по открытым данным. Не официальный сайт компании.">
+  <title>{{ demo.business_name }} — пример сайта | Кузьмин Виктор</title>
+  <meta name="description" content="Пример сайта для «{{ demo.business_name }}» по открытым данным: запись, заказы, кабинет владельца. Не официальный сайт компании.">
   <link rel="icon" href="{% static 'img/favicon.svg' %}" type="image/svg+xml">
   <link rel="stylesheet" href="{% static 'css/demo-base.css' %}">
+  <link rel="stylesheet" href="{% static 'css/examples.css' %}">
   <link rel="stylesheet" href="{% static 'css/demos/'|add:demo.theme|add:'.css' %}">
+  <script src="{% static 'js/examples.js' %}" defer></script>
 </head>
 <body class="demo demo-{{ demo.theme }}">
   <div class="demo-banner" role="note">
-    <p><strong>Демо-концепт, не официальный сайт «{{ demo.business_name }}».</strong> Сделан по открытым данным как пример работы.</p>
+    <p><strong>Пример сайта, не официальный сайт «{{ demo.business_name }}».</strong> Записи и заказы здесь — тестовые и видны только вам.</p>
+    <a href="{% url 'portfolio:cabinet' demo.slug %}" class="demo-banner-ghost">Кабинет владельца</a>
     <a href="{% url 'core:home' %}#zayavka">Заказать такой сайт</a>
   </div>
   {% block demo %}{% endblock %}
   <footer class="demo-footer">
     <div class="demo-wrap">
-      <p>Данные из открытых источников: <a href="{{ demo.source_url }}" rel="noopener nofollow" target="_blank">2ГИС</a>{% if demo.checked_at %}, проверено {{ demo.checked_at|date:"j E Y" }}{% endif %}. Фото: 2ГИС{% block photo_credit %}{% endblock %}. Контакты компании на демо не публикуются.</p>
-      <p>Демо-концепт сайта сделал <a href="{% url 'core:home' %}">Кузьмин Виктор</a> — веб-разработчик из Якутска. Если вы владелец и хотите убрать демо — <a href="{% url 'core:contacts' %}">напишите</a>, удалю сразу.</p>
+      <p>Данные из открытых источников: <a href="{{ demo.source_url }}" rel="noopener nofollow" target="_blank">2ГИС</a>{% if demo.checked_at %}, проверено {{ demo.checked_at|date:"j E Y" }}{% endif %}. Фото: 2ГИС{% block photo_credit %}{% endblock %}. Контакты компании в примере не публикуются.</p>
+      <p>Пример сайта сделал <a href="{% url 'core:home' %}">Кузьмин Виктор</a> — веб-разработчик из Якутска. Если вы владелец и хотите убрать пример — <a href="{% url 'core:contacts' %}">напишите</a>, удалю сразу.</p>
     </div>
   </footer>
 </body>

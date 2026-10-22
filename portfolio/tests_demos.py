@@ -21,7 +21,7 @@ class DemoSeedTests(TestCase):
 
     def test_seed_creates_six_demos_and_cases_from_research(self) -> None:
         counts = seed.seed_portfolio()
-        self.assertEqual(counts, {"демо-сайты": 6, "кейсы": 6})
+        self.assertEqual(counts, {"примеры сайтов": 6, "кейсы": 6})
         self.assertEqual(seed.seed_portfolio(), {})  # повторный запуск ничего не дублирует
         demo = DemoSite.objects.get(slug="snezhny")
         self.assertEqual(len(demo.blocks["prices"]), 139)
@@ -43,7 +43,7 @@ class DemoSeedTests(TestCase):
                 response = self.client.get(demo.get_absolute_url())
                 self.assertEqual(response.status_code, 200)
                 self.assertEqual(response["X-Robots-Tag"], "noindex, nofollow")
-                self.assertContains(response, "Демо-концепт, не official".replace("official", "официальный"))
+                self.assertContains(response, "Пример сайта, не официальный сайт")
                 self.assertContains(response, "Заказать такой сайт")
                 self.assertNotContains(response, "instagram")
 

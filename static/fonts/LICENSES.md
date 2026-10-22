@@ -12,3 +12,7 @@
 | `unbounded-*.woff2` | Unbounded (NaN) | демо салона |
 | `russo-*.woff2` | Russo One (Jovanny Lemonad) | демо автосервиса |
 | `cormorant-*.woff2` | Cormorant Garamond (Christian Thalmann) | демо цветочной студии |
+| `lora-*.woff2` | Lora (Cyreal) | текст примера цветочной студии |
+| `exo2-*.woff2` | Exo 2 (Natanael Gama) | текст примера автосервиса |
+| `robotocond-*.woff2` | Roboto Condensed (Google) | текст примера барбершопа |
+| `montserrat-*.woff2` | Montserrat (Julieta Ulanovsky) | текст примера салона |

@@ -55,21 +55,21 @@ class PortfolioTests(TestCase):
     def test_case_page_has_demo_link_badge_and_sources(self) -> None:
         case = make_case()
         response = self.client.get(case.get_absolute_url())
-        self.assertContains(response, "Демо-проект")
+        self.assertContains(response, "Пример работы")
         self.assertContains(response, case.demo.get_absolute_url())
         self.assertContains(response, "https://2gis.ru/x")
         self.assertEqual(case.done_list, ["Дизайн", "Адаптив"])
 
     def test_demo_badge_can_be_removed(self) -> None:
         case = make_case(is_demo_project=False)
-        self.assertNotContains(self.client.get(case.get_absolute_url()), "Демо-проект:")
+        self.assertNotContains(self.client.get(case.get_absolute_url()), "Пример работы:")
 
     def test_demo_page_is_noindex_with_banner(self) -> None:
         case = make_case()
         response = self.client.get(case.demo.get_absolute_url())
         self.assertEqual(response["X-Robots-Tag"], "noindex, nofollow")
         self.assertContains(response, 'content="noindex, nofollow"')
-        self.assertContains(response, "Демо-концепт, не официальный сайт «Бизнес dental»")
+        self.assertContains(response, "Пример сайта, не официальный сайт «Бизнес dental»")
         self.assertContains(response, "Заказать такой сайт")
 
     def test_unpublished_demo_404(self) -> None:

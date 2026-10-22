@@ -1,8 +1,10 @@
+@font-face { font-family: "Roboto Condensed"; src: url("../../fonts/robotocond-cyrillic-400-700.woff2") format("woff2"); font-weight: 400 700; font-display: swap; unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Roboto Condensed"; src: url("../../fonts/robotocond-latin-400-700.woff2") format("woff2"); font-weight: 400 700; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
 /* Демо Topmen: тёмный мужской стиль, латунь, крупная узкая типографика Oswald. */
 @font-face { font-family: "Oswald"; src: url("../../fonts/oswald-cyrillic-400-700.woff2") format("woff2"); font-weight: 400 700; font-display: swap; unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
 @font-face { font-family: "Oswald"; src: url("../../fonts/oswald-latin-400-700.woff2") format("woff2"); font-weight: 400 700; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2212; }
 
-.demo-barber { --d-bg: #121110; --d-ink: #efe6d3; --brass: #c9a45c; --brass-deep: #9c7a39; --coal: #1c1a18; --d-stub-bg: #1c1a18; --d-focus: #c9a45c; }
+.demo-barber { font-family: "Roboto Condensed", sans-serif; --e-accent: #c9a45c; --e-on-accent: #121110; --e-surface: #1c1a18; --e-surface-ink: #efe6d3; --e-line: #3a342b; --e-radius: 0; --e-head: "Oswald", sans-serif; --e-busy: #2a2622; --d-bg: #121110; --d-ink: #efe6d3; --brass: #c9a45c; --brass-deep: #9c7a39; --coal: #1c1a18; --d-stub-bg: #1c1a18; --d-focus: #c9a45c; }
 .demo-barber h1, .demo-barber h2, .demo-barber h3, .tm-logo, .tm-strip strong { font-family: "Oswald", "Onest", sans-serif; text-transform: uppercase; letter-spacing: 0.01em; line-height: 0.95; }
 .demo-barber h2 { font-size: clamp(40px, 1rem + 4vw, 84px); font-weight: 700; color: var(--brass); }
 .demo-barber h3 { font-size: 26px; font-weight: 600; }
@@ -78,4 +80,18 @@
   .tm-included, .tm-drinks, .tm-address { grid-template-columns: 1fr; }
   .tm-gallery { grid-template-columns: 1fr 1fr; }
   .tm-award-list { grid-template-columns: 1fr 1fr; }
+}
+
+.tm-booking-band { background: #0b0a09; }
+.demo-barber .ex-head h2, .demo-barber .ex-panel h2 { text-transform: uppercase; color: var(--brass); font-size: clamp(40px, 1rem + 4vw, 84px); }
+.demo-barber .ex-field input, .demo-barber .ex-field select { background: #121110; color: #efe6d3; }
+.demo-barber .ex-day span, .demo-barber .ex-slot span { background: #121110; color: #efe6d3; }
+/* Своя композиция: на компьютере навигация — вертикальной колонкой слева */
+@media (min-width: 1100px) {
+  .demo-barber { padding-left: 96px; }
+  .demo-barber .demo-banner { margin-left: -96px; }
+  .tm-top { position: fixed; z-index: 50; left: 0; top: 0; bottom: 0; width: 96px; max-width: none; flex-direction: column; justify-content: space-between; padding: 72px 0 28px; background: #0b0a09; }
+  .tm-logo { writing-mode: vertical-rl; transform: rotate(180deg); font-size: 34px; }
+  .tm-nav { flex-direction: column; margin: 0; gap: 18px; align-items: center; font-size: 13px; }
+  .tm-top .tm-btn { writing-mode: vertical-rl; transform: rotate(180deg); min-height: 0; padding: 18px 12px; }
 }

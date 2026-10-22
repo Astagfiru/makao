@@ -7,7 +7,7 @@
     <span>S’Нежный</span>
   </a>
   <p class="sn-motto">{{ b.slogan }}</p>
-  <a class="sn-btn sn-btn-ghost" href="#prajs">Цены</a>
+  <nav class="sn-nav" aria-label="Разделы"><a href="#prajs">Цены и заказ</a><a href="#status">Готова ли вещь</a><a href="#punkty">Пункты</a></nav>
 </header>
 
 <section class="sn-hero demo-wrap" id="top">
@@ -26,26 +26,18 @@
   <div class="demo-wrap">
     <div class="sn-prices-head">
       <h2 id="sn-prices-title">Сколько стоит чистка</h2>
-      <p>{{ b.prices|length }} позиций из прайса — {{ b.prices_updated|lower }}. Начните вводить название вещи.</p>
+      <p>{{ b.prices|length }} позиций из прайса — {{ b.prices_updated|lower }}. Найдите свою вещь, укажите количество — итог и скидка посчитаются сразу.</p>
     </div>
     <div class="sn-search" data-price-search hidden>
       <label for="sn-q" class="visually-hidden">Поиск по прайсу</label>
-      <input id="sn-q" type="search" placeholder="Например: пуховик, шуба, плед" autocomplete="off" data-q>
-      <p class="sn-count" data-count aria-live="polite"></p>
+      <input id="sn-q" type="search" placeholder="Например: пуховик, шуба, плед" autocomplete="off">
     </div>
-    <nav class="sn-cats" aria-label="Категории прайса">{% for group, items in b.prices|price_groups %}<a href="#cat-{{ forloop.counter }}">{{ group }}</a>{% endfor %}</nav>
-    <div class="sn-groups">
-      {% for group, items in b.prices|price_groups %}
-      <section class="sn-group" id="cat-{{ forloop.counter }}" data-group>
-        <h3>{{ group }}</h3>
-        <ul role="list">{% for p in items %}<li data-row><span>{{ p.name|capfirst }}</span><strong>{{ p.price|default:"по запросу" }}</strong></li>{% endfor %}</ul>
-      </section>
-      {% endfor %}
-    </div>
-    <p class="sn-empty" data-empty hidden>Такой вещи в прайсе нет — на рабочем сайте здесь будет кнопка «Спросить цену».</p>
-    {% if b.prices_note %}<p class="sn-note">Прайс не является публичной офертой, цены уточняйте в приёмных пунктах.</p>{% endif %}
+    {% include "examples/_cart.html" %}
+    <p class="sn-note">Прайс не является публичной офертой, цены уточняйте в приёмных пунктах.</p>
   </div>
 </section>
+
+<section class="sn-track-band"><div class="demo-wrap">{% include "examples/_track_form.html" %}</div></section>
 
 <section class="sn-process demo-wrap" aria-labelledby="sn-process-title">
   <h2 id="sn-process-title">Как мы чистим</h2>
@@ -59,6 +51,8 @@
     <div class="sn-gallery-grid">{% for p in b.gallery|demo_photos:demo.slug %}<figure><img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" loading="lazy"><figcaption>{{ p.alt }}</figcaption></figure>{% endfor %}</div>
   </div>
 </section>
+
+<div class="demo-wrap">{% include "examples/_posts.html" %}</div>
 
 <section class="sn-reviews demo-wrap" aria-labelledby="sn-reviews-title">
   <p class="sn-score"><strong>{{ b.rating.value|comma }}</strong> {{ b.rating.ratings }} оценок в 2ГИС</p>
@@ -83,7 +77,6 @@
       {% with p=b.hours_photo|demo_photo:demo.slug %}{% if p %}<img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" loading="lazy">{% endif %}{% endwith %}
     </div>
   </div>
-  <div class="demo-wrap">{% include "demos/_stub.html" with stub_title="Здесь будут кнопки «Позвонить» и «Написать»" %}</div>
+  <div class="demo-wrap">{% include "demos/_stub.html" with stub_title="Позвонить или написать" %}</div>
 </section>
-<script src="{% static 'js/demo-search.js' %}" defer></script>
 {% endblock %}

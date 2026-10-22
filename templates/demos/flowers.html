@@ -3,8 +3,8 @@
 {% block demo %}
 <header class="lf-top demo-wrap">
   <a class="lf-logo" href="#top">Liks flowers</a>
-  <nav class="lf-nav" aria-label="Разделы"><a href="#katalog">Букеты</a><a href="#vazy">Вазы</a><a href="#zakaz">Как заказать</a><a href="#adres">Адрес</a></nav>
-  <a class="lf-btn" href="#zapis">Заказать букет</a>
+  <nav class="lf-nav" aria-label="Разделы"><a href="#katalog">Букеты</a><a href="#zakaz">Заказ и доставка</a><a href="#status">Где мой заказ</a><a href="#novosti">Новости</a><a href="#adres">Адрес</a></nav>
+  <a class="lf-btn" href="#zakaz">Заказать букет</a>
 </header>
 
 <section class="lf-hero demo-wrap" id="top">
@@ -41,7 +41,10 @@
   </div>
 </section>
 
-<section class="lf-order" id="zakaz" aria-labelledby="lf-order-title">
+<div class="demo-wrap">{% include "examples/_cart.html" %}</div>
+<div class="lf-track-band"><div class="demo-wrap">{% include "examples/_track_form.html" %}</div></div>
+
+<section class="lf-order" id="kak" aria-labelledby="lf-order-title">
   <div class="demo-wrap lf-order-in">
     <div>
       <h2 id="lf-order-title">Как заказать</h2>
@@ -58,6 +61,8 @@
   <div class="lf-gallery">{% for p in b.gallery|demo_photos:demo.slug %}<img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" loading="lazy">{% endfor %}</div>
 </section>
 
+<div class="demo-wrap">{% include "examples/_posts.html" %}</div>
+
 <section class="lf-address demo-wrap" id="adres" aria-labelledby="lf-addr-title">
   <div>
     <h2 id="lf-addr-title">Короленко, 25</h2>
@@ -65,6 +70,6 @@
     <dl class="lf-hours">{% for d, v in b.hours|hours_rows %}<div><dt>{{ d }}</dt><dd>{{ v }}</dd></div>{% endfor %}</dl>
     <ul class="lf-small" role="list">{% for f in b.features %}<li>{{ f }}</li>{% endfor %}</ul>
   </div>
-  {% include "demos/_stub.html" with stub_title="Здесь будет заказ букета с доставкой" %}
+  {% include "demos/_stub.html" with stub_title="Позвонить или написать" %}
 </section>
 {% endblock %}

@@ -1,0 +1,37 @@
+{% extends "examples/_page.html" %}
+{% load site_tags %}
+{% block page %}
+<section class="ex-done" aria-labelledby="done-title">
+  <h1 id="done-title">{% if kind == "bookings" %}Вы записаны{% else %}Заказ оформлен{% endif %} · №{{ item.number }}</h1>
+  {% if kind == "bookings" %}
+  <dl class="ex-dl">
+    <div><dt>Услуга</dt><dd>{{ item.service }}</dd></div>
+    <div><dt>Когда</dt><dd>{{ item.date }} в {{ item.time }}</dd></div>
+    <div><dt>Стоимость</dt><dd>{{ item.price_text }}</dd></div>
+    <div><dt>Статус</dt><dd>{{ item.status }}{% if item.paid %} · оплачено{% endif %}</dd></div>
+  </dl>
+  <p>За день до визита на рабочем сайте придёт напоминание, а владелец увидит запись в кабинете и в Telegram.</p>
+  {% else %}
+  <ul class="ex-lines" role="list">{% for l in item.lines %}<li><span>{{ l.name }} × {{ l.qty }}</span><strong>{% if l.sum is not None %}{{ l.sum|rub }}{% else %}по запросу{% endif %}</strong></li>{% endfor %}</ul>
+  {% if item.discount %}<p class="ex-discount">Скидка по акции: −{{ item.discount|rub }}</p>{% endif %}
+  <p class="ex-total">Итого: {{ item.total|rub }}{% if item.unknown %} + позиции по запросу{% endif %}</p>
+  <dl class="ex-dl">
+    {% if item.branch %}<div><dt>Приёмный пункт</dt><dd>{{ item.branch }}</dd></div>{% endif %}
+    {% if item.delivery %}<div><dt>Получение</dt><dd>{{ item.delivery }}, {{ item.slot }}</dd></div>{% endif %}
+    {% if item.card %}<div><dt>Открытка</dt><dd>{{ item.card }}</dd></div>{% endif %}
+    <div><dt>Статус</dt><dd>{{ item.status }}{% if item.paid %} · оплачено{% endif %}</dd></div>
+  </dl>
+  {% endif %}
+
+  {% if can_pay and not item.paid %}
+  <div class="ex-pay">
+    <h2>Оплата онлайн — {{ amount|rub }}</h2>
+    <p>На рабочем сайте эта кнопка открывает защищённую страницу банка (ЮKassa, СБП или эквайринг вашего банка) — данные карты вводятся только там. Здесь это тест: деньги не списываются.</p>
+    <form method="post" action="{% url 'portfolio:pay' demo.slug kind item.number %}">{% csrf_token %}<button class="ex-btn" type="submit">Оплатить (тест)</button></form>
+  </div>
+  {% elif item.paid %}<p class="ex-ok">Оплата прошла (тест). Чек на рабочем сайте приходит на почту.</p>{% endif %}
+
+  <ol class="ex-timeline" role="list">{% for s in statuses %}<li{% if s == item.status %} class="is-now"{% endif %}>{{ s }}</li>{% endfor %}</ol>
+  <p class="ex-links"><a class="ex-btn ex-btn-ghost" href="{% url 'portfolio:track' demo.slug %}?n={{ item.number }}">Статус по номеру</a> <a class="ex-btn ex-btn-ghost" href="{% url 'portfolio:cabinet' demo.slug %}">Посмотреть как владелец</a></p>
+</section>
+{% endblock %}

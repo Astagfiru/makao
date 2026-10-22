@@ -1,15 +1,35 @@
-{% load static %}<footer class="site-footer">
-  <div class="footer-top">
-    <p class="footer-note">Делаю сайты для малого и среднего бизнеса. {{ site_settings.city }}, работаю по договору.</p>
-    <a class="footer-up" href="#main">Наверх</a>
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <div class="footer-brand">
+      <p class="footer-name">Кузьмин Виктор</p>
+      <p class="footer-note">Сайты под ключ для малого и среднего бизнеса. {{ site_settings.city }}, работаю по договору, оплата 30/70.</p>
+      <div class="footer-contacts">
+        {% for c in channels_footer %}<a class="btn {% if forloop.first %}btn-accent{% else %}btn-ink{% endif %}" href="{{ c.url }}" rel="noopener" target="_blank">{{ c.label }}</a>{% endfor %}
+      </div>
+    </div>
+    <nav class="footer-col" aria-label="Разделы сайта">
+      <p class="footer-title">Разделы</p>
+      <a href="{% url 'portfolio:list' %}">Примеры работ</a>
+      <a href="{% url 'core:home' %}#ceny">Цены</a>
+      <a href="{% url 'core:home' %}#etapy">Как работаю</a>
+      <a href="{% url 'core:contacts' %}">Контакты</a>
+    </nav>
+    <nav class="footer-col" aria-label="Услуги">
+      <p class="footer-title">Услуги</p>
+      <a href="{% url 'core:seo-zakazat-sajt-yakutsk' %}">Заказать сайт в Якутске</a>
+      <a href="{% url 'core:seo-razrabotka-sajtov-yakutsk-cena' %}">Цены на разработку</a>
+      <a href="{% url 'core:seo-sozdanie-internet-magazina-yakutsk' %}">Интернет-магазин</a>
+    </nav>
+    <nav class="footer-col" aria-label="Документы">
+      <p class="footer-title">Документы</p>
+      <a href="{% url 'core:policy' %}">Политика обработки персональных данных</a>
+      <a href="{% url 'core:consent' %}">Согласие на обработку данных</a>
+    </nav>
   </div>
-  <nav class="footer-contacts" aria-label="Связаться">
-    {% for c in channels_footer %}<a class="footer-contact" href="{{ c.url }}" rel="noopener" target="_blank">{{ c.label }}</a>{% endfor %}
-  </nav>
-  <div class="footer-legal">
+  <div class="wrap footer-legal">
     <p>{{ site_settings.operator_name }}{% if site_settings.inn %} · ИНН {{ site_settings.inn }}{% endif %}{% if site_settings.ogrnip %} · ОГРНИП {{ site_settings.ogrnip }}{% endif %}</p>
-    <p><a href="{% url 'core:policy' %}">Политика обработки персональных данных</a> · <a href="{% url 'core:consent' %}">Согласие на обработку данных</a></p>
     <p>Информация на сайте не является публичной офертой.</p>
-    <p class="footer-credit">Фото улицы Якутска: Maarten Takens, <a href="https://creativecommons.org/licenses/by-sa/2.0/" rel="noopener">CC BY-SA 2.0</a> · © {% now "Y" %} {{ site_settings.city }}</p>
+    <p>© {% now "Y" %} Кузьмин Виктор · Якутск</p>
+    <a class="footer-up" href="#main">Наверх ↑</a>
   </div>
 </footer>

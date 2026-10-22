@@ -1,7 +1,7 @@
 <header class="site-header">
   <a class="wordmark" href="{% url 'core:home' %}" aria-label="Кузьмин Виктор — на главную">Кузьмин Виктор</a>
   <nav class="site-nav" aria-label="Основное меню">
-    <a href="{% url 'portfolio:list' %}"{% if request.resolver_match.app_name == 'portfolio' %} aria-current="page"{% endif %}>Работы</a>
+    <a href="{% url 'portfolio:list' %}"{% if request.resolver_match.app_name == 'portfolio' %} aria-current="page"{% endif %}>Примеры работ</a>
     <a href="{% url 'core:home' %}#ceny">Цены</a>
     <a href="{% url 'core:home' %}#etapy">Как работаю</a>
     <a href="{% url 'core:contacts' %}"{% if request.resolver_match.url_name == 'contacts' %} aria-current="page"{% endif %}>Контакты</a>
