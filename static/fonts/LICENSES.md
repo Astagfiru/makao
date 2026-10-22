@@ -16,3 +16,9 @@
 | `exo2-*.woff2` | Exo 2 (Natanael Gama) | текст примера автосервиса |
 | `robotocond-*.woff2` | Roboto Condensed (Google) | текст примера барбершопа |
 | `montserrat-*.woff2` | Montserrat (Julieta Ulanovsky) | текст примера салона |
+| `caveat-*.woff2` | Caveat (Impallari Type) | заголовки примера кофейни |
+| `plexmono-*.woff2` | IBM Plex Mono (IBM) | меню и подписи примера кофейни |
+| `playfair-*.woff2` | Playfair Display (Claus Eggers Sørensen) | заголовки примера ателье |
+| `jost-*.woff2` | Jost (Owen Earl) | текст примера ателье |
+| `geologica-*.woff2` | Geologica (Monokrom) | текст примера ремонта телефонов |
+| `jbmono-*.woff2` | JetBrains Mono (JetBrains) | коды и подписи примера ремонта телефонов |

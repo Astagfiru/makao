@@ -3,16 +3,17 @@
 <section class="ex-cart" id="zakaz" aria-labelledby="ex-cart-title">
   <div class="ex-head">
     <h2 id="ex-cart-title">{{ cart.title }}</h2>
-    <p>{% if demo.theme == "dryclean" %}Отметьте вещи — итог посчитается сразу, акция «от 5 зимних вещей −15%» применится сама.{% else %}Выберите букеты и вазы, укажите доставку. Где цены нет в открытом прайсе — флорист пришлёт её после заказа.{% endif %}</p>
+    <p>{% if demo.theme == "dryclean" %}Отметьте вещи — итог посчитается сразу, акция «от 5 зимних вещей −15%» применится сама.{% elif demo.theme == "cafe" %}Соберите заказ и выберите время — к нему всё будет готово, без очереди на кассе. Акции кофейни считаются сами.{% else %}Выберите букеты и вазы, укажите доставку. Где цены нет в открытом прайсе — флорист пришлёт её после заказа.{% endif %}</p>
   </div>
   {% if request.GET.error %}<p class="ex-alert" role="alert">Выберите хотя бы одну позицию и отметьте согласие.</p>{% endif %}
-  <form method="get" action="#zakaz" class="ex-cart-form" data-cart>
+  <form method="get" action="#zakaz" class="ex-cart-form" data-cart data-stamps="{{ stamps|default:0 }}">
     <div class="ex-cart-list">
+      {% if features.pickup %}<label class="ex-check ex-own-cup"><input type="checkbox" name="own_cup"{% if own_cup %} checked{% endif %} data-own-cup> <span>Приду со своей кружкой или термосом — −15% на кофе</span></label>{% endif %}
       {% regroup items by group as groups %}
       {% for g in groups %}
       <fieldset class="ex-cart-group" data-group data-title="{{ g.grouper }}"><legend>{{ g.grouper|default:"Позиции"|capfirst }}</legend>
         {% for s in g.list %}
-        <label class="ex-cart-row" data-row data-price="{{ s.price|default_if_none:'' }}" data-winter="{{ s.winter|yesno:'1,0' }}">
+        <label class="ex-cart-row" data-row data-price="{{ s.price|default_if_none:'' }}" data-winter="{{ s.winter|yesno:'1,0' }}" data-coffee="{{ s.coffee|yesno:'1,0' }}">
           <span class="ex-cart-name">{{ s.name|capfirst }}</span>
           <span class="ex-cart-price">{{ s.price_text }}</span>
           <input type="number" name="q_{{ s.id }}" min="0" max="50" inputmode="numeric" value="{% for k, v in quantities.items %}{% if k == s.id %}{{ v }}{% endif %}{% endfor %}" aria-label="Количество: {{ s.name }}">
@@ -25,7 +26,7 @@
       <p class="ex-summary-title">Итого</p>
       {% if totals.lines %}
       <ul role="list">{% for l in totals.lines %}<li><span>{{ l.name|truncatechars:38 }} × {{ l.qty }}</span><strong>{% if l.sum is not None %}{{ l.sum|rub }}{% else %}по запросу{% endif %}</strong></li>{% endfor %}</ul>
-      {% if totals.discount %}<p class="ex-discount">Скидка 15% за {{ totals.winter }} зимних вещей: −{{ totals.discount|rub }}</p>{% endif %}
+      {% for label, amount in totals.discounts %}<p class="ex-discount">{{ label }}: −{{ amount|rub }}</p>{% endfor %}
       <p class="ex-total">{{ totals.total|rub }}{% if totals.unknown %} <small>+ позиции по запросу</small>{% endif %}</p>
       {% else %}<p class="ex-muted">Пока ничего не выбрано.</p>{% endif %}
       <button class="ex-btn ex-btn-ghost" type="submit">Пересчитать</button>
@@ -36,10 +37,14 @@
   <form method="post" action="{% url 'portfolio:order' demo.slug %}" class="ex-checkout">
     {% csrf_token %}
     {% for k, v in quantities.items %}<input type="hidden" name="q_{{ k }}" value="{{ v }}">{% endfor %}
+    {% if own_cup %}<input type="hidden" name="own_cup" value="on">{% endif %}
     <div class="ex-row">
       <label class="ex-field"><span>Имя</span><input name="name" maxlength="40" placeholder="Как к вам обращаться" autocomplete="off"></label>
       {% if features.branch %}
       <label class="ex-field"><span>Приёмный пункт</span><select name="branch">{% for br in b.branches %}<option>{{ br.address }}</option>{% endfor %}</select></label>
+      {% endif %}
+      {% if features.pickup %}
+      <label class="ex-field"><span>Заберу сегодня в</span>{% if pickup_slots %}<select name="slot">{% for t in pickup_slots %}<option>{{ t }}</option>{% endfor %}</select>{% else %}<input value="Сегодня уже закрыто — приходите завтра с 8:00" disabled>{% endif %}</label>
       {% endif %}
       {% if features.delivery %}
       <label class="ex-field"><span>Получение</span><select name="delivery"><option>Доставка по Якутску</option><option>Самовывоз — Короленко, 25</option></select></label>
@@ -49,7 +54,7 @@
     </div>
     <label class="ex-check"><input type="checkbox" name="consent" required> <span>Согласен на обработку данных — на рабочем сайте здесь ссылка на политику компании</span></label>
     <div class="ex-actions">
-      <button class="ex-btn" type="submit">{% if demo.theme == "dryclean" %}Оформить и получить номер квитанции{% else %}Оформить заказ{% endif %}</button>
+      <button class="ex-btn" type="submit">{% if demo.theme == "dryclean" %}Оформить и получить номер квитанции{% elif demo.theme == "cafe" %}Оформить предзаказ{% else %}Оформить заказ{% endif %}</button>
       <p class="ex-muted">Это пример: заказ видите только вы. Статус можно отслеживать по номеру, а менять — в кабинете владельца.</p>
     </div>
   </form>

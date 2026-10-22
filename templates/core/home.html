@@ -32,7 +32,7 @@
 <section class="chapter chapter-work" id="raboty" aria-labelledby="work-title">
   <div class="wrap">
     <h2 id="work-title" class="h-section">Примеры работ</h2>
-    <p class="lead-small">Сайты для шести настоящих бизнесов Якутска — по открытым данным 2ГИС: с записью на время, оплатой, корзиной и кабинетом владельца. Так может работать сайт в вашей нише.</p>
+    <p class="lead-small">Сайты для девяти настоящих бизнесов Якутска — по открытым данным 2ГИС: с записью на время, оплатой, корзиной и кабинетом владельца. Так может работать сайт в вашей нише.</p>
     <div class="showcase" data-showcase>
       <div class="show-tabs" role="tablist" aria-label="Выберите пример" hidden>
         {% for case in cases %}<button type="button" role="tab" class="show-tab" id="tab-{{ case.slug }}" aria-controls="work-{{ case.slug }}" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"><span>{{ case.demo.business_name|default:case.title }}</span><small>{{ case.niche.name }}</small></button>{% endfor %}

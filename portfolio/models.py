@@ -29,6 +29,9 @@ class DemoSite(models.Model):
         SALON = "salon", "Салон: «Градиент»"
         AUTOBODY = "autobody", "Кузовной ремонт: «Индустрия»"
         FLOWERS = "flowers", "Цветы: «Пастель»"
+        CAFE = "cafe", "Кофейня: «Крафт»"
+        ATELIER = "atelier", "Ателье: «Бархат»"
+        PHONEREPAIR = "phonerepair", "Ремонт телефонов: «Схема»"
 
     business_name = models.CharField("Название бизнеса", max_length=100)
     slug = models.SlugField("Адрес примера (латиницей)", unique=True)

@@ -1,0 +1,91 @@
+{% extends "demos/_base.html" %}
+{% load demo_tags %}
+{% block demo %}
+<header class="nk-top demo-wrap">
+  <a class="nk-logo" href="#top">Николь<small>ателье-студия</small></a>
+  <nav class="nk-nav" aria-label="Разделы"><a href="#uslugi">Услуги и цены</a><a href="#raboty">Работы</a><a href="#zapis">Запись</a><a href="#status">Статус заказа</a><a href="#adres">Адрес</a></nav>
+  <a class="nk-btn" href="#zapis">Записаться на мерки</a>
+</header>
+
+<section class="nk-hero demo-wrap" id="top">
+  <div class="nk-hero-text">
+    <p class="nk-eyebrow">{{ b.address.details }} · {{ b.address.street }}</p>
+    <h1>Ремонт,<br>подгонка,<br><em>пошив</em></h1>
+    <p class="nk-lead">Экономьте на гардеробе без потери стиля. {{ b.hero_text }}</p>
+    <p class="nk-actions"><a class="nk-btn nk-btn-big" href="#zapis">Записаться на мерки</a><span><strong>{{ b.rating.value|comma }}</strong> {{ b.rating.ratings }} оценок в 2ГИС</span></p>
+  </div>
+  {% with p=b.hero_photo|demo_photo:demo.slug %}{% if p %}<figure class="nk-hero-photo"><img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" fetchpriority="high"></figure>{% endif %}{% endwith %}
+</section>
+<div class="nk-ornament" aria-hidden="true"></div>
+
+<section class="nk-services demo-wrap" id="uslugi" aria-labelledby="nk-serv-title">
+  <h2 id="nk-serv-title">Что мы делаем</h2>
+  <ol class="nk-directions" role="list">{% for d in b.directions %}<li><h3>{{ d.name }}</h3><p>{{ d.text }}</p></li>{% endfor %}</ol>
+  <div class="nk-prices">
+    <h3>Цены</h3>
+    <dl>{% for pr in b.prices %}<div><dt>{{ pr.name }}</dt><dd>{{ pr.price|default:"по запросу" }}</dd></div>{% endfor %}</dl>
+    <p class="nk-small">Прайс из 2ГИС ({{ b.prices_updated|lower }}). Точную стоимость мастер назовёт после мерок — она зависит от ткани и фасона.</p>
+  </div>
+</section>
+
+<section class="nk-works" id="raboty" aria-labelledby="nk-works-title">
+  <div class="demo-wrap">
+    <div class="nk-head"><h2 id="nk-works-title">Платья по фото и эскизу</h2><p>Вечерние и выпускные платья — с примеркой и посадкой по фигуре.</p></div>
+    <div class="nk-dresses">{% for p in b.dresses|demo_photos:demo.slug %}<figure><img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" loading="lazy"><figcaption>{{ p.alt }}</figcaption></figure>{% endfor %}</div>
+  </div>
+</section>
+
+<section class="nk-national" aria-labelledby="nk-nat-title">
+  <div class="demo-wrap nk-national-in">
+    <div class="nk-nat-text">
+      <h2 id="nk-nat-title">Халадаай и национальная одежда</h2>
+      <p>Наряды с якутским орнаментом и бисером — к Ысыаху, выступлениям и праздникам. Шьём и на одного человека, и сразу на ансамбль.</p>
+      {% for pr in b.prices %}{% if pr.name == "Халадаай" %}<p class="nk-price-big">Халадаай {{ pr.price }}</p>{% endif %}{% endfor %}
+      {% with p=b.ornament_photo|demo_photo:demo.slug %}{% if p %}<img class="nk-ornament-photo" src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" loading="lazy">{% endif %}{% endwith %}
+    </div>
+    <div class="nk-nat-grid">{% for p in b.national_photos|demo_photos:demo.slug %}<img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" loading="lazy">{% endfor %}</div>
+  </div>
+</section>
+
+<section class="nk-kids demo-wrap" aria-labelledby="nk-kids-title">
+  <div class="nk-head"><h2 id="nk-kids-title">Детские и коллективные костюмы</h2><p>Для утренников, школ и ансамблей — по эскизу, сразу на группу. {% for pr in b.prices %}{% if pr.category == "Детские (коллективный заказ)" %}Коллективный заказ — {{ pr.price }}.{% endif %}{% endfor %}</p></div>
+  <div class="nk-kids-row">{% for p in b.kids_photos|demo_photos:demo.slug %}<figure><img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" loading="lazy"><figcaption>{{ p.alt }}</figcaption></figure>{% endfor %}</div>
+</section>
+
+<section class="nk-process" aria-labelledby="nk-proc-title">
+  <div class="demo-wrap nk-process-in">
+    {% with p=b.fitting_photo|demo_photo:demo.slug %}{% if p %}<img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" loading="lazy">{% endif %}{% endwith %}
+    <div>
+      <h2 id="nk-proc-title">Как проходит заказ</h2>
+      <ol class="nk-steps" role="list">{% for s in b.process %}<li><h3>{{ s.title }}</h3><p>{{ s.text }}</p></li>{% endfor %}</ol>
+    </div>
+  </div>
+</section>
+
+<div class="nk-booking-band"><div class="demo-wrap">{% include "examples/_booking.html" %}</div></div>
+<div class="demo-wrap">{% include "examples/_track_form.html" %}</div>
+
+<section class="nk-love" aria-labelledby="nk-love-title">
+  <div class="demo-wrap nk-love-in">
+    <div>
+      <h2 id="nk-love-title">За что нас ценят</h2>
+      <ul class="nk-themes" role="list">{% for t in b.review_themes %}<li>{{ t|capfirst }}</li>{% endfor %}</ul>
+      <p class="nk-small">Обобщение отзывов в 2ГИС — без цитат и имён.</p>
+    </div>
+    {% with p=b.lounge_photo|demo_photo:demo.slug %}{% if p %}<img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" loading="lazy">{% endif %}{% endwith %}
+  </div>
+</section>
+
+<div class="demo-wrap">{% include "examples/_posts.html" %}</div>
+
+<section class="nk-address demo-wrap" id="adres" aria-labelledby="nk-addr-title">
+  {% with p=b.place_photo|demo_photo:demo.slug %}{% if p %}<img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" loading="lazy">{% endif %}{% endwith %}
+  <div class="nk-addr-text">
+    <h2 id="nk-addr-title">Курашова, 8</h2>
+    <p>{{ b.address.details }}, {{ b.address.district }}</p>
+    <dl class="nk-hours">{% for d, v in b.hours|hours_rows %}<div><dt>{{ d }}</dt><dd>{{ v }}</dd></div>{% endfor %}</dl>
+    <ul class="nk-small" role="list">{% for f in b.features %}<li>{{ f }}</li>{% endfor %}</ul>
+  </div>
+  {% include "demos/_stub.html" with stub_title="Позвонить или написать" %}
+</section>
+{% endblock %}

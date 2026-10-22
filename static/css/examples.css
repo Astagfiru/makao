@@ -60,6 +60,7 @@
 .ex-cart-row { clear: both; display: grid; grid-template-columns: 1fr auto 76px; gap: 12px; align-items: center; padding: 6px 0; font-size: 16px; }
 .ex-cart-row input { min-height: 42px; padding: 6px 8px; text-align: center; }
 .ex-cart-row.is-on .ex-cart-name { font-weight: 800; }
+.ex-own-cup { padding: 16px 20px; border-radius: var(--e-radius); background: var(--e-surface); color: var(--e-surface-ink); font-weight: 700; }
 .ex-cart-price { white-space: nowrap; font-variant-numeric: tabular-nums; font-weight: 600; }
 .ex-summary { position: sticky; top: 64px; display: grid; gap: 12px; padding: 22px; border-radius: var(--e-radius); background: var(--e-accent); color: var(--e-on-accent); }
 .ex-summary-title { font-weight: 800; font-size: 20px; font-family: var(--e-head); }

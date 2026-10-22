@@ -19,7 +19,7 @@
     {% if not data.bookings and not data.orders %}<p class="ex-muted">Пока пусто. Запишитесь или оформите заказ на <a href="{% url 'portfolio:demo' demo.slug %}">сайте</a> — заявка появится здесь.</p>{% endif %}
     <ul class="ex-orders" role="list">
       {% for x in data.bookings reversed %}
-      <li><div><strong>№{{ x.number }} · {{ x.service }}</strong><span>{{ x.date }} в {{ x.time }} · {{ x.name }}{% if x.note %} · «{{ x.note }}»{% endif %}{% if x.paid %} · оплачено{% endif %}</span></div>
+      <li><div><strong>№{{ x.number }} · {{ x.service }}</strong><span>{{ x.date }} в {{ x.time }} · {{ x.name }}{% if x.place %} · {{ x.place }}{% endif %}{% if x.device %} · {{ x.device }}{% endif %}{% if x.note %} · «{{ x.note }}»{% endif %}{% if x.paid %} · оплачено{% endif %}</span></div>
         <form method="post">{% csrf_token %}<input type="hidden" name="action" value="status"><input type="hidden" name="tab" value="zayavki"><input type="hidden" name="kind" value="bookings"><input type="hidden" name="number" value="{{ x.number }}">
           <select name="status" aria-label="Статус записи №{{ x.number }}">{% for s in booking_statuses %}<option{% if s == x.status %} selected{% endif %}>{{ s }}</option>{% endfor %}</select><button class="ex-btn ex-btn-small" type="submit">Сохранить</button></form></li>
       {% endfor %}

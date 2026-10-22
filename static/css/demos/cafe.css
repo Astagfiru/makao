@@ -1,0 +1,117 @@
+@font-face { font-family: "Caveat"; src: url("../../fonts/caveat-cyrillic-400-700.woff2") format("woff2"); font-weight: 400 700; font-display: swap; unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Caveat"; src: url("../../fonts/caveat-latin-400-700.woff2") format("woff2"); font-weight: 400 700; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "IBM Plex Mono"; src: url("../../fonts/plexmono-cyrillic-400.woff2") format("woff2"); font-weight: 400; font-display: swap; unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "IBM Plex Mono"; src: url("../../fonts/plexmono-latin-400.woff2") format("woff2"); font-weight: 400; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "IBM Plex Mono"; src: url("../../fonts/plexmono-cyrillic-600.woff2") format("woff2"); font-weight: 600; font-display: swap; unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "IBM Plex Mono"; src: url("../../fonts/plexmono-latin-600.woff2") format("woff2"); font-weight: 600; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+/* Пример «Кафетерия»: крафт — кремовая бумага, дерево столов, оранжевый и синий кант тарелок, рукописные заголовки
+   Caveat и подписи машинописью IBM Plex Mono, как на фото меню кофейни. */
+
+.demo-cafe {
+  --d-bg: #f4eee3; --d-ink: #2b1d12; --wood: #9a6b43; --wood-deep: #6b4a2f; --rim: #e0672a; --rim-blue: #1f3a5f;
+  --paper: #fffaf1; --d-stub-bg: #2b1d12;
+  --e-accent: #2b1d12; --e-on-accent: #fffaf1; --e-surface: #fffaf1; --e-radius: 6px; --e-head: "Caveat", cursive;
+  --e-line: rgb(43 29 18 / 0.2);
+  font-family: "Onest", system-ui, sans-serif;
+}
+.demo-cafe h1, .demo-cafe h2, .demo-cafe h3, .kf-logo, .kf-ticket-title { font-family: "Caveat", cursive; font-weight: 700; line-height: 0.95; letter-spacing: 0; }
+.demo-cafe h2 { font-size: clamp(48px, 1rem + 4.5vw, 92px); }
+.demo-cafe h3 { font-size: 34px; }
+.kf-mono, .kf-menu-list, .kf-tags, .kf-strip figcaption, .demo-cafe .ex-cart-price, .demo-cafe .ex-total { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+.kf-mono { font-size: 14px; letter-spacing: 0.02em; }
+.kf-small { font-size: 14px; opacity: 0.72; }
+
+.kf-top { display: flex; align-items: center; gap: 28px; padding-block: 18px; }
+.kf-logo { display: grid; font-size: 44px; text-decoration: none; color: var(--d-ink); }
+.kf-logo small { font: 400 12px/1 "IBM Plex Mono", monospace; letter-spacing: 0.3em; text-transform: uppercase; color: var(--wood-deep); }
+.kf-nav { display: flex; gap: 22px; margin-left: auto; font-size: 16px; }
+.kf-nav a { text-decoration: none; }
+.kf-nav a:hover { text-decoration: underline wavy var(--rim); }
+.kf-btn { display: inline-flex; align-items: center; min-height: 48px; padding: 0 22px; border-radius: 999px; background: var(--rim); color: #fff; font-weight: 700; text-decoration: none; box-shadow: 0 3px 0 var(--wood-deep); transition: transform 160ms, box-shadow 160ms; }
+.kf-btn:hover { transform: translateY(2px); box-shadow: 0 1px 0 var(--wood-deep); }
+.kf-btn-big { min-height: 58px; padding: 0 30px; font-size: 19px; }
+
+.kf-hero { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: clamp(28px, 5vw, 80px); align-items: center; padding-block: clamp(20px, 4vw, 48px) clamp(56px, 7vw, 96px); }
+.kf-hero-text { display: grid; gap: 22px; }
+.kf-hero h1 { font-size: clamp(76px, 2rem + 8vw, 168px); color: var(--wood-deep); }
+.kf-lead { font-size: 20px; max-width: 44ch; }
+.kf-actions { display: flex; flex-wrap: wrap; gap: 16px 22px; align-items: center; }
+.kf-actions strong { font-size: 22px; }
+.kf-tags { display: flex; flex-wrap: wrap; gap: 8px; font-size: 13px; }
+.kf-tags li { padding: 6px 12px; border: 1.5px dashed var(--wood); border-radius: 999px; }
+.kf-hero-photo { position: relative; }
+.kf-hero-photo img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 50% 50% 18px 18px / 34% 34% 18px 18px; border: 12px solid var(--paper); box-shadow: 0 0 0 4px var(--rim), 0 30px 60px -30px rgb(43 29 18 / 0.5); }
+
+.kf-promos { background: var(--wood-deep); color: var(--paper); padding-block: 26px; }
+.kf-tickets { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.kf-ticket { display: grid; gap: 6px; padding: 18px 22px; border: 2px dashed rgb(255 250 241 / 0.5); border-radius: 10px; }
+.kf-ticket-title { font-size: 34px; }
+
+.kf-breakfast { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(28px, 5vw, 72px); padding-block: clamp(64px, 8vw, 120px); align-items: start; }
+.kf-bf-text { display: grid; gap: 18px; }
+.kf-bf-photos { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.kf-bf-photos img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 50%; border: 8px solid var(--paper); box-shadow: 0 0 0 3px var(--rim-blue); }
+.kf-bf-photos img:first-child { grid-column: 1 / -1; width: 72%; justify-self: center; box-shadow: 0 0 0 3px var(--rim); }
+
+.kf-menu-list { display: grid; gap: 10px; font-size: 15px; }
+.kf-menu-list li { display: grid; grid-template-columns: auto 1fr auto; gap: 8px; align-items: baseline; }
+.kf-menu-list i { border-bottom: 2px dotted rgb(43 29 18 / 0.35); }
+.kf-menu-list strong { white-space: nowrap; }
+.kf-menu-list small { grid-column: 1 / -1; font-family: "Onest", sans-serif; font-size: 14px; opacity: 0.7; }
+
+.kf-menu { background: var(--paper); padding-block: clamp(64px, 8vw, 120px); background-image: radial-gradient(rgb(154 107 67 / 0.12) 1px, transparent 1.5px); background-size: 18px 18px; }
+.kf-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px 30px; margin-bottom: 36px; }
+.kf-board { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 36px 48px; align-items: start; margin-bottom: 44px; }
+.kf-board-group { display: grid; gap: 12px; }
+.kf-board-group h3 { color: var(--rim); }
+.kf-strip { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(200px, 1fr); gap: 16px; overflow-x: auto; padding-bottom: 8px; scroll-snap-type: x mandatory; }
+.kf-strip figure { display: grid; gap: 8px; scroll-snap-align: start; }
+.kf-strip img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 10px; }
+
+.kf-how { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: clamp(28px, 5vw, 72px); align-items: center; padding-block: clamp(64px, 8vw, 110px); }
+.kf-how > img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 10px; transform: rotate(-2deg); box-shadow: 0 24px 50px -28px rgb(43 29 18 / 0.6); }
+.kf-how > div { display: grid; gap: 24px; }
+.kf-steps { display: grid; gap: 14px; counter-reset: kf; padding: 0; list-style: none; font-size: 18px; }
+.kf-steps li { counter-increment: kf; display: grid; grid-template-columns: 52px 1fr; gap: 14px; align-items: baseline; }
+.kf-steps li::before { content: counter(kf); font: 700 46px/1 "Caveat", cursive; color: var(--rim); }
+.kf-card { display: grid; gap: 12px; max-width: 440px; padding: 22px 24px; border-radius: 14px; background: var(--rim-blue); color: var(--paper); }
+.kf-stamps { display: flex; gap: 10px; }
+.kf-stamps span { width: 40px; height: 40px; border-radius: 50%; border: 2px dashed rgb(255 250 241 / 0.6); }
+.kf-stamps span.is-on { border: 0; background: var(--rim); box-shadow: inset 0 0 0 6px var(--rim-blue), inset 0 0 0 9px var(--rim); }
+.kf-stamps span:last-child { border-style: solid; border-color: var(--rim); }
+
+.demo-cafe .ex-cart-list { grid-template-columns: 1fr 1fr; align-items: start; }
+.demo-cafe .ex-own-cup { grid-column: 1 / -1; }
+.demo-cafe .ex-cart-group legend { font-size: 32px; font-weight: 700; color: var(--rim); }
+.kf-paper { background: var(--paper); border-block: 2px dashed var(--e-line); }
+.kf-track-band { background: var(--wood-deep); color: var(--paper); --e-accent: var(--rim); --e-on-accent: #fff; }
+
+.kf-love { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 5vw, 72px); padding-block: clamp(64px, 8vw, 110px); align-items: center; }
+.kf-love > div:first-child { display: grid; gap: 20px; }
+.kf-themes { display: grid; gap: 10px; font-size: 18px; }
+.kf-themes li { padding-left: 30px; background: radial-gradient(circle at 9px 0.75em, var(--rim) 5px, transparent 6px) no-repeat; }
+.kf-gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.kf-gallery img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 10px; }
+.kf-gallery img:nth-child(2) { transform: translateY(28px); }
+.kf-gallery img:nth-child(3) { transform: translateY(-8px); }
+
+.kf-address { display: grid; grid-template-columns: 0.8fr 1fr 1fr; gap: 28px; padding-block: clamp(56px, 7vw, 100px); align-items: start; }
+.kf-address > img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 10px; }
+.kf-addr-text { display: grid; gap: 14px; }
+.kf-hours { display: grid; gap: 4px; margin: 0; font-family: "IBM Plex Mono", monospace; }
+.kf-hours div { display: flex; justify-content: space-between; max-width: 260px; }
+.kf-hours dd { margin: 0; }
+
+@media (max-width: 960px) {
+  .kf-nav { display: none; }
+  .kf-hero, .kf-breakfast, .kf-how, .kf-love, .kf-address { grid-template-columns: 1fr; }
+  .kf-hero-photo { max-width: 460px; }
+  .kf-tickets { grid-template-columns: 1fr; }
+  .kf-how > img { max-width: 420px; }
+  .demo-cafe .ex-cart-list { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .kf-top .kf-btn { display: none; }
+  .kf-lead { font-size: 18px; }
+  .kf-gallery img:nth-child(n) { transform: none; }
+}

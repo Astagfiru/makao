@@ -1,0 +1,93 @@
+{% extends "demos/_base.html" %}
+{% load demo_tags site_tags %}
+{% block demo %}
+<header class="kf-top demo-wrap">
+  <a class="kf-logo" href="#top">кафетерия<small>кофе · еда</small></a>
+  <nav class="kf-nav" aria-label="Разделы"><a href="#menu">Меню</a><a href="#zakaz">Предзаказ</a><a href="#status">Готов ли заказ</a><a href="#novosti">Новости</a><a href="#adres">Адрес</a></nav>
+  <a class="kf-btn" href="#zakaz">Заказать навынос</a>
+</header>
+
+<section class="kf-hero demo-wrap" id="top">
+  <div class="kf-hero-text">
+    <p class="kf-mono">{{ b.address.details }} · {{ b.address.street }} · {% if b.hours|open_daily %}ежедневно {{ b.hours.mon }}{% endif %}</p>
+    <h1>Завтраки весь день</h1>
+    <p class="kf-lead">{{ b.hero_text }}</p>
+    <p class="kf-actions"><a class="kf-btn kf-btn-big" href="#zakaz">Собрать предзаказ</a><span class="kf-mono"><strong>{{ b.rating.value|comma }}</strong> · {{ b.rating.ratings }} оценок в 2ГИС</span></p>
+    <ul class="kf-tags" role="list"><li>чек 700 ₽</li><li>до 28 мест</li><li>можно с ноутбуком</li><li>можно с собакой</li><li>кофе с собой</li></ul>
+  </div>
+  {% with p=b.hero_photo|demo_photo:demo.slug %}{% if p %}<figure class="kf-hero-photo"><img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" fetchpriority="high"></figure>{% endif %}{% endwith %}
+</section>
+
+<section class="kf-promos" aria-labelledby="kf-promo-title">
+  <div class="demo-wrap">
+    <h2 id="kf-promo-title" class="visually-hidden">Акции</h2>
+    <ul class="kf-tickets" role="list">
+      {% for p in b.promo %}<li class="kf-ticket"><p class="kf-ticket-title">{{ p.text }}</p><p class="kf-mono">до 30.11.2026</p></li>{% endfor %}
+    </ul>
+  </div>
+</section>
+
+<section class="kf-breakfast demo-wrap" aria-labelledby="kf-bf-title">
+  <div class="kf-bf-text">
+    <h2 id="kf-bf-title">Завтраки</h2>
+    <p>Подают с открытия до закрытия — не только утром.</p>
+    <ul class="kf-menu-list" role="list">{% for pr in b.prices %}{% if pr.category == "Завтраки" %}<li><span>{{ pr.name }}</span><i></i><strong>{{ pr.price }}</strong>{% if pr.note %}<small>{{ pr.note|truncatechars:110 }}</small>{% endif %}</li>{% endif %}{% endfor %}</ul>
+  </div>
+  <div class="kf-bf-photos">{% for p in b.breakfast_photos|demo_photos:demo.slug %}<img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" loading="lazy">{% endfor %}</div>
+</section>
+
+<section class="kf-menu" id="menu" aria-labelledby="kf-menu-title">
+  <div class="demo-wrap">
+    <div class="kf-head"><h2 id="kf-menu-title">Меню</h2><p class="kf-mono">из 2ГИС · {{ b.prices_updated|lower }}</p></div>
+    <div class="kf-board">
+      {% for name, items in b.prices|price_groups %}{% if name != "Завтраки" %}
+      <section class="kf-board-group"><h3>{{ name }}</h3>
+        <ul class="kf-menu-list" role="list">{% for pr in items %}<li><span>{{ pr.name }}</span><i></i><strong>{{ pr.price }}</strong></li>{% endfor %}</ul>
+      </section>{% endif %}{% endfor %}
+    </div>
+    <div class="kf-strip">{% for p in b.menu_photos|demo_photos:demo.slug %}<figure><img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" loading="lazy"><figcaption class="kf-mono">{{ p.alt|lower }}</figcaption></figure>{% endfor %}</div>
+  </div>
+</section>
+
+<section class="kf-how demo-wrap" aria-labelledby="kf-how-title">
+  {% with p=b.takeaway_photo|demo_photo:demo.slug %}{% if p %}<img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" loading="lazy">{% endif %}{% endwith %}
+  <div>
+    <h2 id="kf-how-title">Навынос без очереди</h2>
+    <ol class="kf-steps" role="list">
+      <li><span><strong>Соберите заказ</strong> из меню ниже — кофе, сэндвич, завтрак.</span></li>
+      <li><span><strong>Выберите время</strong> и оплатите онлайн — или на месте.</span></li>
+      <li><span><strong>Заберите готовым</strong> на стойке — по номеру заказа.</span></li>
+    </ol>
+    <div class="kf-card" aria-label="Карта гостя: {{ stamps|default:0 }} кофе">
+      <p class="kf-mono">карта гостя · каждый 6-й кофе в подарок</p>
+      <p class="kf-stamps">{% for on in stamp_marks %}<span{% if on %} class="is-on"{% endif %}></span>{% endfor %}</p>
+      <p class="kf-small">Штампы ставятся сами, когда в предзаказе есть кофе. На рабочем сайте карта привязывается к номеру гостя.</p>
+    </div>
+  </div>
+</section>
+
+<div class="kf-paper"><div class="demo-wrap">{% include "examples/_cart.html" %}</div></div>
+<div class="kf-track-band"><div class="demo-wrap">{% include "examples/_track_form.html" %}</div></div>
+
+<section class="kf-love demo-wrap" aria-labelledby="kf-love-title">
+  <div>
+    <h2 id="kf-love-title">Что пишут гости</h2>
+    <ul class="kf-themes" role="list">{% for t in b.review_themes %}<li>{{ t|capfirst }}</li>{% endfor %}</ul>
+    <p class="kf-small">Обобщение отзывов в 2ГИС — без цитат и имён.</p>
+  </div>
+  <div class="kf-gallery">{% for p in b.gallery|demo_photos:demo.slug %}<img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" loading="lazy">{% endfor %}</div>
+</section>
+
+<div class="demo-wrap">{% include "examples/_posts.html" %}</div>
+
+<section class="kf-address demo-wrap" id="adres" aria-labelledby="kf-addr-title">
+  {% with p=b.place_photo|demo_photo:demo.slug %}{% if p %}<img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" loading="lazy">{% endif %}{% endwith %}
+  <div class="kf-addr-text">
+    <h2 id="kf-addr-title">Ленина, 20</h2>
+    <p>{{ b.address.details }}, {{ b.address.district }}</p>
+    <dl class="kf-hours">{% for d, v in b.hours|hours_rows %}<div><dt>{{ d }}</dt><dd>{{ v }}</dd></div>{% endfor %}</dl>
+    <ul class="kf-small" role="list">{% for f in b.features %}<li>{{ f }}</li>{% endfor %}</ul>
+  </div>
+  {% include "demos/_stub.html" with stub_title="Позвонить или написать" %}
+</section>
+{% endblock %}

@@ -55,8 +55,12 @@ def cart_context(request: HttpRequest, sandbox: examples.Sandbox) -> dict:
     if not feature:
         return {}
     quantities = examples.parse_quantities(request.GET, sandbox)
-    return {"cart": feature, "items": sandbox.services(), "quantities": quantities,
-            "totals": examples.cart_total(sandbox, quantities)}
+    own_cup = request.GET.get("own_cup") == "on"
+    pickup = examples.pickup_slots(sandbox) if examples.FEATURES[sandbox.demo.theme].get("pickup") else []
+    return {"cart": feature, "items": sandbox.services(), "quantities": quantities, "own_cup": own_cup,
+            "pickup_slots": pickup, "stamps": sandbox.data["stamps"],
+            "stamp_marks": [i < sandbox.data["stamps"] % examples.STAMPS_FOR_GIFT for i in range(examples.STAMPS_FOR_GIFT)],
+            "totals": examples.cart_total(sandbox, quantities, own_cup)}
 
 
 @require_GET
@@ -89,12 +93,17 @@ def book(request: HttpRequest, slug: str) -> HttpResponse:
         url = reverse("portfolio:demo", args=[slug])
         query = f"?service={service.id if service else ''}&date={day.isoformat() if day else ''}&error=1#zapis"
         return redirect(url + query)
+    feature = examples.FEATURES[site.theme]["booking"]
+    place = request.POST.get("place", "")
+    device = request.POST.get("device", "")
     number = sandbox.next_number()
     sandbox.data["bookings"].append({
         "number": number, "service": service.name, "price": service.price, "price_text": service.price_text,
         "date": day.isoformat(), "time": slot, "name": (request.POST.get("name") or "Гость").strip()[:40],
-        "note": (request.POST.get("note") or "").strip()[:300], "status": "Новая", "paid": False,
-        "created": timezone.localtime().strftime("%d.%m %H:%M"),
+        "note": (request.POST.get("note") or "").strip()[:300], "status": statuses_for(site, "bookings")[0],
+        "place": place if place in feature.get("places", []) else "",
+        "device": device if device in (site.blocks or {}).get("brands", []) else "",
+        "paid": False, "created": timezone.localtime().strftime("%d.%m %H:%M"),
     })
     sandbox.save()
     return redirect("portfolio:done", slug=slug, kind="bookings", number=number)
@@ -105,16 +114,22 @@ def order(request: HttpRequest, slug: str) -> HttpResponse:
     site = get_example(slug)
     sandbox = examples.Sandbox(request, site)
     quantities = examples.parse_quantities(request.POST, sandbox)
-    if not quantities or request.POST.get("consent") != "on":
-        query = "&".join(f"q_{k}={v}" for k, v in quantities.items())
+    own_cup = request.POST.get("own_cup") == "on"
+    pickup = examples.FEATURES[site.theme].get("pickup")
+    slot_ok = not pickup or request.POST.get("slot") in examples.pickup_slots(sandbox)
+    if not quantities or not slot_ok or request.POST.get("consent") != "on":
+        query = "&".join(f"q_{k}={v}" for k, v in quantities.items()) + ("&own_cup=on" if own_cup else "")
         return redirect(f"{reverse('portfolio:demo', args=[slug])}?{query}&error=1#zakaz")
-    totals = examples.cart_total(sandbox, quantities)
+    totals = examples.cart_total(sandbox, quantities, own_cup)
+    if pickup:
+        sandbox.data["stamps"] = totals["stamps"]
     first = examples.STATUSES.get(site.theme, examples.STATUSES["booking"])[0]
     number = sandbox.next_number()
     sandbox.data["orders"].append({
         "number": number, "lines": totals["lines"], "total": totals["total"], "discount": totals["discount"],
+        "discounts": totals["discounts"], "own_cup": own_cup,
         "unknown": totals["unknown"], "branch": (request.POST.get("branch") or "")[:120],
-        "delivery": (request.POST.get("delivery") or "")[:40], "slot": (request.POST.get("slot") or "")[:20],
+        "delivery": "Навынос" if pickup else (request.POST.get("delivery") or "")[:40], "slot": (request.POST.get("slot") or "")[:20],
         "card": (request.POST.get("card_text") or "").strip()[:200], "name": (request.POST.get("name") or "Гость")[:40],
         "status": first, "paid": False, "created": timezone.localtime().strftime("%d.%m %H:%M"),
     })
@@ -154,7 +169,7 @@ def pay(request: HttpRequest, slug: str, kind: str, number: int) -> HttpResponse
 
 
 def statuses_for(site: DemoSite, kind: str) -> list[str]:
-    return examples.STATUSES["booking"] if kind == "bookings" and site.theme != "autobody" \
+    return examples.STATUSES["booking"] if kind == "bookings" and site.theme not in examples.THEMED_BOOKINGS \
         else examples.STATUSES.get(site.theme, examples.STATUSES["booking"])
 
 
@@ -223,7 +238,7 @@ def apply_cabinet_action(sandbox: examples.Sandbox, data) -> None:
         elif len(iso) == 10:
             days.append(iso)
     elif action == "reset":
-        sandbox.data.update({"bookings": [], "orders": [], "prices": {}, "posts": [], "days_off": []})
+        sandbox.data.update({"bookings": [], "orders": [], "prices": {}, "posts": [], "days_off": [], "stamps": 0})
 
 
 def old_demo_url(request: HttpRequest, slug: str) -> HttpResponse:

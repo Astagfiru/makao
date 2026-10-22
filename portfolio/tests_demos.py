@@ -19,9 +19,9 @@ class DemoSeedTests(TestCase):
         super().tearDownClass()
         shutil.rmtree(TMP_MEDIA, ignore_errors=True)
 
-    def test_seed_creates_six_demos_and_cases_from_research(self) -> None:
+    def test_seed_creates_nine_demos_and_cases_from_research(self) -> None:
         counts = seed.seed_portfolio()
-        self.assertEqual(counts, {"примеры сайтов": 6, "кейсы": 6})
+        self.assertEqual(counts, {"примеры сайтов": 9, "кейсы": 9})
         self.assertEqual(seed.seed_portfolio(), {})  # повторный запуск ничего не дублирует
         demo = DemoSite.objects.get(slug="snezhny")
         self.assertEqual(len(demo.blocks["prices"]), 139)

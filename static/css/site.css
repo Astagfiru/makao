@@ -278,6 +278,9 @@ h3 { font-size: var(--fs-h3); font-weight: 700; line-height: 1.2; letter-spacing
 .folder-salon, .mock-salon { --folder-bg: #f7e1ee; --folder-ink: #3a0d2c; --tab-bg: #e0218a; --tab-ink: #ffffff; }
 .folder-autobody, .mock-autobody { --folder-bg: #1a1d22; --folder-ink: #f3f4f6; --tab-bg: #ff6a13; --tab-ink: #160a02; }
 .folder-flowers, .mock-flowers { --folder-bg: #fbeee9; --folder-ink: #4a2530; --tab-bg: #f3c4c9; --tab-ink: #4a2530; }
+.folder-cafe, .mock-cafe { --folder-bg: #f4eee3; --folder-ink: #2b1d12; --tab-bg: #e0672a; --tab-ink: #ffffff; }
+.folder-atelier, .mock-atelier { --folder-bg: #4a0a14; --folder-ink: #f3e9e2; --tab-bg: #c9a35b; --tab-ink: #2a0f14; }
+.folder-phonerepair, .mock-phonerepair { --folder-bg: #2337c6; --folder-ink: #ffffff; --tab-bg: #ffd21f; --tab-ink: #0c1640; }
 .folder-plain, .mock-plain { --folder-bg: #dce8f1; --folder-ink: #0a1322; --tab-bg: #0a1322; --tab-ink: #ffffff; }
 
 /* Миниатюра сайта, если нет скриншота */

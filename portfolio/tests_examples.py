@@ -1,7 +1,9 @@
 import re
-from datetime import date
+from datetime import date, datetime, time
+from unittest import mock
 
 from django.test import TestCase
+from django.utils import timezone
 
 from portfolio import examples, seed
 from portfolio.models import DemoSite
@@ -88,3 +90,77 @@ class ExampleFeatureTests(TestCase):
     def test_unknown_order_is_404(self) -> None:
         self.assertEqual(self.client.get("/primery/topmen/gotovo/orders/5/").status_code, 404)
         self.assertEqual(self.client.get("/primery/topmen/gotovo/hack/5/").status_code, 404)
+
+
+class NewNicheExampleTests(TestCase):
+    """Кофейня (предзаказ навынос с акциями), ателье (мерки с выездом), ремонт телефонов (приём устройства)."""
+
+    def setUp(self) -> None:
+        seed.seed_portfolio()
+        self.cafe = DemoSite.objects.get(slug="coffee-globus")
+        names = {s.name: s.id for s in examples.services(self.cafe)}
+        self.americano, self.syrniki = names["Американо, 300 мл"], names["Сырники"]
+        morning = timezone.make_aware(datetime.combine(date(2026, 10, 22), time(10, 0)))
+        patcher = mock.patch("portfolio.examples.timezone.localtime", return_value=morning)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def test_coffee_gifts_count_stamps_from_earlier_orders(self) -> None:
+        sandbox = examples.Sandbox(mock.Mock(session={}), self.cafe)
+        sandbox.data["stamps"] = 3
+        discounts, stamps = examples.coffee_discounts(sandbox, [299, 209, 209], own_cup=True)
+        self.assertEqual(discounts[0], ("Каждый 6-й кофе в подарок: 1 шт.", 209))
+        self.assertEqual(discounts[1], ("Своя тара: −15% на кофе", 76))  # (209 + 299) × 15%
+        self.assertEqual(stamps, 6)
+        self.assertEqual(examples.coffee_discounts(sandbox, [209], own_cup=False), ([], 4))
+
+    def test_cafe_preorder_with_own_cup_payment_and_status(self) -> None:
+        html = self.client.get(f"/primery/coffee-globus/?q_{self.americano}=6&q_{self.syrniki}=1&own_cup=on").content.decode()
+        self.assertIn("Каждый 6-й кофе в подарок: 1 шт.", html)
+        self.assertIn("Своя тара", html)
+        self.assertIn('<option>10:30</option>', html)
+        self.assertNotIn('<option>10:15</option>', html)  # меньше 20 минут на приготовление
+        response = self.client.post("/primery/coffee-globus/zakaz/", {
+            f"q_{self.americano}": "6", f"q_{self.syrniki}": "1", "own_cup": "on", "slot": "10:30", "consent": "on"})
+        self.assertRedirects(response, "/primery/coffee-globus/gotovo/orders/101/")
+        done = self.client.get("/primery/coffee-globus/gotovo/orders/101/")
+        # 6 × 209 + 419 = 1673; подарок −209; своя тара −15% от 5 × 209 = 157
+        self.assertContains(done, "Итого: 1 307 ₽")
+        self.assertContains(done, "−157 ₽")
+        self.assertContains(done, "Оплатить (тест)")
+        self.assertContains(done, "Навынос, 10:30")
+        self.client.post("/primery/coffee-globus/kabinet/", {"action": "status", "kind": "orders", "number": "101",
+                                                             "status": "Готов — можно забирать"})
+        self.assertContains(self.client.get("/primery/coffee-globus/status/?n=101"), "Готов — можно забирать")
+        # шесть штампов уже потрачены на подарок: следующий кофе — первый штамп новой карты
+        html = self.client.get(f"/primery/coffee-globus/?q_{self.americano}=1").content.decode()
+        self.assertNotIn("в подарок: 1 шт.", html)
+
+    def test_cafe_preorder_needs_valid_pickup_time(self) -> None:
+        response = self.client.post("/primery/coffee-globus/zakaz/", {f"q_{self.americano}": "1", "slot": "07:00",
+                                                                      "consent": "on"})
+        self.assertIn("error=1", response["Location"])
+
+    def test_atelier_booking_with_home_visit_has_order_statuses(self) -> None:
+        day, slot = ExampleFeatureTests.free_slot(self, "nicole")
+        self.client.post("/primery/nicole/zapis/", {"service": "s0", "date": day, "time": slot, "consent": "on",
+                                                    "place": "Выезд мастера на дом", "device": "Apple"})
+        done = self.client.get("/primery/nicole/gotovo/bookings/101/")
+        self.assertContains(done, "Выезд мастера на дом")
+        self.assertNotContains(done, "Устройство")
+        self.assertContains(done, "Раскрой и пошив")
+        self.client.post("/primery/nicole/kabinet/", {"action": "status", "kind": "bookings", "number": "101",
+                                                      "status": "Примерка"})
+        self.assertContains(self.client.get("/primery/nicole/status/?n=101"), "№101: Примерка")
+
+    def test_phone_repair_booking_keeps_device_and_repair_statuses(self) -> None:
+        day, slot = ExampleFeatureTests.free_slot(self, "remont-plus")
+        self.client.post("/primery/remont-plus/zapis/", {"service": "s1", "date": day, "time": slot, "consent": "on",
+                                                         "device": "Xiaomi", "note": "разбит экран"})
+        done = self.client.get("/primery/remont-plus/gotovo/bookings/101/")
+        self.assertContains(done, "Xiaomi")
+        self.assertContains(done, "Записан на приём")
+        self.assertContains(done, "после диагностики")
+        self.client.post("/primery/remont-plus/kabinet/", {"action": "status", "kind": "bookings", "number": "101",
+                                                           "status": "Стоимость согласована"})
+        self.assertContains(self.client.get("/primery/remont-plus/status/?n=101"), "Стоимость согласована")

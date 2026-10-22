@@ -1,0 +1,72 @@
+{% extends "demos/_base.html" %}
+{% load demo_tags %}
+{% block demo %}
+<header class="rp-top demo-wrap">
+  <a class="rp-logo" href="#top"><span class="rp-mark" aria-hidden="true"></span>РемонтПлюс</a>
+  <nav class="rp-nav" aria-label="Разделы"><a href="#uslugi">Услуги</a><a href="#kak">Как чиним</a><a href="#zapis">Запись</a><a href="#status">Статус ремонта</a><a href="#adres">Адрес</a></nav>
+  <a class="rp-btn" href="#zapis">Сдать в ремонт</a>
+</header>
+
+<section class="rp-hero" id="top">
+  <div class="demo-wrap rp-hero-in">
+    <div class="rp-hero-text">
+      <p class="rp-code">{{ b.address.details }} · {% if b.hours|open_daily %}ежедневно {{ b.hours.mon }}{% endif %}</p>
+      <h1>Ремонт телефонов любой сложности. <span>Гарантия.</span></h1>
+      <p class="rp-lead">{{ b.hero_text }}</p>
+      <p class="rp-actions"><a class="rp-btn rp-btn-big" href="#zapis">Записаться на приём</a><a class="rp-btn rp-btn-ghost" href="#status">Статус ремонта</a></p>
+      <p class="rp-code"><strong>{{ b.rating.value|comma }}</strong> · {{ b.rating.ratings }} оценок в 2ГИС</p>
+    </div>
+    {% with p=b.hero_photo|demo_photo:demo.slug %}{% if p %}<figure class="rp-hero-photo"><img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" fetchpriority="high"></figure>{% endif %}{% endwith %}
+  </div>
+</section>
+
+<section class="rp-brands" aria-labelledby="rp-brands-title">
+  <div class="demo-wrap rp-brands-in">
+    <h2 id="rp-brands-title">Чиним</h2>
+    <ul role="list">{% for brand in b.brands %}<li>{{ brand }}</li>{% endfor %}</ul>
+  </div>
+</section>
+
+<section class="rp-services demo-wrap" id="uslugi" aria-labelledby="rp-serv-title">
+  <div class="rp-head"><h2 id="rp-serv-title">Услуги</h2><p>Цену называем после диагностики — когда понятно, что именно сломалось. Без согласия клиента ремонт не начинаем.</p></div>
+  <ol class="rp-grid" role="list">{% for name in b.repairs %}<li><span class="rp-code">{{ forloop.counter|stringformat:"02d" }}</span><h3>{{ name }}</h3><p class="rp-code">после диагностики</p></li>{% endfor %}</ol>
+  {% with p=b.chip_photo|demo_photo:demo.slug %}{% if p %}<figure class="rp-chip"><img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" loading="lazy"><figcaption><strong>Ремонт платы под микроскопом.</strong> Когда устройство не включается или не заряжается, причину ищут на плате — у мастера микроскоп и паяльная станция.</figcaption></figure>{% endif %}{% endwith %}
+</section>
+
+<section class="rp-process" id="kak" aria-labelledby="rp-proc-title">
+  <div class="demo-wrap">
+    <h2 id="rp-proc-title">Как проходит ремонт</h2>
+    <ol class="rp-steps" role="list">
+      {% for s in b.process %}{% with p=b.process_photos|slice:forloop.counter|last %}{% with ph=p|demo_photo:demo.slug %}
+      <li>{% if ph %}<img src="{{ ph.url }}" alt="{{ ph.alt }}" width="{{ ph.width }}" height="{{ ph.height }}" loading="lazy">{% endif %}
+        <p class="rp-code">шаг {{ forloop.counter }} / {{ b.process|length }}</p><h3>{{ s.title }}</h3><p>{{ s.text }}</p></li>
+      {% endwith %}{% endwith %}{% endfor %}
+    </ol>
+  </div>
+</section>
+
+<div class="demo-wrap">{% include "examples/_booking.html" %}</div>
+<div class="rp-track-band"><div class="demo-wrap">{% include "examples/_track_form.html" %}</div></div>
+
+<section class="rp-shop demo-wrap" aria-labelledby="rp-shop-title">
+  <div>
+    <h2 id="rp-shop-title">Аксессуары на месте</h2>
+    <p>Чехлы, зарядки, автодержатели и наушники — можно подобрать сразу, пока ждёте ремонт.</p>
+    <h3>Что ценят клиенты</h3>
+    <ul class="rp-themes" role="list">{% for t in b.review_themes %}<li>{{ t|capfirst }}</li>{% endfor %}</ul>
+    <p class="rp-small">Обобщение отзывов в 2ГИС — без цитат и имён.</p>
+  </div>
+  <div class="rp-shop-photos">{% for p in b.accessories_photos|demo_photos:demo.slug %}<img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" loading="lazy">{% endfor %}</div>
+</section>
+
+<section class="rp-address demo-wrap" id="adres" aria-labelledby="rp-addr-title">
+  {% with p=b.place_photo|demo_photo:demo.slug %}{% if p %}<img src="{{ p.url }}" alt="{{ p.alt }}" width="{{ p.width }}" height="{{ p.height }}" loading="lazy">{% endif %}{% endwith %}
+  <div class="rp-addr-text">
+    <h2 id="rp-addr-title">Жорницкого, 33</h2>
+    <p>{{ b.address.details }}, {{ b.address.district }}</p>
+    <dl class="rp-hours">{% for d, v in b.hours|hours_rows %}<div><dt>{{ d }}</dt><dd>{{ v }}</dd></div>{% endfor %}</dl>
+    <ul class="rp-small" role="list">{% for f in b.features %}<li>{{ f }}</li>{% endfor %}</ul>
+  </div>
+  {% include "demos/_stub.html" with stub_title="Позвонить или написать" %}
+</section>
+{% endblock %}

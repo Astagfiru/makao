@@ -1,0 +1,109 @@
+@font-face { font-family: "Geologica"; src: url("../../fonts/geologica-cyrillic-300-800.woff2") format("woff2"); font-weight: 300 800; font-display: swap; unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "Geologica"; src: url("../../fonts/geologica-latin-300-800.woff2") format("woff2"); font-weight: 300 800; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "JetBrains Mono"; src: url("../../fonts/jbmono-cyrillic-400-700.woff2") format("woff2"); font-weight: 400 700; font-display: swap; unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+@font-face { font-family: "JetBrains Mono"; src: url("../../fonts/jbmono-latin-400-700.woff2") format("woff2"); font-weight: 400 700; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+/* Пример «Ремонт плюс»: схема — синий с вывески, белый, сигнальный жёлтый, сетка как у платы под микроскопом;
+   Geologica для текста и JetBrains Mono для кодов и подписей. */
+
+.demo-phonerepair {
+  --d-bg: #f5f7fc; --d-ink: #0c1640; --blue: #2337c6; --blue-deep: #111c6b; --signal: #ffd21f; --grid: rgb(255 255 255 / 0.08);
+  --d-stub-bg: #111c6b;
+  --e-accent: #2337c6; --e-on-accent: #fff; --e-surface: #fff; --e-radius: 14px; --e-head: "Geologica", sans-serif;
+  --e-line: rgb(12 22 64 / 0.16);
+  font-family: "Geologica", system-ui, sans-serif; font-weight: 350;
+}
+.demo-phonerepair h1, .demo-phonerepair h2, .demo-phonerepair h3, .rp-logo { font-family: "Geologica", sans-serif; font-weight: 750; letter-spacing: -0.03em; line-height: 1; }
+.demo-phonerepair h2 { font-size: clamp(36px, 1rem + 3.4vw, 70px); }
+.demo-phonerepair h3 { font-size: 21px; letter-spacing: -0.01em; line-height: 1.15; }
+.rp-code { font: 500 13px/1.4 "JetBrains Mono", ui-monospace, monospace; letter-spacing: 0.02em; text-transform: uppercase; }
+.rp-small { font-size: 14px; opacity: 0.7; }
+
+.rp-top { display: flex; align-items: center; gap: 28px; padding-block: 16px; }
+.rp-logo { display: inline-flex; align-items: center; gap: 10px; font-size: 26px; text-decoration: none; color: var(--blue-deep); }
+.rp-mark { width: 30px; height: 30px; border-radius: 50%; border: 4px solid var(--blue); position: relative; }
+.rp-mark::after { content: ""; position: absolute; left: 50%; top: -6px; bottom: -6px; width: 5px; background: var(--blue); transform: translateX(-50%) rotate(40deg); border-radius: 3px; }
+.rp-nav { display: flex; gap: 22px; margin-left: auto; font-size: 16px; font-weight: 500; }
+.rp-nav a { text-decoration: none; }
+.rp-nav a:hover { color: var(--blue); }
+.rp-btn { display: inline-flex; align-items: center; min-height: 48px; padding: 0 22px; border-radius: 12px; background: var(--blue); color: #fff; font-weight: 650; text-decoration: none; transition: transform 160ms, background-color 200ms; }
+.rp-btn:hover { transform: translateY(-2px); background: var(--blue-deep); }
+.rp-btn-big { min-height: 58px; padding: 0 28px; background: var(--signal); color: var(--d-ink); }
+.rp-btn-big:hover { background: #fff; }
+.rp-btn-ghost { background: transparent; color: #fff; box-shadow: inset 0 0 0 2px rgb(255 255 255 / 0.5); }
+
+.rp-hero {
+  background-color: var(--blue); color: #fff; padding-block: clamp(40px, 6vw, 88px);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+.rp-hero-in { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: clamp(28px, 5vw, 80px); align-items: center; }
+.rp-hero-text { display: grid; gap: 24px; }
+.rp-hero h1 { font-size: clamp(46px, 1rem + 5vw, 104px); }
+.rp-hero h1 span { color: var(--signal); }
+.rp-lead { font-size: 19px; max-width: 48ch; opacity: 0.92; }
+.rp-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.rp-hero .rp-code strong { font-size: 20px; color: var(--signal); }
+.rp-hero-photo { padding: 12px; border-radius: 40px; background: var(--blue-deep); box-shadow: 0 30px 60px -20px rgb(0 0 0 / 0.5); max-width: 420px; justify-self: end; }
+.rp-hero-photo img { width: 100%; aspect-ratio: 9 / 16; object-fit: cover; border-radius: 30px; }
+
+.rp-brands { background: var(--d-ink); color: #fff; padding-block: 22px; }
+.rp-brands-in { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 28px; }
+.rp-brands h2 { font-size: 24px; color: var(--signal); }
+.rp-brands ul { display: flex; flex-wrap: wrap; gap: 8px; }
+.rp-brands li { padding: 8px 14px; border: 1px solid rgb(255 255 255 / 0.3); border-radius: 999px; font: 500 15px/1 "JetBrains Mono", monospace; }
+
+.rp-services { padding-block: clamp(64px, 8vw, 110px); display: grid; gap: 32px; }
+.rp-head { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 40px; align-items: end; }
+.rp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--e-line); border: 1px solid var(--e-line); border-radius: 18px; overflow: hidden; }
+.rp-grid li { display: grid; gap: 10px; align-content: start; min-height: 170px; padding: 22px; background: #fff; transition: background-color 200ms; }
+.rp-grid li:hover { background: #eef1ff; }
+.rp-grid li .rp-code:first-child { color: var(--blue); }
+.rp-grid li .rp-code:last-child { margin-top: auto; opacity: 0.6; }
+.rp-chip { display: grid; grid-template-columns: 220px 1fr; gap: 24px; align-items: center; padding: 18px; border-radius: 18px; background: var(--d-ink); color: #fff; }
+.rp-chip img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 50%; border: 4px solid var(--signal); }
+.rp-chip figcaption { font-size: 18px; max-width: 60ch; }
+
+.rp-process { background: #fff; padding-block: clamp(64px, 8vw, 110px); }
+.rp-process h2 { margin-bottom: 36px; }
+.rp-steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+.rp-steps li { display: grid; gap: 10px; align-content: start; padding: 14px; border-radius: 16px; background: var(--d-bg); position: relative; }
+.rp-steps li:not(:last-child)::after { content: ""; position: absolute; right: -12px; top: 40%; width: 8px; height: 8px; border-top: 3px solid var(--blue); border-right: 3px solid var(--blue); transform: rotate(45deg); }
+.rp-steps img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 10px; }
+.rp-steps .rp-code { color: var(--blue); }
+
+.rp-track-band { background: var(--signal); --e-accent: var(--d-ink); }
+
+.rp-shop { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 5vw, 72px); padding-block: clamp(64px, 8vw, 110px); align-items: center; }
+.rp-shop > div:first-child { display: grid; gap: 18px; }
+.rp-shop h3 { margin-top: 12px; }
+.rp-themes { display: grid; gap: 10px; font-size: 18px; }
+.rp-themes li { padding-left: 30px; position: relative; }
+.rp-themes li::before { content: "✓"; position: absolute; left: 0; font-weight: 800; color: var(--blue); }
+.rp-shop-photos { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 12px; }
+.rp-shop-photos img { width: 100%; height: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 16px; }
+
+.rp-address { display: grid; grid-template-columns: 0.8fr 1fr 1fr; gap: 28px; padding-block: clamp(56px, 7vw, 100px); align-items: start; }
+.rp-address > img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 16px; }
+.rp-addr-text { display: grid; gap: 14px; }
+.rp-hours { display: grid; gap: 4px; margin: 0; font-family: "JetBrains Mono", monospace; font-size: 16px; }
+.rp-hours div { display: flex; justify-content: space-between; max-width: 260px; }
+.rp-hours dd { margin: 0; }
+
+@media (max-width: 1100px) {
+  .rp-steps { grid-template-columns: repeat(3, 1fr); }
+  .rp-steps li::after { display: none; }
+  .rp-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 960px) {
+  .rp-nav { display: none; }
+  .rp-hero-in, .rp-head, .rp-shop, .rp-address { grid-template-columns: 1fr; }
+  .rp-hero-photo { justify-self: start; max-width: 300px; }
+  .rp-chip { grid-template-columns: 1fr; }
+  .rp-chip img { max-width: 220px; }
+}
+@media (max-width: 560px) {
+  .rp-top .rp-btn { display: none; }
+  .rp-steps { grid-template-columns: 1fr; }
+  .rp-grid li { min-height: 0; }
+  .rp-lead { font-size: 17px; }
+}

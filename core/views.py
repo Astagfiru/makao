@@ -32,7 +32,7 @@ def home(request: HttpRequest) -> HttpResponse:
         "steps": STEPS,
         "reviews": Review.published.all(),
         "faq": FAQItem.objects.filter(is_published=True),
-        "cases": Case.published.select_related("niche", "demo")[:6],
+        "cases": Case.published.select_related("niche", "demo")[:9],
         "form": lead_form("/"),
     }
     return render(request, "core/home.html", context)

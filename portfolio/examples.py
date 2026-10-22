@@ -5,6 +5,7 @@
 """
 from __future__ import annotations
 
+import math
 import re
 from dataclasses import dataclass
 from datetime import date, datetime, time, timedelta
@@ -33,6 +34,16 @@ FEATURES: dict[str, dict] = {
     "autobody": {"booking": {"title": "Запись на осмотр", "button": "Записаться на осмотр", "pay": False, "step": 60,
                              "ask": "Марка авто и что повреждено"}, "tracker": True, "posts": False},
     "flowers": {"cart": {"title": "Оформить заказ", "pay": True}, "delivery": True, "tracker": True, "posts": True},
+    "cafe": {"cart": {"title": "Предзаказ навынос", "pay": True}, "pickup": True, "tracker": True, "posts": True},
+    "atelier": {"booking": {"title": "Запись на мерки и примерку", "button": "Записаться", "pay": False, "step": 30,
+                            "ask": "Что нужно сделать (необязательно)",
+                            "intro": "Мастер снимет мерки, обсудит фасон и ткань — можно принести фото или эскиз.",
+                            "places": ["В ателье — Курашова, 8, каб. 208", "Выезд мастера на дом"]},
+                "tracker": True, "posts": True},
+    "phonerepair": {"booking": {"title": "Сдать в ремонт", "button": "Записаться на приём", "pay": False, "step": 30,
+                                "ask": "Что случилось с устройством", "devices": True,
+                                "intro": "Мастер посмотрит устройство при вас; стоимость и срок назовёт после диагностики."},
+                    "tracker": True, "posts": False},
 }
 
 STATUSES = {
@@ -40,12 +51,21 @@ STATUSES = {
     "dryclean": ["Принят", "В чистке", "Сушка и проверка", "Готов к выдаче", "Выдан"],
     "autobody": ["Записан на осмотр", "Смета согласована", "В ремонте", "Покраска и полировка", "Готов к выдаче"],
     "flowers": ["Принят", "Собираем букет", "Передан курьеру", "Доставлен"],
+    "cafe": ["Принят", "Готовим", "Готов — можно забирать", "Выдан"],
+    "atelier": ["Записан", "Мерки сняты", "Раскрой и пошив", "Примерка", "Готово к выдаче", "Выдано"],
+    "phonerepair": ["Записан на приём", "Диагностика", "Стоимость согласована", "В ремонте", "Готов, гарантия"],
 }
+# У этих ниш запись — начало заказа, поэтому у записи статусы самой ниши, а не «Новая → Пришёл».
+THEMED_BOOKINGS = {"autobody", "atelier", "phonerepair"}
+
+# Кофейня: акции из карточки 2ГИС — «каждый 6-й кофе в подарок» и «15% на кофе в свою тару».
+COFFEE_GROUP, STAMPS_FOR_GIFT, OWN_CUP_DISCOUNT = "Кофе", 6, 0.15
+PICKUP_STEP, PICKUP_LEAD = 15, 20  # минут: шаг времени выдачи и минимум на приготовление
 
 # Длительность услуг — настройка владельца; в источниках её нет, здесь значения для примера.
 DURATIONS = {"стрижка": 60, "бород": 30, "седин": 30, "окрашив": 120, "завивк": 150, "уход": 60, "пилинг": 30,
              "реконструкц": 90, "укладк": 60, "причёск": 90, "брови": 30, "помыть": 30, "консультац": 30,
-             "имплант": 60, "хирург": 60, "брекет": 60, "протез": 60}
+             "имплант": 60, "хирург": 60, "брекет": 60, "протез": 60, "пошив": 60, "халадаай": 60, "укорач": 30}
 
 
 @dataclass
@@ -57,6 +77,7 @@ class Service:
     minutes: int
     group: str = ""
     winter: bool = False
+    coffee: bool = False
 
 
 def _price_min(text: str | None) -> int | None:
@@ -89,6 +110,8 @@ def services(demo: DemoSite) -> list[Service]:
                 continue
             items.append(Service(f"s{i}", s["name"], None, "после консультации", _minutes(s["name"], 60), "Лечение"))
         return items
+    if demo.theme == "phonerepair":
+        return [Service(f"s{i}", n, None, "после диагностики", step, "Ремонт") for i, n in enumerate(b.get("repairs", []))]
     if demo.theme == "autobody":
         names = [p["name"] for p in b.get("prices", [])] + ["Ремонт вмятин без покраски (ПДР)", "Сварка"]
         return [Service(f"s{i}", f"Осмотр: {n.lower()}", None, "цена после осмотра", step, "Осмотр")
@@ -103,6 +126,12 @@ def services(demo: DemoSite) -> list[Service]:
     if demo.theme == "dryclean":
         for s in items:
             s.winter = winter_item(s)
+    if demo.theme == "cafe":
+        for s in items:
+            s.coffee = s.group == COFFEE_GROUP
+    if demo.theme == "atelier":
+        for s in items:
+            s.group = "Ремонт и подгонка" if s.group == "Все" else s.group
     return items
 
 
@@ -114,6 +143,7 @@ class Sandbox:
         self.key = f"example:{demo.slug}"
         self.data = request.session.get(self.key) or {"bookings": [], "orders": [], "prices": {}, "posts": [],
                                                        "days_off": [], "counter": 100}
+        self.data.setdefault("stamps", 0)
 
     def save(self) -> None:
         for name in ("bookings", "orders", "posts"):
@@ -187,8 +217,22 @@ def winter_item(service: Service) -> bool:
     return any(w in text for w in ("пуховик", "мех", "шуб", "дублен", "утепл", "зимн", "парка"))
 
 
-def cart_total(sandbox: Sandbox, quantities: dict[str, int]) -> dict:
-    lines, total, winter, unknown = [], 0, 0, 0
+def coffee_discounts(sandbox: Sandbox, cups: list[int], own_cup: bool) -> tuple[list[tuple[str, int]], int]:
+    """Подарочные кофе по карте гостя (каждый 6-й) и скидка за свою тару на остальные. Возвращает скидки и штампы."""
+    stamps = sandbox.data["stamps"]
+    gifts = (stamps + len(cups)) // STAMPS_FOR_GIFT - stamps // STAMPS_FOR_GIFT
+    cups = sorted(cups)
+    result = []
+    if gifts:
+        result.append((f"Каждый 6-й кофе в подарок: {gifts} шт.", sum(cups[:gifts])))
+    if own_cup and cups[gifts:]:
+        # floor(x + 0.5) — так же, как Math.round в живом расчёте на странице
+        result.append(("Своя тара: −15% на кофе", math.floor(sum(cups[gifts:]) * OWN_CUP_DISCOUNT + 0.5)))
+    return result, stamps + len(cups)
+
+
+def cart_total(sandbox: Sandbox, quantities: dict[str, int], own_cup: bool = False) -> dict:
+    lines, total, winter, unknown, cups = [], 0, 0, 0, []
     for s in sandbox.services():
         qty = quantities.get(s.id, 0)
         if qty <= 0:
@@ -198,9 +242,32 @@ def cart_total(sandbox: Sandbox, quantities: dict[str, int]) -> dict:
         total += line or 0
         unknown += line is None
         winter += qty if winter_item(s) else 0
-    discount = round(total * 0.15) if sandbox.demo.theme == "dryclean" and winter >= 5 else 0
-    return {"lines": lines, "subtotal": total, "discount": discount, "total": total - discount,
-            "winter": winter, "unknown": unknown}
+        cups += [s.price] * qty if s.coffee and s.price is not None else []
+    discounts, stamps = [], sandbox.data["stamps"]
+    if sandbox.demo.theme == "dryclean" and winter >= 5:
+        discounts.append((f"Скидка 15% за {winter} зимних вещей", round(total * 0.15)))
+    if sandbox.demo.theme == "cafe":
+        discounts, stamps = coffee_discounts(sandbox, cups, own_cup)
+    discount = sum(amount for _, amount in discounts)
+    return {"lines": lines, "subtotal": total, "discounts": discounts, "discount": discount, "total": total - discount,
+            "winter": winter, "unknown": unknown, "cups": len(cups), "stamps": stamps}
+
+
+def pickup_slots(sandbox: Sandbox) -> list[str]:
+    """Время выдачи предзаказа сегодня: не раньше чем через 20 минут и до закрытия."""
+    now = timezone.localtime()
+    today = now.date()
+    if today.isoformat() in sandbox.data["days_off"]:
+        return []
+    earliest = (now + timedelta(minutes=PICKUP_LEAD)).replace(tzinfo=None)
+    result = []
+    for start, end in working_ranges(sandbox.demo.blocks.get("hours"), today):
+        t = datetime.combine(today, start)
+        while t <= datetime.combine(today, end) - timedelta(minutes=PICKUP_STEP):
+            if t >= earliest:
+                result.append(t.strftime("%H:%M"))
+            t += timedelta(minutes=PICKUP_STEP)
+    return result
 
 
 def parse_quantities(data, sandbox: Sandbox) -> dict[str, int]:

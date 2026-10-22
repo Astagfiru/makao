@@ -1,6 +1,6 @@
 <section class="ex-track" id="status" aria-labelledby="ex-track-title">
-  <div class="ex-head"><h2 id="ex-track-title">{% if demo.theme == "dryclean" %}Готова ли вещь?{% elif demo.theme == "autobody" %}Как идёт ремонт?{% else %}Где мой заказ?{% endif %}</h2>
-    <p>Введите номер {% if demo.theme == "dryclean" %}квитанции{% elif demo.theme == "autobody" %}заказ-наряда{% else %}заказа{% endif %} — статус обновляет владелец в своём кабинете.</p></div>
+  <div class="ex-head"><h2 id="ex-track-title">{% if demo.theme == "dryclean" %}Готова ли вещь?{% elif demo.theme == "autobody" or demo.theme == "phonerepair" %}Как идёт ремонт?{% elif demo.theme == "atelier" or demo.theme == "cafe" %}Готов ли заказ?{% else %}Где мой заказ?{% endif %}</h2>
+    <p>Введите номер {% if demo.theme == "dryclean" %}квитанции{% elif demo.theme == "autobody" %}заказ-наряда{% elif demo.theme == "phonerepair" %}квитанции о приёме{% else %}заказа{% endif %} — статус обновляет владелец в своём кабинете.</p></div>
   <form class="ex-track-form" method="get" action="{% url 'portfolio:track' demo.slug %}">
     <label class="ex-field"><span>Номер</span><input name="n" inputmode="numeric" pattern="[0-9]*" required placeholder="Например, 101"></label>
     <button class="ex-btn" type="submit">Проверить</button>
