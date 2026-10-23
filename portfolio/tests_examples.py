@@ -37,10 +37,12 @@ class ExampleFeatureTests(TestCase):
                                                       "status": "Подтверждена"})
         self.assertContains(self.client.get("/primery/topmen/status/?n=101"), "№101: Подтверждена")
 
-    def test_booking_rejected_without_consent_or_busy_slot(self) -> None:
+    def test_booking_rejected_for_busy_or_wrong_slot(self) -> None:
         day, slot = self.free_slot("gradient")
         response = self.client.post("/primery/gradient/zapis/", {"service": "s0", "date": day, "time": slot})
-        self.assertIn("error=1", response["Location"])
+        self.assertRedirects(response, "/primery/gradient/gotovo/bookings/101/")
+        response = self.client.post("/primery/gradient/zapis/", {"service": "s0", "date": day, "time": slot})
+        self.assertIn("error=1", response["Location"])  # время уже занято
         response = self.client.post("/primery/gradient/zapis/", {"service": "s0", "date": day, "time": "03:00",
                                                                  "consent": "on"})
         self.assertIn("error=1", response["Location"])
@@ -86,6 +88,16 @@ class ExampleFeatureTests(TestCase):
         sunday = date(2026, 10, 25)
         self.assertEqual(examples.working_ranges(demo.blocks["hours"], sunday), [])
         self.assertEqual(len(examples.working_ranges(demo.blocks["hours"], date(2026, 10, 26))), 2)
+
+    def test_examples_ask_no_personal_data(self) -> None:
+        for slug in ("topmen", "dental-diamond", "liks-flowers", "coffee-globus"):
+            html = self.client.get(f"/primery/{slug}/?q_s0=1").content.decode()
+            self.assertNotIn('name="name"', html)
+            self.assertNotIn('name="consent"', html)
+        day, slot = self.free_slot("topmen")
+        self.client.post("/primery/topmen/zapis/", {"service": "s0", "date": day, "time": slot, "name": "Иван Петров"})
+        self.assertNotContains(self.client.get("/primery/topmen/kabinet/"), "Иван Петров")
+        self.assertNotContains(self.client.get("/primery/dental-diamond/"), 'name="note"')
 
     def test_unknown_order_is_404(self) -> None:
         self.assertEqual(self.client.get("/primery/topmen/gotovo/orders/5/").status_code, 404)

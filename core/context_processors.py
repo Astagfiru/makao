@@ -18,4 +18,5 @@ def site(request: HttpRequest) -> dict:
         "channels_footer": SimpleLazyObject(lambda: [c for c in channels if c.show_in_footer]),
         "channels_cta": SimpleLazyObject(lambda: [c for c in channels if c.show_in_cta]),
         "SITE_URL": settings.SITE_URL,
+        "leads_enabled": settings.LEADS_FORM_ENABLED,
     }

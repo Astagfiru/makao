@@ -11,6 +11,7 @@ from leads.models import Lead
 VALID = {"name": "Айсен", "phone": "+7 914 123-45-67", "message": "Лендинг для кофейни", "consent": "on", "page": "/"}
 
 
+@override_settings(LEADS_FORM_ENABLED=True)
 class LeadFormTests(TestCase):
     def setUp(self) -> None:
         cache.clear()
@@ -82,6 +83,7 @@ class LeadFormTests(TestCase):
         self.assertContains(self.client.get(self.url), "Заявка на сайт")
 
 
+@override_settings(LEADS_FORM_ENABLED=True)
 class TelegramTests(TestCase):
     def test_message_has_number_and_admin_link_but_no_personal_data(self) -> None:
         lead = Lead.objects.create(name="Айсен", phone="+79141234567", message="секретный текст", consent=True)
@@ -127,6 +129,16 @@ class TelegramTests(TestCase):
         with mock.patch("leads.telegram.threading.Thread") as thread:
             telegram.start_background("x")
         thread.assert_called_once_with(target=telegram.send_telegram, args=("x",), daemon=True)
+
+
+class LeadFormDisabledTests(TestCase):
+    """По умолчанию формы нет: сайт не собирает персональные данные."""
+
+    def test_form_urls_are_gone(self) -> None:
+        self.assertEqual(self.client.get(reverse("leads:create")).status_code, 404)
+        self.assertEqual(self.client.post(reverse("leads:create"), {"name": "Иван"}).status_code, 404)
+        self.assertEqual(self.client.get(reverse("leads:thanks")).status_code, 404)
+        self.assertFalse(Lead.objects.exists())
 
 
 class LeadAdminTests(TestCase):

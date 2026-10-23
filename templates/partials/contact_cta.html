@@ -1,0 +1,7 @@
+{# Вместо формы заявки: прямые каналы связи. Сайт сам не собирает персональные данные. #}
+<div class="contact-cta">
+  <ul class="channels" role="list">
+    {% for c in channels_cta %}<li><a class="channel" href="{{ c.url }}"{% if c.kind != "phone" and c.kind != "email" %} rel="noopener" target="_blank"{% endif %}><span class="channel-kind">{{ c.get_kind_display }}</span><span class="channel-label">{{ c.label }}</span></a></li>{% endfor %}
+  </ul>
+  <p class="contact-note">Отвечаю в течение дня. Напишите, чем занимается бизнес и какой нужен сайт — пришлю цену и срок.</p>
+</div>

@@ -5,7 +5,7 @@
     <h2 id="ex-cart-title">{{ cart.title }}</h2>
     <p>{% if demo.theme == "dryclean" %}Отметьте вещи — итог посчитается сразу, акция «от 5 зимних вещей −15%» применится сама.{% elif demo.theme == "cafe" %}Соберите заказ и выберите время — к нему всё будет готово, без очереди на кассе. Акции кофейни считаются сами.{% else %}Выберите букеты и вазы, укажите доставку. Где цены нет в открытом прайсе — флорист пришлёт её после заказа.{% endif %}</p>
   </div>
-  {% if request.GET.error %}<p class="ex-alert" role="alert">Выберите хотя бы одну позицию и отметьте согласие.</p>{% endif %}
+  {% if request.GET.error %}<p class="ex-alert" role="alert">Выберите хотя бы одну позицию.</p>{% endif %}
   <form method="get" action="#zakaz" class="ex-cart-form" data-cart data-stamps="{{ stamps|default:0 }}">
     <div class="ex-cart-list">
       {% if features.pickup %}<label class="ex-check ex-own-cup"><input type="checkbox" name="own_cup"{% if own_cup %} checked{% endif %} data-own-cup> <span>Приду со своей кружкой или термосом — −15% на кофе</span></label>{% endif %}
@@ -39,7 +39,6 @@
     {% for k, v in quantities.items %}<input type="hidden" name="q_{{ k }}" value="{{ v }}">{% endfor %}
     {% if own_cup %}<input type="hidden" name="own_cup" value="on">{% endif %}
     <div class="ex-row">
-      <label class="ex-field"><span>Имя</span><input name="name" maxlength="40" placeholder="Как к вам обращаться" autocomplete="off"></label>
       {% if features.branch %}
       <label class="ex-field"><span>Приёмный пункт</span><select name="branch">{% for br in b.branches %}<option>{{ br.address }}</option>{% endfor %}</select></label>
       {% endif %}
@@ -52,7 +51,7 @@
       <label class="ex-field ex-wide"><span>Текст открытки (необязательно)</span><input name="card_text" maxlength="200" autocomplete="off"></label>
       {% endif %}
     </div>
-    <label class="ex-check"><input type="checkbox" name="consent" required> <span>Согласен на обработку данных — на рабочем сайте здесь ссылка на политику компании</span></label>
+    <p class="ex-muted">Имя и телефон в примере не спрашиваем. На рабочем сайте здесь будут контакты клиента и согласие на обработку данных.</p>
     <div class="ex-actions">
       <button class="ex-btn" type="submit">{% if demo.theme == "dryclean" %}Оформить и получить номер квитанции{% elif demo.theme == "cafe" %}Оформить предзаказ{% else %}Оформить заказ{% endif %}</button>
       <p class="ex-muted">Это пример: заказ видите только вы. Статус можно отслеживать по номеру, а менять — в кабинете владельца.</p>

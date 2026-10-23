@@ -1,4 +1,5 @@
-from django.http import HttpRequest, HttpResponse
+from django.conf import settings
+from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.views.decorators.http import require_http_methods
@@ -24,6 +25,8 @@ def save_lead(data: dict) -> Lead:
 
 @require_http_methods(["GET", "POST"])
 def lead_create(request: HttpRequest) -> HttpResponse:
+    if not settings.LEADS_FORM_ENABLED:
+        raise Http404
     if request.method == "GET":
         return render(request, "leads/form_page.html", {"form": LeadForm(initial={"page": "/zayavka/"})})
 
@@ -43,6 +46,8 @@ def lead_create(request: HttpRequest) -> HttpResponse:
 
 
 def thanks(request: HttpRequest) -> HttpResponse:
+    if not settings.LEADS_FORM_ENABLED:
+        raise Http404
     response = render(request, "leads/thanks.html", {"lead_id": request.session.get(SESSION_KEY)})
     response["X-Robots-Tag"] = "noindex"
     return response

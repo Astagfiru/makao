@@ -157,6 +157,10 @@ CACHES = {"default": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache"
           if DEBUG else {"BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
                          "LOCATION": BASE_DIR / ".cache"}}
 
+# Форма заявки с именем и телефоном. Выключена: сайт не собирает персональные данные, связь — через мессенджеры.
+# Включать только вместе с уведомлением в Роскомнадзор и реквизитами оператора (см. README).
+LEADS_FORM_ENABLED = env_bool("LEADS_FORM_ENABLED", False)
+
 # Заявки: не больше LEAD_RATE_LIMIT штук за LEAD_RATE_WINDOW секунд с одного адреса (адрес в БД не пишем).
 LEAD_RATE_LIMIT = int(os.getenv("LEAD_RATE_LIMIT", "5"))
 LEAD_RATE_WINDOW = int(os.getenv("LEAD_RATE_WINDOW", "600"))

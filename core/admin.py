@@ -13,7 +13,7 @@ admin.site.index_title = "Что будем править?"
 class SiteSettingsAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Оператор персональных данных (футер, политика, согласие)", {
-            "fields": ("operator_name", "inn", "ogrnip", "pd_email", "city", "hosting"),
+            "fields": ("operator_name", "status", "inn", "ogrnip", "pd_email", "city", "hosting"),
         }),
         ("Версии правовых документов", {
             "fields": (("policy_version", "policy_date"), ("consent_version", "consent_date")),

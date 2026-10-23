@@ -42,7 +42,7 @@
 <section class="chapter chapter-cta" id="zayavka" aria-labelledby="seo-cta">
   <div class="wrap"><div class="cta-tile cta-tile-solo">
     <h2 id="seo-cta" class="h-section">Обсудим ваш сайт</h2>
-    {% include "partials/lead_form.html" %}
+    {% if leads_enabled %}{% include "partials/lead_form.html" %}{% else %}{% include "partials/contact_cta.html" %}{% endif %}
   </div></div>
 </section>
 {% endblock %}

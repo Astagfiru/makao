@@ -23,7 +23,7 @@
     <p class="hero-lead">Для бизнеса — от 15&nbsp;000&nbsp;₽, запуск от 5&nbsp;дней. Договор, оплата 30/70, сайт полностью ваш.</p>
     <div class="hero-actions">
       {% for c in channels_cta|slice:":2" %}<a class="btn{% if forloop.first %} btn-accent{% else %} btn-ink{% endif %}" href="{{ c.url }}" rel="noopener" target="_blank">Написать в {{ c.label }}</a>{% endfor %}
-      <a class="btn btn-ghost" href="#zayavka">Оставить заявку</a>
+      <a class="btn btn-ghost" href="#zayavka">{% if leads_enabled %}Оставить заявку{% else %}Все контакты{% endif %}</a>
     </div>
   </div>
 </section>
@@ -144,12 +144,16 @@
   <div class="wrap cta-grid">
     <div class="cta-text">
       <h2 id="cta-title" class="h-section">Обсудим ваш сайт</h2>
+      {% if leads_enabled %}
       <p>Оставьте имя и телефон — перезвоню или напишу, обсудим задачу, сроки и цену. Это ни к чему не обязывает.</p>
       <p>Удобнее в мессенджере?</p>
       <div class="cta-channels">{% for c in channels_cta|slice:":3" %}<a class="btn {% if forloop.first %}btn-accent{% else %}btn-light{% endif %}" href="{{ c.url }}" rel="noopener" target="_blank">{{ c.label }}</a>{% endfor %}</div>
+      {% else %}
+      <p>Напишите или позвоните — обсудим задачу, сроки и цену. Это ни к чему не обязывает.</p>
+      {% endif %}
     </div>
     <div class="cta-tile">
-      {% include "partials/lead_form.html" %}
+      {% if leads_enabled %}{% include "partials/lead_form.html" %}{% else %}{% include "partials/contact_cta.html" %}{% endif %}
     </div>
   </div>
 </section>

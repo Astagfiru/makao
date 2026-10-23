@@ -22,12 +22,16 @@
     </nav>
     <nav class="footer-col" aria-label="Документы">
       <p class="footer-title">Документы</p>
+      {% if leads_enabled %}
       <a href="{% url 'core:policy' %}">Политика обработки персональных данных</a>
       <a href="{% url 'core:consent' %}">Согласие на обработку данных</a>
+      {% else %}
+      <a href="{% url 'core:policy' %}">Конфиденциальность и cookie</a>
+      {% endif %}
     </nav>
   </div>
   <div class="wrap footer-legal">
-    <p>{{ site_settings.operator_name }}{% if site_settings.inn %} · ИНН {{ site_settings.inn }}{% endif %}{% if site_settings.ogrnip %} · ОГРНИП {{ site_settings.ogrnip }}{% endif %}</p>
+    <p>{{ site_settings.operator_name }}{% if site_settings.status %} · {{ site_settings.status }}{% endif %}{% if site_settings.inn %} · ИНН {{ site_settings.inn }}{% endif %}{% if site_settings.ogrnip %} · ОГРНИП {{ site_settings.ogrnip }}{% endif %}</p>
     <p>Информация на сайте не является публичной офертой.</p>
     <p>© {% now "Y" %} Кузьмин Виктор · Якутск</p>
     <a class="footer-up" href="#main">Наверх ↑</a>

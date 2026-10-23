@@ -16,12 +16,11 @@ class SiteSettings(models.Model):
     """Одна запись: реквизиты оператора ПДн и версии правовых документов."""
 
     operator_name = models.CharField("ФИО оператора (ИП)", max_length=150, default="Кузьмин Виктор")
-    inn = models.CharField("ИНН", max_length=12, blank=True, default="000000000000",
-                           help_text="Плейсхолдер — замените на свой ИНН.")
-    ogrnip = models.CharField("ОГРНИП", max_length=15, blank=True, default="000000000000000",
-                              help_text="Плейсхолдер — замените на свой ОГРНИП.")
-    pd_email = models.EmailField("Email для запросов по персональным данным", blank=True,
-                                 default="privacy@example.ru")
+    status = models.CharField("Статус", max_length=60, blank=True,
+                              help_text="Например «самозанятый» или «индивидуальный предприниматель». Пусто — не показывается.")
+    inn = models.CharField("ИНН", max_length=12, blank=True, help_text="Пусто — в футере не показывается.")
+    ogrnip = models.CharField("ОГРНИП", max_length=15, blank=True, help_text="Только для ИП. Пусто — не показывается.")
+    pd_email = models.EmailField("Email для запросов о данных", blank=True)
     city = models.CharField("Город", max_length=60, default="Якутск")
     hosting = models.CharField("Где хранятся данные (хостинг)", max_length=200,
                                default="VPS у ООО «РЕГ.РУ», серверы в Российской Федерации")

@@ -65,6 +65,8 @@ def policy(request: HttpRequest) -> HttpResponse:
 
 @require_GET
 def consent(request: HttpRequest) -> HttpResponse:
+    if not settings.LEADS_FORM_ENABLED:  # без формы согласие не берём — страница не нужна
+        raise Http404
     return render(request, "core/consent.html")
 
 

@@ -12,8 +12,9 @@ class StaticPagesSitemap(Sitemap):
     protocol = PROTOCOL
 
     def items(self) -> list[str]:
-        return ["core:home", "portfolio:list", "core:contacts", *(f"core:seo-{slug}" for slug in SEO_PAGES),
-                "core:policy", "core:consent"]
+        pages = ["core:home", "portfolio:list", "core:contacts", *(f"core:seo-{slug}" for slug in SEO_PAGES),
+                 "core:policy"]
+        return [*pages, "core:consent"] if settings.LEADS_FORM_ENABLED else pages
 
     def location(self, item: str) -> str:
         return reverse(item)

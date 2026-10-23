@@ -28,7 +28,7 @@ class PagesTests(TestCase):
         call_command("setup", stdout=StringIO())
 
     def test_main_pages_open(self) -> None:
-        for name in ("core:home", "core:contacts", "core:policy", "core:consent", "portfolio:list",
+        for name in ("core:home", "core:contacts", "core:policy", "portfolio:list",
                      "core:seo-zakazat-sajt-yakutsk", "core:seo-razrabotka-sajtov-yakutsk-cena",
                      "core:seo-sozdanie-internet-magazina-yakutsk"):
             with self.subTest(name=name):
@@ -79,10 +79,34 @@ class PagesTests(TestCase):
         self.assertContains(response, "Принять")
 
     def test_footer_legal_block_everywhere(self) -> None:
+        site = SiteSettings.load()
+        site.inn = "141234567890"
+        site.save()
         for name in ("core:contacts", "portfolio:list", "core:policy"):
             response = self.client.get(reverse(name))
-            self.assertContains(response, "ИНН")
-            self.assertContains(response, reverse("core:consent"))
+            self.assertContains(response, "ИНН 141234567890")
+            self.assertContains(response, "не является публичной офертой")
+            self.assertNotContains(response, reverse("core:consent"))
+
+    def test_empty_requisites_are_hidden(self) -> None:
+        self.assertNotContains(self.client.get(reverse("core:home")), "ИНН")
+
+    def test_no_lead_form_by_default(self) -> None:
+        ContactChannel.objects.create(kind="phone", label="+7 914 000-00-00", url="tel:+79140000000")
+        for name in ("core:home", "core:contacts", "core:seo-zakazat-sajt-yakutsk"):
+            response = self.client.get(reverse(name))
+            self.assertNotContains(response, 'class="lead-form"')
+            self.assertNotContains(response, 'name="phone"')
+        self.assertContains(self.client.get(reverse("core:home")), "tel:+79140000000")
+        self.assertEqual(self.client.get(reverse("core:consent")).status_code, 404)
+        self.assertContains(self.client.get(reverse("core:policy")), "Сайт не собирает персональные данные")
+        self.assertNotIn("/consent/", self.client.get("/sitemap.xml").content.decode())
+
+    @override_settings(LEADS_FORM_ENABLED=True)
+    def test_lead_form_can_be_switched_back_on(self) -> None:
+        self.assertContains(self.client.get(reverse("core:home")), 'class="lead-form"')
+        self.assertEqual(self.client.get(reverse("core:consent")).status_code, 200)
+        self.assertContains(self.client.get(reverse("core:policy")), "Политика обработки персональных данных")
 
     def test_404_page(self) -> None:
         response = self.client.get("/net-takoy-stranicy/")

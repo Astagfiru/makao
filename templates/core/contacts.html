@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% block title %}Контакты — Кузьмин Виктор, сайты для бизнеса в Якутске{% endblock %}
-{% block description %}Связаться с веб-разработчиком в Якутске: WhatsApp, Telegram или заявка на сайте. Обсудим задачу, сроки и цену.{% endblock %}
+{% block description %}Связаться с веб-разработчиком в Якутске: WhatsApp, Telegram, телефон или почта. Обсудим задачу, сроки и цену.{% endblock %}
 {% block body_class %}page-inner page-contacts{% endblock %}
 {% block content %}
 <section class="page-hero">
   <div class="wrap">
     <h1 class="h-display">Контакты</h1>
-    <p class="page-lead">Пишите в мессенджер или оставьте заявку — отвечу и предложу время для разговора. {{ site_settings.city }}, можно встретиться лично.</p>
+    <p class="page-lead">Пишите в мессенджер или звоните — отвечу и предложу время для разговора. {{ site_settings.city }}, можно встретиться лично.</p>
   </div>
 </section>
 <section class="chapter chapter-contacts" aria-labelledby="channels-title">
@@ -14,19 +14,30 @@
     <div>
       <h2 id="channels-title" class="h-section">Написать</h2>
       <ul class="channels" role="list">
-        {% for c in channels_cta %}<li><a class="channel" href="{{ c.url }}" rel="noopener" target="_blank"><span class="channel-kind">{{ c.get_kind_display }}</span><span class="channel-label">{{ c.label }}</span></a></li>{% endfor %}
+        {% for c in channels_cta %}<li><a class="channel" href="{{ c.url }}"{% if c.kind != "phone" and c.kind != "email" %} rel="noopener" target="_blank"{% endif %}><span class="channel-kind">{{ c.get_kind_display }}</span><span class="channel-label">{{ c.label }}</span></a></li>{% endfor %}
       </ul>
+      {% if leads_enabled %}<div class="map" data-map data-src="{{ site_settings.map_embed_url }}">
+        <p>Яндекс.Карта загружается только по вашему клику: у Яндекса свои cookie.</p>
+        <button class="btn btn-ink" type="button" data-map-load>Показать карту Якутска</button>
+        <noscript><p><a href="https://yandex.ru/maps/74/yakutsk/" rel="noopener">Открыть карту на Яндексе</a></p></noscript>
+      </div>{% endif %}
+    </div>
+    {% if not leads_enabled %}
+    <div class="contacts-side">
+      <p class="contact-note">Отвечаю в течение дня. Напишите, чем занимается бизнес и какой нужен сайт — пришлю цену и срок. Сайт не собирает ваши данные: переписка идёт только в выбранном вами мессенджере или почте.</p>
       <div class="map" data-map data-src="{{ site_settings.map_embed_url }}">
         <p>Яндекс.Карта загружается только по вашему клику: у Яндекса свои cookie.</p>
         <button class="btn btn-ink" type="button" data-map-load>Показать карту Якутска</button>
         <noscript><p><a href="https://yandex.ru/maps/74/yakutsk/" rel="noopener">Открыть карту на Яндексе</a></p></noscript>
       </div>
     </div>
+    {% else %}
     <div class="cta-tile" id="zayavka">
       <h2 class="h-section">Заявка</h2>
       <p>Имя, телефон и пара слов о задаче — этого достаточно.</p>
       {% include "partials/lead_form.html" %}
     </div>
+    {% endif %}
   </div>
 </section>
 {% endblock %}

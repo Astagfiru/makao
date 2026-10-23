@@ -89,7 +89,7 @@ def book(request: HttpRequest, slug: str) -> HttpResponse:
         day = None
     slot = request.POST.get("time", "")
     free = {s["time"] for s in examples.slots(sandbox, day, service.minutes) if s["free"]} if service and day else set()
-    if not service or not day or slot not in free or request.POST.get("consent") != "on":
+    if not service or not day or slot not in free:
         url = reverse("portfolio:demo", args=[slug])
         query = f"?service={service.id if service else ''}&date={day.isoformat() if day else ''}&error=1#zapis"
         return redirect(url + query)
@@ -99,7 +99,7 @@ def book(request: HttpRequest, slug: str) -> HttpResponse:
     number = sandbox.next_number()
     sandbox.data["bookings"].append({
         "number": number, "service": service.name, "price": service.price, "price_text": service.price_text,
-        "date": day.isoformat(), "time": slot, "name": (request.POST.get("name") or "Гость").strip()[:40],
+        "date": day.isoformat(), "time": slot, "name": "Гость",
         "note": (request.POST.get("note") or "").strip()[:300], "status": statuses_for(site, "bookings")[0],
         "place": place if place in feature.get("places", []) else "",
         "device": device if device in (site.blocks or {}).get("brands", []) else "",
@@ -117,7 +117,7 @@ def order(request: HttpRequest, slug: str) -> HttpResponse:
     own_cup = request.POST.get("own_cup") == "on"
     pickup = examples.FEATURES[site.theme].get("pickup")
     slot_ok = not pickup or request.POST.get("slot") in examples.pickup_slots(sandbox)
-    if not quantities or not slot_ok or request.POST.get("consent") != "on":
+    if not quantities or not slot_ok:
         query = "&".join(f"q_{k}={v}" for k, v in quantities.items()) + ("&own_cup=on" if own_cup else "")
         return redirect(f"{reverse('portfolio:demo', args=[slug])}?{query}&error=1#zakaz")
     totals = examples.cart_total(sandbox, quantities, own_cup)
@@ -130,7 +130,7 @@ def order(request: HttpRequest, slug: str) -> HttpResponse:
         "discounts": totals["discounts"], "own_cup": own_cup,
         "unknown": totals["unknown"], "branch": (request.POST.get("branch") or "")[:120],
         "delivery": "Навынос" if pickup else (request.POST.get("delivery") or "")[:40], "slot": (request.POST.get("slot") or "")[:20],
-        "card": (request.POST.get("card_text") or "").strip()[:200], "name": (request.POST.get("name") or "Гость")[:40],
+        "card": (request.POST.get("card_text") or "").strip()[:200], "name": "Гость",
         "status": first, "paid": False, "created": timezone.localtime().strftime("%d.%m %H:%M"),
     })
     sandbox.save()

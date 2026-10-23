@@ -22,8 +22,8 @@ TIME_RANGE = re.compile(r"(\d{1,2}):(\d{2})\s*[–-]\s*(\d{1,2}):(\d{2})")
 
 # Что умеет каждый пример — по бизнес-процессу ниши.
 FEATURES: dict[str, dict] = {
-    "dental": {"booking": {"title": "Запись на приём", "button": "Записаться", "pay": False, "step": 30,
-                           "ask": "Что беспокоит (необязательно)"},
+    # у стоматологии нет поля «что беспокоит»: это сведения о здоровье (особая категория данных)
+    "dental": {"booking": {"title": "Запись на приём", "button": "Записаться", "pay": False, "step": 30},
                "posts": True},
     "dryclean": {"cart": {"title": "Рассчитать стоимость и оформить приём", "pay": False}, "tracker": True,
                  "posts": True, "branch": True},

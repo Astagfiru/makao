@@ -477,7 +477,10 @@ h3 { font-size: var(--fs-h3); font-weight: 700; line-height: 1.2; letter-spacing
 
 .contacts-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; }
 .contacts-grid > div:first-child { grid-column: 1 / 6; display: grid; gap: 28px; align-content: start; }
-.contacts-grid > .cta-tile { grid-column: 7 / 13; }
+.contacts-grid > .cta-tile, .contacts-grid > .contacts-side { grid-column: 7 / 13; }
+.contacts-side { display: grid; gap: 28px; align-content: start; }
+.contact-cta { display: grid; gap: 18px; }
+.contact-note { max-width: 52ch; }
 .channels { display: grid; gap: 8px; }
 .channel { display: flex; justify-content: space-between; align-items: center; min-height: 72px; padding: 0 24px; background: var(--f-deep); color: var(--on-deep); text-decoration: none; font-size: 22px; font-weight: 800; transition: background-color var(--t-mid); }
 .channel:hover { background: var(--accent); color: var(--on-accent); }
@@ -559,7 +562,7 @@ h3 { font-size: var(--fs-h3); font-weight: 700; line-height: 1.2; letter-spacing
   .footer-grid { grid-template-columns: 1fr 1fr; }
   .footer-brand { grid-column: 1 / -1; }
   .footer-legal { grid-template-columns: 1fr; }
-  .contacts-grid > div:first-child, .contacts-grid > .cta-tile { grid-column: 1 / -1; }
+  .contacts-grid > div:first-child, .contacts-grid > .cta-tile, .contacts-grid > .contacts-side { grid-column: 1 / -1; }
   .price-lines li { grid-template-columns: 1fr; gap: 4px; }
   .cookie { font-size: 13px; }
   .show-arrow { display: none !important; }
