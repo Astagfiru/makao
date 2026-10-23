@@ -14,7 +14,7 @@
     <div>
       <h2 id="channels-title" class="h-section">Написать</h2>
       <ul class="channels" role="list">
-        {% for c in channels_cta %}<li><a class="channel" href="{{ c.url }}"{% if c.kind != "phone" and c.kind != "email" %} rel="noopener" target="_blank"{% endif %}><span class="channel-kind">{{ c.get_kind_display }}</span><span class="channel-label">{{ c.label }}</span></a></li>{% endfor %}
+        {% for c in channels_cta %}<li><a class="channel" href="{{ c.url }}"{% if c.kind != "phone" and c.kind != "email" %} rel="noopener" target="_blank"{% endif %}>{% if c.label != c.get_kind_display %}<span class="channel-kind">{{ c.get_kind_display }}</span>{% endif %}<span class="channel-label">{{ c.label }}</span></a></li>{% endfor %}
       </ul>
       {% if leads_enabled %}<div class="map" data-map data-src="{{ site_settings.map_embed_url }}">
         <p>Яндекс.Карта загружается только по вашему клику: у Яндекса свои cookie.</p>
